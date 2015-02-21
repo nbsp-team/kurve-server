@@ -4,6 +4,7 @@ package model;
  * Created by v.chibrikov on 13.09.2014.
  */
 public class UserProfile {
+    private long id;
     private String login;
     private String password;
     private String email;
@@ -24,5 +25,9 @@ public class UserProfile {
 
     public String getEmail() {
         return email;
+    }
+
+    public long getId() {
+        return id;
     }
 }

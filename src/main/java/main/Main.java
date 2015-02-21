@@ -31,11 +31,11 @@ public class Main {
 
         AccountService accountService = new AccountService();
 
-        Servlet signin = new SignInServlet(accountService);
+        Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(signin), "/api/v1/auth/signin");
+        context.addServlet(new ServletHolder(signIn), "/api/v1/auth/signin");
         context.addServlet(new ServletHolder(signUp), "/api/v1/auth/signup");
 
         ResourceHandler resource_handler = new ResourceHandler();

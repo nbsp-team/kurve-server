@@ -1,5 +1,6 @@
 package websocket;
 
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
 
@@ -10,7 +11,6 @@ import java.io.IOException;
  */
 @WebSocket
 public class WebSocketHandler {
-
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         System.out.println("Close: statusCode=" + statusCode + ", reason=" + reason);
@@ -23,7 +23,7 @@ public class WebSocketHandler {
 
     @OnWebSocketConnect
     public void onConnect(Session session) {
-        System.out.println("Connect: " + session.getRemoteAddress().getAddress());
+        System.out.println("Connect: " + session.getUpgradeRequest().getCookies().get(0));
         try {
             session.getRemote().sendString("Hello Webbrowser");
         } catch (IOException e) {
