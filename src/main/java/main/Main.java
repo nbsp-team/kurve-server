@@ -8,6 +8,10 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.server.WebSocketHandler;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import javax.servlet.Servlet;
 import java.net.InetSocketAddress;
@@ -38,8 +42,15 @@ public class Main {
         resource_handler.setDirectoriesListed(true);
         resource_handler.setResourceBase("public_html");
 
+        WebSocketHandler wsHandler = new WebSocketHandler() {
+            @Override
+            public void configure(WebSocketServletFactory factory) {
+                factory.register(websocket.WebSocketHandler.class);
+            }
+        };
+
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{resource_handler, context});
+        handlers.setHandlers(new Handler[]{wsHandler, resource_handler, context});
 
         Server server = new Server(new InetSocketAddress("0.0.0.0", port));
         server.setHandler(handlers);
