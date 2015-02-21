@@ -8,6 +8,7 @@ public class UserProfile {
     private String login;
     private String password;
     private String email;
+    private int roomId = -1;
 
     public UserProfile(String login, String password, String email) {
         this.login = login;
@@ -29,5 +30,13 @@ public class UserProfile {
 
     public long getId() {
         return id;
+    }
+
+    public void setCurrentRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getRoomId() {
+        return roomId;
     }
 }

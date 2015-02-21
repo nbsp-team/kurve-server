@@ -25,12 +25,14 @@ public class Game {
     public void onNewConnection(String sessionId) {
         UserProfile user = accountService.getSessions(sessionId);
 
-        for(Room room : rooms) {
+        for(int i = 0; i < rooms.size(); ++i) {
+            Room room = rooms.get(i);
             Player player = room.getPlayerByUser(user);
 
             // If player already exist - connect session
             if (player != null) {
                 player.connectSession(sessionId);
+                user.setCurrentRoomId(i);
                 return;
             }
 
@@ -38,6 +40,7 @@ public class Game {
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
                 Player newPlayer = new Player(Color.BLUE, user);
                 room.onNewPlayer(newPlayer);
+                user.setCurrentRoomId(i);
                 return;
             }
         }
@@ -47,5 +50,22 @@ public class Game {
         Player newPlayer = new Player(Color.BLUE, user);
         newRoom.onNewPlayer(newPlayer);
         rooms.add(newRoom);
+        user.setCurrentRoomId(rooms.size() - 1);
+    }
+
+    public void onDisconnect(String sessionId) {
+        UserProfile user = accountService.getSessions(sessionId);
+        if (user.getRoomId() != -1) {
+            Room room = rooms.get(user.getRoomId());
+            Player player = room.getPlayerByUser(user);
+            room.onPlayerDisconnect(player);
+        }
+    }
+
+    public void onReady(String sessionId) {
+        UserProfile user = accountService.getSessions(sessionId);
+        int roomId = user.getRoomId();
+        Room room = rooms.get(roomId);
+        room.getPlayerByUser(user).setReady(true);
     }
 }

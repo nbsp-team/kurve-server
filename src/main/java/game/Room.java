@@ -26,7 +26,11 @@ public class Room {
     }
 
     public void onPlayerReady(Player player) {
+        player.setReady(true);
+    }
 
+    public void onPlayerDisconnect(Player player) {
+        players.remove(player);
     }
 
     public Player getPlayerByUser(UserProfile userProfile) {
