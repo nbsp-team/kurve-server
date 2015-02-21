@@ -10,6 +10,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.Servlet;
+import java.net.InetSocketAddress;
 
 /**
  * @author v.chibrikov
@@ -40,7 +41,7 @@ public class Main {
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{resource_handler, context});
 
-        Server server = new Server(port);
+        Server server = new Server(new InetSocketAddress("0.0.0.0", port));
         server.setHandler(handlers);
 
         server.start();

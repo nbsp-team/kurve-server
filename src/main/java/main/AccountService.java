@@ -1,5 +1,7 @@
 package main;
 
+import model.UserProfile;
+
 import java.util.HashMap;
 import java.util.Map;
 

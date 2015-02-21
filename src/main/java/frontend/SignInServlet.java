@@ -1,7 +1,7 @@
 package frontend;
 
 import main.AccountService;
-import main.UserProfile;
+import model.UserProfile;
 import templater.PageGenerator;
 
 import javax.servlet.ServletException;
