@@ -2,6 +2,7 @@ package frontend;
 
 import main.AccountService;
 import model.UserProfile;
+import templater.JsonGenerator;
 import templater.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -34,7 +35,8 @@ public class SignInServlet extends HttpServlet {
             pageVariables.put("loginStatus", "Wrong login/password");
         }
 
-        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+        //response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+        //response.getWriter().println(JsonGenerator.toJson(1231, pageVariables));
     }
 
     public void doPost(HttpServletRequest request,

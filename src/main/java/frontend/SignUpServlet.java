@@ -2,7 +2,9 @@ package frontend;
 
 import main.AccountService;
 import model.UserProfile;
+import templater.JsonGenerator;
 import templater.PageGenerator;
+import utils.ResponseCodes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SignUpServlet extends HttpServlet {
     private AccountService accountService;
@@ -21,17 +24,30 @@ public class SignUpServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
+
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        Map<String, Object> pageVariables = new HashMap<>();
-        if (accountService.addUser(name, new UserProfile(name, password, ""))) {
-            pageVariables.put("signUpStatus", "New user created");
+        Map<String, Object> responseData = new HashMap<>();
+
+        // Быдлокод
+        if(name == null || password == null) {
+            responseData.put("error", ResponseCodes.ERROR);
+            responseData.put("message", "Invalid request");
+
+        } else if (!accountService.addUser(name, new UserProfile(name, password, ""))) {
+            responseData.put("error", ResponseCodes.ERROR);
+            responseData.put("message", "User with name: " + name + " already exists");
         } else {
-            pageVariables.put("signUpStatus", "User with name: " + name + " already exists");
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("name", name);
+
+            responseData.put("error", ResponseCodes.OK);
+            responseData.put("data", userData);
         }
 
-        response.getWriter().println(PageGenerator.getPage("signupstatus.html", pageVariables));
+        response.getWriter().println(JsonGenerator.toJson(responseData));
         response.setStatus(HttpServletResponse.SC_OK);
     }
 

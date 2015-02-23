@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * nickolay, 21.02.15.
  */
+
 @WebSocket
 public class WebSocketHandler {
     @OnWebSocketClose
