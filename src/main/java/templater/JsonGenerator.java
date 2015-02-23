@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,19 +22,19 @@ public class JsonGenerator {
 
     public static String toJson(Map<String, Object> data) {
 
-        JSONObject returnObject = new JSONObject();
+        Map<String, Object> returnObject = new HashMap<>();
 
         if(data.get("error") == ResponseCodes.OK) {
             returnObject.put("error", null);
 
-            JSONObject responseObject = new JSONObject();
+            Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("user", data.get("data"));
             returnObject.put("response", responseObject);
         } else {
             returnObject.putAll(data);
         }
 
-        return returnObject.toJSONString();
+        return new JSONObject(returnObject).toJSONString();
     }
 
 

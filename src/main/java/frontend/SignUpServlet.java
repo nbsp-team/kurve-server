@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class SignUpServlet extends HttpServlet {
     private AccountService accountService;
@@ -22,26 +21,28 @@ public class SignUpServlet extends HttpServlet {
         this.accountService = accountService;
     }
 
-    public void doGet(HttpServletRequest request,
+    public void doPost(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
 
-        String name = request.getParameter("name");
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         Map<String, Object> responseData = new HashMap<>();
 
         // Быдлокод
-        if(name == null || password == null) {
+        if(username == null || email == null || password == null) {
             responseData.put("error", ResponseCodes.ERROR);
             responseData.put("message", "Invalid request");
 
-        } else if (!accountService.addUser(name, new UserProfile(name, password, ""))) {
+        } else if (!accountService.addUser(username, new UserProfile(username, password, ""))) {
             responseData.put("error", ResponseCodes.ERROR);
-            responseData.put("message", "User with name: " + name + " already exists");
+            responseData.put("message", "User with name: " + username + " already exists");
         } else {
 
             Map<String, Object> userData = new HashMap<>();
-            userData.put("name", name);
+            userData.put("name", username);
+            userData.put("email", username);
 
             responseData.put("error", ResponseCodes.OK);
             responseData.put("data", userData);
