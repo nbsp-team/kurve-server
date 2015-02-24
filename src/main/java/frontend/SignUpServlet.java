@@ -35,13 +35,13 @@ public class SignUpServlet extends HttpServlet {
             responseData.put("error", ResponseCodes.ERROR);
             responseData.put("message", "Invalid request");
 
-        } else if (!accountService.addUser(username, new UserProfile(username, password, ""))) {
+        } else if (!accountService.addUser(username, new UserProfile(username, password, email))) {
             responseData.put("error", ResponseCodes.ERROR);
             responseData.put("message", "User with name: " + username + " already exists");
         } else {
 
             Map<String, Object> userData = new HashMap<>();
-            userData.put("name", username);
+            userData.put("username", username);
             userData.put("email", username);
 
             responseData.put("error", ResponseCodes.OK);
