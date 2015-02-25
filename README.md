@@ -1,2 +1,2 @@
 # kurve-server
-Jetty server for kurve game. [Client](https://github.com/lukaville/kurve) here.
+Jetty server for kurve game. Client [here](https://github.com/lukaville/kurve).
