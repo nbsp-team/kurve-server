@@ -69,7 +69,6 @@
             <version>1.1.1</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>

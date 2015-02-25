@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * nickolay, 21.02.15.
@@ -15,7 +16,9 @@ public class Game {
     private static final int MAX_PLAYER_IN_ROOM = 6;
     private AccountService accountService;
 
+    // TODO: rewrite
     private List<Room> rooms;
+    private Map<UserProfile, Room> userRooms;
 
     public Game() {
         accountService = new AccountService();
@@ -25,14 +28,13 @@ public class Game {
     public void onNewConnection(String sessionId) {
         UserProfile user = accountService.getSessions(sessionId);
 
-        for(int i = 0; i < rooms.size(); ++i) {
-            Room room = rooms.get(i);
+        for (Room room : rooms) {
             Player player = room.getPlayerByUser(user);
 
             // If player already exist - connect session
             if (player != null) {
                 player.connectSession(sessionId);
-                user.setCurrentRoomId(i);
+                userRooms.put(user, room);
                 return;
             }
 
@@ -40,7 +42,7 @@ public class Game {
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
                 Player newPlayer = new Player(Color.BLUE, user);
                 room.onNewPlayer(newPlayer);
-                user.setCurrentRoomId(i);
+                userRooms.put(user, room);
                 return;
             }
         }
@@ -50,22 +52,21 @@ public class Game {
         Player newPlayer = new Player(Color.BLUE, user);
         newRoom.onNewPlayer(newPlayer);
         rooms.add(newRoom);
-        user.setCurrentRoomId(rooms.size() - 1);
+        userRooms.put(user, newRoom);;
     }
 
     public void onDisconnect(String sessionId) {
         UserProfile user = accountService.getSessions(sessionId);
-        if (user.getRoomId() != -1) {
-            Room room = rooms.get(user.getRoomId());
-            Player player = room.getPlayerByUser(user);
-            room.onPlayerDisconnect(player);
+        Room userRoom = userRooms.get(user);
+        if (userRoom != null) {
+            Player player = userRoom.getPlayerByUser(user);
+            userRoom.onPlayerDisconnect(player);
         }
     }
 
     public void onReady(String sessionId) {
         UserProfile user = accountService.getSessions(sessionId);
-        int roomId = user.getRoomId();
-        Room room = rooms.get(roomId);
+        Room room = userRooms.get(user);
         room.getPlayerByUser(user).setReady(true);
     }
 }
