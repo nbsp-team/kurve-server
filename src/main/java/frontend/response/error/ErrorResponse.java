@@ -7,9 +7,9 @@ import org.json.simple.JSONObject;
  * nickolay, 25.02.15.
  */
 public class ErrorResponse extends Response {
-    public static final int ERROR_SIGNIN_FAILED = 1;
-    public static final int ERROR_SINGUP_FAILED = 2;
-    public static final int ERROR_EMPTY_RESPONSE = 3;
+    public static final int ERROR_SIGNIN_FAILED = 0;
+    public static final int ERROR_SINGUP_FAILED = 1;
+    public static final int ERROR_EMPTY_RESPONSE = 2;
     public static final int ERROR_INVALID_PARAMS = 3;
 
     private static final String[] DEFAULT_ERROR_DESCRIPTIONS = new String[]{
