@@ -1,15 +1,13 @@
-package frontend;
+package frontend.servlet.auth;
 
+import frontend.AbstractServlet;
+import frontend.response.Response;
 import frontend.response.auth.SignInResponse;
 import frontend.response.error.AuthErrorResponse;
-import frontend.response.Response;
 import main.AccountService;
 import model.UserProfile;
-import utils.ResponseCodes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignInServlet extends AbstractServlet {
     private AccountService accountService;
@@ -22,10 +20,11 @@ public class SignInServlet extends AbstractServlet {
         String name = request.getParameter("username");
         String password = request.getParameter("password");
 
-        UserProfile profile = accountService.getUser(name);
+        UserProfile user = accountService.getUser(name);
 
-        if (profile != null && profile.getPassword().equals(password)) {
-            return new SignInResponse(profile);
+        if (user != null && user.getPassword().equals(password)) {
+            signInUser(request, user);
+            return new SignInResponse(user);
         } else {
             return new AuthErrorResponse();
         }

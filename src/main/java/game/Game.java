@@ -2,6 +2,7 @@ package game;
 
 import main.AccountService;
 import model.UserProfile;
+import org.eclipse.jetty.server.session.AbstractSessionIdManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,13 +21,13 @@ public class Game {
     private List<Room> rooms;
     private Map<UserProfile, Room> userRooms;
 
-    public Game() {
-        accountService = new AccountService();
+    public Game(AccountService accountService) {
+        this.accountService = accountService;
         rooms = new ArrayList<>();
     }
 
     public void onNewConnection(String sessionId) {
-        UserProfile user = accountService.getSessions(sessionId);
+        UserProfile user = null; // TODO: get user by sessionId
 
         for (Room room : rooms) {
             Player player = room.getPlayerByUser(user);
@@ -56,7 +57,7 @@ public class Game {
     }
 
     public void onDisconnect(String sessionId) {
-        UserProfile user = accountService.getSessions(sessionId);
+        UserProfile user = null; // TODO: get user by sessionId
         Room userRoom = userRooms.get(user);
         if (userRoom != null) {
             Player player = userRoom.getPlayerByUser(user);
@@ -65,7 +66,7 @@ public class Game {
     }
 
     public void onReady(String sessionId) {
-        UserProfile user = accountService.getSessions(sessionId);
+        UserProfile user = null; // TODO: get user by sessionId
         Room room = userRooms.get(user);
         room.getPlayerByUser(user).setReady(true);
     }

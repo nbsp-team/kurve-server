@@ -2,6 +2,7 @@ package frontend;
 
 import frontend.response.error.ErrorResponse;
 import frontend.response.Response;
+import model.UserProfile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -56,6 +57,14 @@ public abstract class AbstractServlet extends HttpServlet {
 
     protected Response onDelete(HttpServletRequest req) {
         return null;
+    }
+
+    protected void signInUser(HttpServletRequest request, UserProfile user) {
+        request.getSession().setAttribute("username", user.getLogin());
+    }
+
+    protected void signOutUser(HttpServletRequest request) {
+        request.getSession().removeAttribute("username");
     }
 
     private void writeResponse(HttpServletResponse servResp, Response resp) throws IOException {

@@ -1,18 +1,25 @@
 package model;
 
 /**
- * Created by v.chibrikov on 13.09.2014.
+ * nickolay, 13.09.2014.
  */
 public class UserProfile {
-    private long id;
+    private static final String ADMIN_DMITRY_EMAIL = "didika914@gmail.com";
+
     private String login;
     private String password;
     private String email;
+    private boolean isAdmin = false;
 
     public UserProfile(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
+
+        // TODO: remove this
+        if (email.equals(ADMIN_DMITRY_EMAIL)) {
+            isAdmin = true;
+        }
     }
 
     public String getLogin() {
@@ -27,7 +34,11 @@ public class UserProfile {
         return email;
     }
 
-    public long getId() {
-        return id;
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

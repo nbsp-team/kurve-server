@@ -11,12 +11,14 @@ public class ErrorResponse extends Response {
     public static final int ERROR_SINGUP_FAILED = 1;
     public static final int ERROR_EMPTY_RESPONSE = 2;
     public static final int ERROR_INVALID_PARAMS = 3;
+    public static final int ERROR_PERMISSION_DENIED = 4;
 
     private static final String[] DEFAULT_ERROR_DESCRIPTIONS = new String[]{
             "Ошибка авторизации пользователя",
             "Ошибка при регистрации пользователя",
             "Сервер возвратил пустой ответ",
-            "Неверные параметры"
+            "Неверные параметры",
+            "Ошибка доступа"
     };
 
     public ErrorResponse(int errorCode, String message) {

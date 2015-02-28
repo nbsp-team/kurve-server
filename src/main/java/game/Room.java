@@ -35,7 +35,7 @@ public class Room {
 
     public Player getPlayerByUser(UserProfile userProfile) {
         for(Player player : players) {
-            if (player.getUserProfile().getId() == userProfile.getId()) {
+            if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
                 return player;
             }
         }

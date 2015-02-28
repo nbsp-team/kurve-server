@@ -1,6 +1,7 @@
 package main;
 
 import model.UserProfile;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,6 @@ import java.util.Map;
  */
 public class AccountService {
     private Map<String, UserProfile> users = new HashMap<>();
-    private Map<String, UserProfile> sessions = new HashMap<>();
 
     public boolean addUser(String userName, UserProfile userProfile) {
         if (users.containsKey(userName))
@@ -19,15 +19,11 @@ public class AccountService {
         return true;
     }
 
-    public void addSessions(String sessionId, UserProfile userProfile) {
-        sessions.put(sessionId, userProfile);
-    }
-
     public UserProfile getUser(String userName) {
         return users.get(userName);
     }
 
-    public UserProfile getSessions(String sessionId) {
-        return sessions.get(sessionId);
+    public int getUserCount() {
+        return users.size();
     }
 }
