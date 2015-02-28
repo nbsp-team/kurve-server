@@ -1,22 +1,22 @@
-package frontend.servlet.admin;
+package frontend.servlet;
 
-import frontend.AbstractAdminServlet;
+import frontend.AbstractServlet;
+import frontend.annotation.AdminRightsRequired;
+import frontend.annotation.ApiMethod;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
 import main.AccountService;
-import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ShutdownServlet extends AbstractAdminServlet {
-    private AccountService accountService;
-
+@AdminRightsRequired
+public class ShutdownServlet extends AbstractServlet {
     public ShutdownServlet(AccountService accountService) {
         super(accountService);
-        this.accountService = accountService;
     }
 
-    public Response onPost(HttpServletRequest request, UserProfile userProfile) {
+    @ApiMethod(method = HttpMethod.POST)
+    public Response shutdownServer(HttpServletRequest request) {
         String timeString = request.getParameter("time");
         if (timeString != null) {
             int timeMS = Integer.valueOf(timeString);

@@ -1,4 +1,4 @@
-package frontend.response.error;
+package frontend.response;
 
 import frontend.response.Response;
 import org.json.simple.JSONObject;
@@ -12,13 +12,15 @@ public class ErrorResponse extends Response {
     public static final int ERROR_EMPTY_RESPONSE = 2;
     public static final int ERROR_INVALID_PARAMS = 3;
     public static final int ERROR_PERMISSION_DENIED = 4;
+    public static final int ERROR_INTERNAL_SERVER = 5;
 
     private static final String[] DEFAULT_ERROR_DESCRIPTIONS = new String[]{
             "Ошибка авторизации пользователя",
             "Ошибка при регистрации пользователя",
             "Сервер возвратил пустой ответ",
             "Неверные параметры",
-            "Ошибка доступа"
+            "Ошибка доступа",
+            "Ошибка сервера"
     };
 
     public ErrorResponse(int errorCode, String message) {

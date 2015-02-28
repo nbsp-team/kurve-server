@@ -1,4 +1,4 @@
-package frontend.response.error;
+package frontend.response;
 
 /**
  * nickolay, 25.02.15.

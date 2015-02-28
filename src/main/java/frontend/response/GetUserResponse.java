@@ -1,4 +1,4 @@
-package frontend.response.user;
+package frontend.response;
 
 import frontend.response.SuccessResponse;
 import model.UserProfile;

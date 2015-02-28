@@ -1,31 +1,30 @@
-package frontend.servlet.auth;
+package frontend.servlet;
 
 import frontend.AbstractServlet;
+import frontend.annotation.ApiMethod;
 import frontend.response.Response;
-import frontend.response.auth.SignUpResponse;
-import frontend.response.error.AuthErrorResponse;
-import frontend.response.error.ErrorResponse;
+import frontend.response.SignUpResponse;
+import frontend.response.AuthErrorResponse;
+import frontend.response.ErrorResponse;
 import main.AccountService;
 import model.UserProfile;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 
 public class SignUpServlet extends AbstractServlet {
-    private AccountService accountService;
-
     public SignUpServlet(AccountService accountService) {
-        this.accountService = accountService;
+        super(accountService);
     }
 
-    public Response onPost(HttpServletRequest request) {
+    @ApiMethod(method = HttpMethod.POST)
+    public Response signUp(HttpServletRequest request) {
 
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         if(username == null || email == null || password == null) {
-            return new ErrorResponse(ErrorResponse.ERROR_PERMISSION_DENIED);
+            return new ErrorResponse(ErrorResponse.ERROR_INTERNAL_SERVER);
         } else if (!accountService.addUser(username, new UserProfile(username, password, email))) {
             return new AuthErrorResponse("User with name: " + username + " already exists");
         } else {

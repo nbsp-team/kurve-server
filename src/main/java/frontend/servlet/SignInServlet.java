@@ -1,22 +1,22 @@
-package frontend.servlet.auth;
+package frontend.servlet;
 
 import frontend.AbstractServlet;
+import frontend.annotation.ApiMethod;
 import frontend.response.Response;
-import frontend.response.auth.SignInResponse;
-import frontend.response.error.AuthErrorResponse;
+import frontend.response.SignInResponse;
+import frontend.response.AuthErrorResponse;
 import main.AccountService;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class SignInServlet extends AbstractServlet {
-    private AccountService accountService;
-
     public SignInServlet(AccountService accountService) {
-        this.accountService = accountService;
+        super(accountService);
     }
 
-    public Response onPost(HttpServletRequest request)  {
+    @ApiMethod(method = HttpMethod.POST)
+    public Response signIn(HttpServletRequest request)  {
         String name = request.getParameter("username");
         String password = request.getParameter("password");
 

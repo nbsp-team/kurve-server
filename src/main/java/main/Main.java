@@ -1,16 +1,10 @@
 package main;
 
-import frontend.servlet.admin.ServerStatusServlet;
-import frontend.servlet.admin.ShutdownServlet;
-import frontend.servlet.auth.SignInServlet;
-import frontend.servlet.auth.SignOutServlet;
-import frontend.servlet.auth.SignUpServlet;
-import frontend.servlet.user.UserServlet;
+import frontend.servlet.*;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.server.session.AbstractSessionIdManager;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -47,6 +41,7 @@ public class Main {
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
         Servlet user = new UserServlet(accountService);
+        Servlet rating = new RatingServlet(accountService);
         Servlet serverStatus = new ServerStatusServlet(accountService, sessionIdManager);
         Servlet serverShutdown = new ShutdownServlet(accountService);
 
@@ -56,6 +51,7 @@ public class Main {
         context.addServlet(new ServletHolder(signUp), "/api/v" + API_VERSION + "/auth/signup");
         context.addServlet(new ServletHolder(signOut), "/api/v" + API_VERSION + "/auth/signout");
         context.addServlet(new ServletHolder(user), "/api/v" + API_VERSION + "/user/");
+        context.addServlet(new ServletHolder(rating), "/api/v" + API_VERSION + "/rating/");
         context.addServlet(new ServletHolder(serverStatus), "/api/v" + API_VERSION + "/admin/status");
         context.addServlet(new ServletHolder(serverShutdown), "/api/v" + API_VERSION + "/admin/shutdown");
 
