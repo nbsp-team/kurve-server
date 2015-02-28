@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * nickolay, 25.02.15.
  */
-public class AbstractServlet extends HttpServlet {
+public abstract class AbstractServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse servResp) throws ServletException, IOException {
         Response response = onGet(req);
         writeResponse(servResp, response);
@@ -60,6 +60,7 @@ public class AbstractServlet extends HttpServlet {
 
     private void writeResponse(HttpServletResponse servResp, Response resp) throws IOException {
         servResp.setContentType("application/json");
+        servResp.setHeader("Server", "KurveServer (API v1)");
         if (resp != null) {
             servResp.getWriter().println(resp.getJSON());
         } else {
