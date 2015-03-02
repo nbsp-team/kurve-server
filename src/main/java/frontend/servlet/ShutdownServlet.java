@@ -2,7 +2,6 @@ package frontend.servlet;
 
 import frontend.AbstractServlet;
 import frontend.annotation.AdminRightsRequired;
-import frontend.annotation.ApiMethod;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
 import main.AccountService;
@@ -15,8 +14,7 @@ public class ShutdownServlet extends AbstractServlet {
         super(accountService);
     }
 
-    @ApiMethod(method = HttpMethod.POST)
-    public Response shutdownServer(HttpServletRequest request) {
+    public Response onPost(HttpServletRequest request) {
         String timeString = request.getParameter("time");
         if (timeString != null) {
             int timeMS = Integer.valueOf(timeString);

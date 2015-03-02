@@ -1,7 +1,6 @@
 package frontend;
 
 import frontend.annotation.AdminRightsRequired;
-import frontend.annotation.ApiMethod;
 import frontend.annotation.AuthenticationRequired;
 import frontend.response.ErrorResponse;
 import frontend.response.PermissionDeniedErrorResponse;
@@ -28,71 +27,85 @@ public abstract class AbstractServlet extends HttpServlet {
         this.accountService = accountService;
     }
 
-    public enum HttpMethod {
-        GET, HEAD, POST, PUT, DELETE
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        sendToHandler(request, response, HttpMethod.GET);
+        if(!checkPermissions(request, response)) {
+            writeResponse(response, new PermissionDeniedErrorResponse());
+        } else {
+            writeResponse(response, onGet(request));
+        }
     }
 
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        sendToHandler(request, response, HttpMethod.HEAD);
+        if(!checkPermissions(request, response)) {
+            writeResponse(response, new PermissionDeniedErrorResponse());
+        } else {
+            writeResponse(response, onHead(request));
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        sendToHandler(request, response, HttpMethod.POST);
+        if(!checkPermissions(request, response)) {
+            writeResponse(response, new PermissionDeniedErrorResponse());
+        } else {
+            writeResponse(response, onPost(request));
+        }
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        sendToHandler(request, response, HttpMethod.PUT);
+        if(!checkPermissions(request, response)) {
+            writeResponse(response, new PermissionDeniedErrorResponse());
+        } else {
+            writeResponse(response, onPut(request));
+        }
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        sendToHandler(request, response, HttpMethod.DELETE);
+        if(!checkPermissions(request, response)) {
+            writeResponse(response, new PermissionDeniedErrorResponse());
+        } else {
+            writeResponse(response, onDelete(request));
+        }
+    }
+
+    protected Response onGet(HttpServletRequest req) {
+        return null;
+    }
+
+    protected Response onHead(HttpServletRequest req) {
+        return null;
+    }
+
+    protected Response onPost(HttpServletRequest req) {
+        return null;
+    }
+
+    protected Response onPut(HttpServletRequest req) {
+        return null;
+    }
+
+    protected Response onDelete(HttpServletRequest req) {
+        return null;
     }
 
 
-    private void sendToHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
+    private boolean checkPermissions(HttpServletRequest request, HttpServletResponse response) {
         if (this.getClass().isAnnotationPresent(AuthenticationRequired.class)) {
             if (!isAuthenticated(request)) {
-                writeResponse(response, new PermissionDeniedErrorResponse());
-                return;
+                return false;
             }
         }
 
         if (this.getClass().isAnnotationPresent(AdminRightsRequired.class)) {
             if (!isAuthenticated(request) || !getUser(request).isAdmin()) {
-                writeResponse(response, new PermissionDeniedErrorResponse());
-                return;
+                return false;
             }
         }
 
-        Method[] methods = this.getClass().getMethods();
-        for(Method m : methods) {
-            if (m.isAnnotationPresent(ApiMethod.class)) {
-                ApiMethod apiMethod = m.getDeclaredAnnotation(ApiMethod.class);
-                if (apiMethod.method() == method) {
-                    processHandler(m, request, response);
-                    return;
-                }
-            }
-        }
+        return true;
     }
 
     private boolean isAuthenticated(HttpServletRequest request) {
         return request.getSession().getAttribute("username") != null;
-    }
-
-    private void processHandler(Method handler, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Response apiResponse = (Response) handler.invoke(this, request);
-            writeResponse(response, apiResponse);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
 
     private void writeResponse(HttpServletResponse response, Response apiResponse) {
@@ -112,7 +125,6 @@ public abstract class AbstractServlet extends HttpServlet {
                     new ErrorResponse(ErrorResponse.ERROR_EMPTY_RESPONSE));
         }
     }
-
 
     /* Authenticated required */
 

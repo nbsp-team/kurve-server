@@ -1,7 +1,6 @@
 package frontend.servlet;
 
 import frontend.AbstractServlet;
-import frontend.annotation.ApiMethod;
 import frontend.annotation.AuthenticationRequired;
 import frontend.response.GetUserResponse;
 import frontend.response.Response;
@@ -15,8 +14,7 @@ public class UserServlet extends AbstractServlet {
         super(accountService);
     }
 
-    @ApiMethod
-    public Response getUserInfo(HttpServletRequest request) {
+    public Response onGet(HttpServletRequest request) {
         return new GetUserResponse(getUser(request));
     }
 }

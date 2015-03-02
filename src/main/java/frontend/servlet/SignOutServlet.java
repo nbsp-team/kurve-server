@@ -1,7 +1,6 @@
 package frontend.servlet;
 
 import frontend.AbstractServlet;
-import frontend.annotation.ApiMethod;
 import frontend.annotation.AuthenticationRequired;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
@@ -15,8 +14,7 @@ public class SignOutServlet extends AbstractServlet {
         super(accountService);
     }
 
-    @ApiMethod(method = HttpMethod.POST)
-    public Response signOut(HttpServletRequest request) {
+    public Response onPost(HttpServletRequest request) {
         signOutUser(request);
         return new SuccessResponse();
     }

@@ -1,7 +1,6 @@
 package frontend.servlet;
 
 import frontend.AbstractServlet;
-import frontend.annotation.ApiMethod;
 import frontend.response.RatingResponse;
 import frontend.response.Response;
 import main.AccountService;
@@ -13,8 +12,7 @@ public class RatingServlet extends AbstractServlet {
         super(accountService);
     }
 
-    @ApiMethod
-    public Response getGlobalRating(HttpServletRequest request) {
+    public Response onGet(HttpServletRequest request) {
         return new RatingResponse();
     }
 }
