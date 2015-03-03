@@ -12,6 +12,7 @@ import java.util.Objects;
 public class SuccessResponse extends Response {
     public SuccessResponse() {
         rootJson.put("error", null);
+        rootJson.put("response", new JSONObject());
     }
 
     public SuccessResponse(Map<String, Object> data) {

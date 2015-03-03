@@ -12,6 +12,11 @@ import java.util.Map;
 public class AccountService {
     private Map<String, UserProfile> users = new HashMap<>();
 
+    public AccountService() {
+        // TODO: remove from release
+        addUser("admin", new UserProfile("admin", "admin", "didika914@gmail.com"));
+    }
+
     public boolean addUser(String userName, UserProfile userProfile) {
         if (users.containsKey(userName))
             return false;

@@ -19,9 +19,15 @@ public class ShutdownServlet extends AbstractServlet {
         if (timeString != null) {
             int timeMS = Integer.valueOf(timeString);
             System.out.print("Server will be down after: "+ timeMS + " ms");
-            TimeHelper.sleep(timeMS);
-            System.out.print("\nShutdown.");
-            System.exit(0);
+
+            (new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    TimeHelper.sleep(timeMS);
+                    System.out.print("\nShutdown.");
+                    System.exit(0);
+                }
+            })).start();
         }
 
         return new SuccessResponse();
