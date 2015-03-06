@@ -1,15 +1,20 @@
 package main;
 
 import frontend.servlet.*;
+import game.Game;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.server.session.HashSessionIdManager;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
+import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import utils.SessionManager;
+import websocket.GameWebSocketHandler;
 
 import javax.servlet.Servlet;
 import java.net.InetSocketAddress;
@@ -30,19 +35,19 @@ public class Main {
 
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
 
-        HashSessionIdManager sessionIdManager = new HashSessionIdManager();
-
         Server server = new Server(new InetSocketAddress("0.0.0.0", port));
-        server.setSessionIdManager(sessionIdManager);
+        SessionManager sessionManager = new SessionManager();
+        server.setSessionIdManager(sessionManager);
 
         AccountService accountService = new AccountService();
 
+        // Create servlets
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
         Servlet user = new UserServlet(accountService);
         Servlet rating = new RatingServlet(accountService);
-        Servlet serverStatus = new ServerStatusServlet(accountService, sessionIdManager);
+        Servlet serverStatus = new ServerStatusServlet(accountService, sessionManager);
         Servlet serverShutdown = new ShutdownServlet(accountService);
 
         // Build web app context
@@ -59,10 +64,14 @@ public class Main {
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
+
+        // Init game
+        Game game = new Game(accountService, sessionManager);
+
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
-                factory.register(websocket.WebSocketHandler.class);
+                factory.setCreator(new GameWebSocketCreator(game));
             }
         };
 
@@ -73,5 +82,18 @@ public class Main {
 
         server.start();
         server.join();
+    }
+
+    public static class GameWebSocketCreator implements WebSocketCreator {
+        private Game game;
+
+        public GameWebSocketCreator(Game game) {
+            this.game = game;
+        }
+
+        @Override
+        public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
+            return new GameWebSocketHandler(game);
+        }
     }
 }

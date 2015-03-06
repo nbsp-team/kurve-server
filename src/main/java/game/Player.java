@@ -2,10 +2,9 @@ package game;
 
 import model.UserProfile;
 import model.snake.Snake;
+import org.eclipse.jetty.websocket.api.Session;
 
-import javax.servlet.http.HttpSession;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import java.util.Set;
  */
 public class Player {
     private int points = 0;
-    private Set<String> sessions;
+    private Set<Session> sessions;
     private Color color;
     private UserProfile userProfile;
     private Snake snake;
@@ -27,8 +26,8 @@ public class Player {
         this.snake = new Snake();
     }
 
-    public void connectSession(String sessionId) {
-        sessions.add(sessionId);
+    public void connectSession(Session session) {
+        sessions.add(session);
     }
 
     public boolean isReady() {
