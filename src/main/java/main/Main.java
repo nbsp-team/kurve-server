@@ -68,10 +68,11 @@ public class Main {
         // Init game
         Game game = new Game(accountService, sessionManager);
 
+        // Create WebSocketHandler
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
-                factory.setCreator(new GameWebSocketCreator(game));
+                factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(game));
             }
         };
 
@@ -82,18 +83,5 @@ public class Main {
 
         server.start();
         server.join();
-    }
-
-    public static class GameWebSocketCreator implements WebSocketCreator {
-        private Game game;
-
-        public GameWebSocketCreator(Game game) {
-            this.game = game;
-        }
-
-        @Override
-        public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
-            return new GameWebSocketHandler(game);
-        }
     }
 }

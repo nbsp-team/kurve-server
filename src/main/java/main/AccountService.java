@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by v.chibrikov on 13.09.2014.
+ * v.chibrikov, 13.09.2014.
  */
 public class AccountService {
     private Map<String, UserProfile> users = new HashMap<>();

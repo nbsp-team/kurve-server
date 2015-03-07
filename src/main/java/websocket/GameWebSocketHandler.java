@@ -6,6 +6,9 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.api.annotations.*;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
+import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 
 import javax.servlet.http.Cookie;
 import java.io.IOException;
@@ -60,5 +63,18 @@ public class GameWebSocketHandler extends WebSocketAdapter {
             }
         }
         return null;
+    }
+
+    public static class GameWebSocketCreator implements WebSocketCreator {
+        private Game game;
+
+        public GameWebSocketCreator(Game game) {
+            this.game = game;
+        }
+
+        @Override
+        public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
+            return new GameWebSocketHandler(game);
+        }
     }
 }
