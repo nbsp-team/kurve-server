@@ -1,16 +1,13 @@
 package websocket;
 
 import game.Game;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.api.WebSocketException;
-import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 
-import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.net.HttpCookie;
 import java.util.List;
@@ -45,14 +42,12 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketConnect(Session session) {
         String sessionId = getSessionId(session.getUpgradeRequest().getCookies());
-        game.onNewConnection(sessionId, session);
+        game.onNewConnection(sessionId, new WebSocketConnection(session));
 
         try {
             session.getRemote().sendString("Hello!");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (WebSocketException e2) {
-            e2.printStackTrace();
+        } catch (IOException | WebSocketException e) {
+            e.printStackTrace();
         }
     }
 

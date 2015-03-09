@@ -1,7 +1,8 @@
 package frontend.response;
 
-import frontend.response.Response;
-import org.json.simple.JSONObject;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
 
 /**
  * nickolay, 25.02.15.
@@ -23,15 +24,35 @@ public class ErrorResponse extends Response {
             "Ошибка сервера"
     };
 
-    public ErrorResponse(int errorCode, String message) {
-        JSONObject errorJsonObject = new JSONObject();
-        errorJsonObject.put("code", errorCode);
-        errorJsonObject.put("description", message);
+    private int errorCode;
+    private String description;
 
-        rootJson.put("error", errorJsonObject);
+    public ErrorResponse(int errorCode, String description) {
+        this.errorCode = errorCode;
+        this.description = description;
     }
 
     public ErrorResponse(int errorCode) {
         this(errorCode, DEFAULT_ERROR_DESCRIPTIONS[errorCode]);
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorDescription() {
+        return description;
+    }
+
+    public static class serializer implements JsonSerializer<ErrorResponse> {
+        public JsonElement serialize(ErrorResponse src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject errorObject = new JsonObject();
+            errorObject.add("code", new JsonPrimitive(src.getErrorCode()));
+            errorObject.add("description", new JsonPrimitive(src.getErrorDescription()));
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("error", errorObject);
+            return jsonObject;
+        }
     }
 }

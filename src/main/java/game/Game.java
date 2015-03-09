@@ -2,8 +2,8 @@ package game;
 
 import main.AccountService;
 import model.UserProfile;
-import org.eclipse.jetty.websocket.api.Session;
 import utils.SessionManager;
+import websocket.WebSocketConnection;
 
 import javax.servlet.http.HttpSession;
 import java.awt.*;
@@ -28,7 +28,7 @@ public class Game {
         rooms = new ArrayList<>();
     }
 
-    public void onNewConnection(String sessionId, Session session) {
+    public void onNewConnection(String sessionId, WebSocketConnection connection) {
         System.out.println("New ws: " + sessionId);
         UserProfile user = getUserBySessionId(sessionId);
 
@@ -41,16 +41,16 @@ public class Game {
         for (Room room : rooms) {
             Player player = room.getPlayerByUser(user);
 
-            // If player already exist - connect session
+            // If player already exist - add connection
             if (player != null) {
-                player.connectSession(session);
+                player.addConnection(connection);
                 return;
             }
 
-            // If founded room with enough places
+            // If founded room with enough space
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
                 Player newPlayer = new Player(Color.BLUE, user);
-                newPlayer.connectSession(session);
+                newPlayer.addConnection(connection);
                 room.onNewPlayer(newPlayer);
                 return;
             }
@@ -59,7 +59,7 @@ public class Game {
         // Room not found - create new
         Room newRoom = new Room();
         Player newPlayer = new Player(Color.BLUE, user);
-        newPlayer.connectSession(session);
+        newPlayer.addConnection(connection);
         newRoom.onNewPlayer(newPlayer);
         rooms.add(newRoom);
     }
@@ -105,7 +105,8 @@ public class Game {
         Optional<HttpSession> session = sessionManager.getSessionById(sessionId);
 
         if (session.isPresent()) {
-            UserProfile user = accountService.getUser((String) session.get().getAttribute("username"));
+            String username = (String) session.get().getAttribute("username");
+            UserProfile user = accountService.getUser(username);
             return user;
         } else {
             return null;

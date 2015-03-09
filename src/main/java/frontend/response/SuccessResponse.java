@@ -1,27 +1,22 @@
 package frontend.response;
 
-import org.json.simple.JSONObject;
+import com.google.gson.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.Type;
 
 /**
  * nickolay, 25.02.15.
  */
 public class SuccessResponse extends Response {
     public SuccessResponse() {
-        rootJson.put("error", null);
-        rootJson.put("response", new JSONObject());
     }
 
-    public SuccessResponse(Map<String, Object> data) {
-        this();
-        setData(data);
-    }
-
-    public void setData(Map<String, Object> data) {
-        JSONObject responseJson = new JSONObject(data);
-        rootJson.put("response", responseJson);
+    public static class serializer implements JsonSerializer<SuccessResponse> {
+        public JsonElement serialize(SuccessResponse src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("error", JsonNull.INSTANCE);
+            jsonObject.add("response", new JsonObject());
+            return jsonObject;
+        }
     }
 }

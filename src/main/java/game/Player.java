@@ -2,7 +2,7 @@ package game;
 
 import model.UserProfile;
 import model.snake.Snake;
-import org.eclipse.jetty.websocket.api.Session;
+import websocket.WebSocketConnection;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -13,21 +13,21 @@ import java.util.Set;
  */
 public class Player {
     private int points = 0;
-    private Set<Session> sessions;
+    private Set<WebSocketConnection> connections;
     private Color color;
     private UserProfile userProfile;
     private Snake snake;
     private boolean isReady = false;
 
     public Player(Color color, UserProfile userProfile) {
-        this.sessions = new HashSet<>();
+        this.connections = new HashSet<>();
         this.color = color;
         this.userProfile = userProfile;
         this.snake = new Snake();
     }
 
-    public void connectSession(Session session) {
-        sessions.add(session);
+    public void addConnection(WebSocketConnection connection) {
+        connections.add(connection);
     }
 
     public boolean isReady() {
