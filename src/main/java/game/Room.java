@@ -10,12 +10,12 @@ import java.util.List;
  */
 public class Room {
     enum RoomState {
-        waiting,
-        game
+        WAITING,
+        GAME
     }
 
     private List<Player> players;
-    private RoomState roomState = RoomState.waiting;
+    private RoomState roomState = RoomState.WAITING;
 
     public Room() {
         players = new ArrayList<>();
@@ -47,7 +47,7 @@ public class Room {
     }
 
     private void startGame() {
-        roomState = RoomState.game;
+        roomState = RoomState.GAME;
     }
 
     public RoomState getRoomState() {
