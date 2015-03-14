@@ -1,63 +1,38 @@
 package model.snake;
 
-import utils.Point;
 
-/**
- * nickolay, 21.02.15.
- */
-public class SnakePartArc extends SnakePart {
-    enum Direction {
-        left,
-        light
+
+public class SnakePartArc
+{
+
+
+    private float y, x, r;
+    private float angle, span;
+    private int halfWidth;
+
+    public SnakePartArc(float x, float y, float r, float startAngle, float span, int width){
+
+        this.r = r;
+        this.x = x;
+        this.y = y;
+        angle = startAngle;
+        this.span = span;
+        halfWidth = width / 2;
     }
 
-    private Point pointFrom;
-    private float radius;
-    private Direction direction;
-    private float angle;
+    public void update_head(float span) {
+        this.span = span;
+    }
+    public boolean is_inside(float x, float y) {
 
-    public SnakePartArc(Point pointFrom, float radius, Direction direction, float angle) {
-        this.pointFrom = pointFrom;
-        this.radius = radius;
-        this.direction = direction;
-        this.angle = angle;
+
+        double d = Math.sqrt((x-this.x)*(x-this.x)+(y-this.y)*(y-this.y));
+        if(Math.abs(d-r)>halfWidth) return false;
+        double alpha = Math.atan2((y-this.y),(x-this.x));
+
+
+        return ((alpha<=angle) != (alpha< angle + span));
+
     }
 
-    public Point getPointFrom() {
-        return pointFrom;
-    }
-
-    public void setPointFrom(Point pointFrom) {
-        this.pointFrom = pointFrom;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    public float getAngle() {
-        return angle;
-    }
-
-    public void setAngle(float angle) {
-        if (angle >= 0 && angle <= 2 * Math.PI) {
-            this.angle = angle;
-        } else {
-            throw new IllegalArgumentException(
-                    "Angle must be larger than 0 and smaller than 2*pi"
-            );
-        }
-    }
 }
