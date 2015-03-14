@@ -67,11 +67,13 @@ public class GameField {
 
 
 
-    public static final int LEFT_DOWN_EVENT = 1;
-    public static final int RIGHT_DOWN_EVENT = 2;
-    public static final int LEFT_UP_EVENT = 3;
-    public static final int RIGHT_UP_EVENT = 4;
-    public void do_event(int sender, int event) {
+    public enum Event {
+       LEFT_DOWN_EVENT,
+        RIGHT_DOWN_EVENT,
+        LEFT_UP_EVENT,
+        RIGHT_UP_EVENT
+    }
+    public void do_event(int sender, Event event) {
         switch (event){
             case LEFT_DOWN_EVENT: {
                 snakes.get(sender).start_turning(Snake.TurnState.TURNING_LEFT);
