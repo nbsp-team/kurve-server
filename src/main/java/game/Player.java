@@ -23,7 +23,7 @@ public class Player {
         this.connections = new HashSet<>();
         this.color = color;
         this.userProfile = userProfile;
-        this.snake = new Snake();
+        //this.snake = new Snake();
     }
 
     public void addConnection(WebSocketConnection connection) {

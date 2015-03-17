@@ -8,31 +8,30 @@ import java.lang.Math;
  * nickolay, 21.02.15.
  */
 
-public class Snake
-{
+public class Snake {
+    private static final int DEFAULT_SNAKE_WIDTH = 6;
+    private static final int DEFAULT_HOLE_LENGTH = 5;
+    private static final int DEFAULT_PART_LENGTH = 20;
+
     private List<SnakePartLine> snakeLines;
     private List<SnakePartArc> snakeArcs;
-
 
     private boolean alive;
     private float x, y, vx, vy, angle;
     private float v, angleV;
     private int partStopper, holeStopper, stepCounter;
+    private int width;
 
     private TurnState turning;
     public enum TurnState {
-         TURNING_LEFT,
+        TURNING_LEFT,
         TURNING_RIGHT,
         NOT_TURNING
     }
     private float arcCenterX, arcCenterY;
     private float arcRadius, arcAngle, arcStartAngle;
-    private static final int DEFAULT_SNAKE_WIDTH = 6;
-    private static final int DEFAULT_HOLE_LENGTH = 5;
-    private static final int DEFAULT_PART_LENGTH = 20;
 
-    public Snake(float x, float y, float speed, float angleSpeed, float angle)
-    {
+    public Snake(float x, float y, float speed, float angleSpeed, float angle) {
         this.x = x;
         this.y = y;
 
@@ -55,11 +54,11 @@ public class Snake
         snakeArcs = new ArrayList<>(0);
     }
 
-    public void start_turning(TurnState where) {
+    public void startTurning(TurnState where) {
         turning = where;
         doArc();
     }
-    public void stop_turning(TurnState where){
+    public void stopTurning(TurnState where){
         if(turning==where) {
             turning = TurnState.NOT_TURNING;
             vx = v*(float)Math.cos(angle);
@@ -91,6 +90,7 @@ public class Snake
         snakeLines.add(newLine);
         sendUpdatesToEveryone();
     }
+
     public void teleport(float x, float y) {
         this.x = x;
         this.y = y;
@@ -101,7 +101,6 @@ public class Snake
         }
     }
     public void step() {
-
         makeHoles();
 
         if(turning == TurnState.NOT_TURNING) {
@@ -124,7 +123,8 @@ public class Snake
             if(drawing()) lastArc().update_head(arcAngle-arcStartAngle);
         }
     }
-    public boolean is_inside(float x, float y, boolean itself) {
+
+    public boolean isInside(float x, float y, boolean itself) {
 
         boolean res = false;
 
@@ -154,7 +154,6 @@ public class Snake
     public boolean isAlive() { return alive;}
     public void setAlive(boolean alive) {this.alive = alive;}
 
-
     private float normAngle(float angle) {
 
         angle = angle % 2*(float)Math.PI;
@@ -173,6 +172,7 @@ public class Snake
         }
         stepCounter++;
     }
+
     private boolean drawing() {
         return stepCounter < partStopper;
     }
@@ -182,10 +182,8 @@ public class Snake
     private SnakePartLine lastLine() {
         return snakeLines.get(snakeLines.size() - 1);
     }
+
     private void sendUpdatesToEveryone() {
         // send new parts to all players
     }
-
-
-    private int width;
 }

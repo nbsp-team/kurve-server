@@ -3,17 +3,17 @@ package game;
 import model.snake.Snake;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class GameField {
+    private static final int MAX_FPS = 30;
+    private static final float DEFAULT_SNAKE_SPEED = 5;
+    private static final float DEFAULT_SNAKE_ANGLE_SPEED = 0.1f;
+
     private boolean playing;
     private List<Snake> snakes;
     private int fieldWidth, fieldHeight, numPlayers;
     private long milliSecPerStep;
-    private static final int MAX_FPS = 30;
-    private static final float DEFAULT_SNAKE_SPEED = 5;
-    private static final float DEFAULT_SNAKE_ANGLE_SPEED = 0.1f;
 
     public GameField( int width, int height, int numOfPlayers){
         fieldWidth = width;
@@ -26,7 +26,7 @@ public class GameField {
             float angle = i*2*(float)Math.PI/numPlayers;
             float x = fieldWidth/2 + screenQuarter*(float)Math.cos(angle);
             float y = fieldHeight/2 + screenQuarter*(float)Math.sin(angle);
-            Snake newSnake = new Snake(x, y, DEFAULT_SNAKE_SPEED/MAX_FPS, DEFAULT_SNAKE_ANGLE_SPEED/MAX_FPS, angle);
+            Snake newSnake = new Snake(x, y, DEFAULT_SNAKE_SPEED / MAX_FPS, DEFAULT_SNAKE_ANGLE_SPEED / MAX_FPS, angle);
             snakes.add(newSnake);
         }
         milliSecPerStep = 1000 / MAX_FPS;
@@ -38,7 +38,6 @@ public class GameField {
         playing = true;
 
         Runnable gameLoop = new Runnable(){
-
             @Override
             public void run(){
                 while(playing) {
@@ -65,10 +64,8 @@ public class GameField {
         playing = false;
     }
 
-
-
     public enum Event {
-       LEFT_DOWN_EVENT,
+        LEFT_DOWN_EVENT,
         RIGHT_DOWN_EVENT,
         LEFT_UP_EVENT,
         RIGHT_UP_EVENT
@@ -76,16 +73,16 @@ public class GameField {
     public void do_event(int sender, Event event) {
         switch (event){
             case LEFT_DOWN_EVENT: {
-                snakes.get(sender).start_turning(Snake.TurnState.TURNING_LEFT);
+                snakes.get(sender).startTurning(Snake.TurnState.TURNING_LEFT);
             } break;
             case RIGHT_DOWN_EVENT: {
-                snakes.get(sender).start_turning(Snake.TurnState.TURNING_RIGHT);
+                snakes.get(sender).startTurning(Snake.TurnState.TURNING_RIGHT);
             } break;
             case LEFT_UP_EVENT: {
-                snakes.get(sender).stop_turning(Snake.TurnState.TURNING_LEFT);
+                snakes.get(sender).stopTurning(Snake.TurnState.TURNING_LEFT);
             } break;
             case RIGHT_UP_EVENT: {
-                snakes.get(sender).stop_turning(Snake.TurnState.TURNING_RIGHT);
+                snakes.get(sender).stopTurning(Snake.TurnState.TURNING_RIGHT);
             } break;
 
         }
@@ -113,7 +110,7 @@ public class GameField {
                 //checking for collisions:
                 int ii = 0;
                 for(Snake otherSnake : snakes) {
-                    if(otherSnake.is_inside(x, y, ii==i)){
+                    if(otherSnake.isInside(x, y, ii == i)){
                         snake.setAlive(false);
                     }
                     ii++;
