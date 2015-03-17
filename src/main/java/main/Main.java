@@ -66,13 +66,17 @@ public class Main {
 
 
         // Init game
-        Game game = new Game(accountService, sessionManager);
+        Game game = new Game(accountService);
 
         // Create WebSocketHandler
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
-                factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(game));
+                factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(
+                        sessionManager,
+                        accountService,
+                        game
+                ));
             }
         };
 

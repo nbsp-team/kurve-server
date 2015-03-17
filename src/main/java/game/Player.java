@@ -1,10 +1,16 @@
 package game;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import model.UserProfile;
 import model.snake.Snake;
 import websocket.WebSocketConnection;
+import websocket.message.Message;
 
 import java.awt.*;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +36,12 @@ public class Player {
         connections.add(connection);
     }
 
+    public void sendMessage(Message message) {
+        for(WebSocketConnection connection : connections) {
+            connection.sendMessage(message);
+        }
+    }
+
     public boolean isReady() {
         return isReady;
     }
@@ -48,5 +60,20 @@ public class Player {
 
     public Snake getSnake() {
         return snake;
+    }
+
+    public static class serializer implements JsonSerializer<Player> {
+        public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+
+            jsonObject.addProperty("username", src.getUserProfile().getLogin());
+            jsonObject.addProperty("global_rating", 0);
+            jsonObject.addProperty("is_ready", src.isReady());
+            jsonObject.addProperty("color",
+                    "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
+            );
+
+            return jsonObject;
+        }
     }
 }

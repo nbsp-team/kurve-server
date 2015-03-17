@@ -1,6 +1,8 @@
 package game;
 
 import model.UserProfile;
+import websocket.message.Message;
+import websocket.message.RoomPlayersMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class Room {
 
     public void onNewPlayer(Player player) {
         players.add(player);
+        broadcastMessage(new RoomPlayersMessage(this));
     }
 
     public void onPlayerReady(Player player) {
@@ -31,6 +34,13 @@ public class Room {
 
     public void onPlayerDisconnect(Player player) {
         players.remove(player);
+        broadcastMessage(new RoomPlayersMessage(this));
+    }
+
+    public void broadcastMessage(Message message) {
+        for(Player player : players) {
+            player.sendMessage(message);
+        }
     }
 
     public Player getPlayerByUser(UserProfile userProfile) {
@@ -44,6 +54,10 @@ public class Room {
 
     public int getPlayerCount() {
         return players.size();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     private void startGame() {

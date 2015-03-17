@@ -4,7 +4,9 @@ import main.AccountService;
 import model.UserProfile;
 import utils.SessionManager;
 import websocket.WebSocketConnection;
+import websocket.message.RoomPlayersMessage;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.util.*;
@@ -18,23 +20,30 @@ public class Game {
     private static final int MAX_PLAYER_IN_ROOM = 6;
 
     private AccountService accountService;
-    private final SessionManager sessionManager;
 
     private List<Room> rooms;
 
-    public Game(AccountService accountService, SessionManager sessionManager) {
+    public Game(AccountService accountService) {
         this.accountService = accountService;
-        this.sessionManager = sessionManager;
         rooms = new ArrayList<>();
     }
 
-    public void onNewConnection(String sessionId, WebSocketConnection connection) {
-        System.out.println("New ws: " + sessionId);
-        UserProfile user = getUserBySessionId(sessionId);
+    public void onNewConnection(UserProfile user, WebSocketConnection connection) {
+        System.out.println("New ws: " + user);
 
         if (user == null) {
             // TODO: close status 1
-            // session.close();
+            // connection.close();
+
+            // TEST:
+            Room tmpRoom = new Room();
+            tmpRoom.onNewPlayer(
+                    new Player(
+                            Color.BLUE,
+                            new UserProfile("test", "test", "test@gmail.com")
+                    )
+            );
+            connection.sendMessage(new RoomPlayersMessage(tmpRoom));
             return;
         }
 
@@ -64,9 +73,7 @@ public class Game {
         rooms.add(newRoom);
     }
 
-    public void onDisconnect(String sessionId) {
-        UserProfile user = getUserBySessionId(sessionId);
-
+    public void onDisconnect(UserProfile user) {
         if (user == null) {
             return;
         }
@@ -90,26 +97,12 @@ public class Game {
         return null;
     }
 
-    public void onReady(String sessionId) {
-        UserProfile user = getUserBySessionId(sessionId);
-
+    public void onReady(UserProfile user) {
         if (user != null) {
             Room room = findPlayerRoom(user);
             if (room != null) {
                 room.getPlayerByUser(user).setReady(true);
             }
-        }
-    }
-
-    private UserProfile getUserBySessionId(String sessionId) {
-        Optional<HttpSession> session = sessionManager.getSessionById(sessionId);
-
-        if (session.isPresent()) {
-            String username = (String) session.get().getAttribute("username");
-            UserProfile user = accountService.getUser(username);
-            return user;
-        } else {
-            return null;
         }
     }
 }
