@@ -3,6 +3,7 @@ package game;
 import main.AccountService;
 import model.UserProfile;
 import utils.SessionManager;
+import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
 import websocket.message.RoomPlayersMessage;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * nickolay, 21.02.15.
  */
-public class Game {
+public class Game implements GameWebSocketHandler.WebSocketMessageListener {
     private static final int MIN_PLAYER_IN_ROOM = 2;
     private static final int MAX_PLAYER_IN_ROOM = 6;
 
@@ -28,6 +29,7 @@ public class Game {
         rooms = new ArrayList<>();
     }
 
+    @Override
     public void onNewConnection(UserProfile user, WebSocketConnection connection) {
         System.out.println("New ws: " + user);
 
@@ -73,6 +75,7 @@ public class Game {
         rooms.add(newRoom);
     }
 
+    @Override
     public void onDisconnect(UserProfile user) {
         if (user == null) {
             return;
@@ -82,6 +85,16 @@ public class Game {
         if (userRoom != null) {
             Player player = userRoom.getPlayerByUser(user);
             userRoom.onPlayerDisconnect(player);
+        }
+    }
+
+    @Override
+    public void onUserReady(UserProfile user) {
+        if (user != null) {
+            Room room = findPlayerRoom(user);
+            if (room != null) {
+                room.getPlayerByUser(user).setReady(true);
+            }
         }
     }
 
@@ -95,14 +108,5 @@ public class Game {
             }
         }
         return null;
-    }
-
-    public void onReady(UserProfile user) {
-        if (user != null) {
-            Room room = findPlayerRoom(user);
-            if (room != null) {
-                room.getPlayerByUser(user).setReady(true);
-            }
-        }
     }
 }

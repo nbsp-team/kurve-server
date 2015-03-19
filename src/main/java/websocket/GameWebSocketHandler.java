@@ -20,12 +20,12 @@ import java.util.Optional;
  */
 
 public class GameWebSocketHandler extends WebSocketAdapter {
-    private Game game;
+    private WebSocketMessageListener messageListener;
     private UserProfile userProfile;
 
-    public GameWebSocketHandler(UserProfile userProfile, Game gameInstance) {
+    public GameWebSocketHandler(UserProfile userProfile, WebSocketMessageListener messageListener) {
         this.userProfile = userProfile;
-        this.game = gameInstance;
+        this.messageListener = messageListener;
     }
 
     @Override
@@ -36,28 +36,28 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         System.out.println("Close: statusCode=" + statusCode + " " + reason);
-        game.onDisconnect(userProfile);
+        messageListener.onDisconnect(userProfile);
     }
 
     @Override
     public void onWebSocketText(String message) {
-        //TODO: route message to correct game method
+        //TODO: route message to correct messageListener method
     }
 
     @Override
     public void onWebSocketConnect(Session session) {
-        game.onNewConnection(userProfile, new WebSocketConnection(session));
+        messageListener.onNewConnection(userProfile, new WebSocketConnection(session));
     }
 
     public static class GameWebSocketCreator implements WebSocketCreator {
         private AccountService accountService;
         private SessionManager sessionManager;
-        private Game game;
+        private WebSocketMessageListener messageListener;
 
-        public GameWebSocketCreator(SessionManager sessionManager, AccountService accountService, Game game) {
+        public GameWebSocketCreator(SessionManager sessionManager, AccountService accountService, WebSocketMessageListener messageListener) {
             this.accountService = accountService;
             this.sessionManager = sessionManager;
-            this.game = game;
+            this.messageListener = messageListener;
         }
 
         @Override
@@ -65,7 +65,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
             String sessionId = getSessionId(servletUpgradeRequest.getCookies());
             return new GameWebSocketHandler(
                     getUserBySessionId(sessionId),
-                    game
+                    messageListener
             );
         }
 
@@ -88,5 +88,11 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 return null;
             }
         }
+    }
+
+    public static interface WebSocketMessageListener {
+        public void onNewConnection(UserProfile user, WebSocketConnection connection);
+        public void onDisconnect(UserProfile user);
+        public void onUserReady(UserProfile user);
     }
 }
