@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.session.HashSessionIdManager;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -11,7 +12,15 @@ import java.util.Optional;
  */
 public class SessionManager extends HashSessionIdManager {
     public Optional<HttpSession> getSessionById(String id) {
-        Collection<HttpSession> session = getSession(id);
-        return session.stream().findFirst();
+        Collection<HttpSession> sessions = getSession(id);
+
+        HttpSession session = null;
+        try {
+            session = sessions.iterator().next();
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.ofNullable(session);
     }
 }
