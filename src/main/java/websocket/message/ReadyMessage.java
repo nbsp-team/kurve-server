@@ -3,6 +3,7 @@ package websocket.message;
 import com.google.gson.*;
 import game.Player;
 import game.Room;
+import websocket.GameWebSocketHandler;
 
 import java.lang.reflect.Type;
 
@@ -10,33 +11,28 @@ import java.lang.reflect.Type;
  * nickolay, 17.03.15.
  */
 public class ReadyMessage extends Message {
-    private Room room;
+    private boolean isReady;
+    private int playerId;
 
-    public ReadyMessage(Room room) {
-        this.room = room;
+    public ReadyMessage(int playerId, boolean isReady) {
+        this.isReady = isReady;
+        this.playerId = playerId;
     }
 
-    public Room getRoom() {
-        return room;
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public int getPlayerId() {
+        return playerId;
     }
 
     public static class serializer implements JsonSerializer<ReadyMessage> {
         public JsonElement serialize(ReadyMessage src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject responseObject = new JsonObject();
-            responseObject.addProperty("code", 0);
-
-            JsonArray playersArray = new JsonArray();
-            for(int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
-                Player player = src.getRoom().getPlayers().get(i);
-                JsonElement playerObject = context.serialize(player);
-                if (playerObject.isJsonObject()) {
-                    ((JsonObject) playerObject).addProperty("player_id", i);
-                }
-                playersArray.add(playerObject);
-            }
-
-            responseObject.add("players", playersArray);
-
+            responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_READY_RESPONSE.ordinal());
+            responseObject.addProperty("ready", src.isReady());
+            responseObject.addProperty("player_id", src.getPlayerId());
             return responseObject;
         }
     }

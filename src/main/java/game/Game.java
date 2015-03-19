@@ -5,6 +5,7 @@ import model.UserProfile;
 import utils.SessionManager;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
+import websocket.message.ReadyMessage;
 import websocket.message.RoomPlayersMessage;
 
 import javax.jws.soap.SOAPBinding;
@@ -20,6 +21,7 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
     private static final int MIN_PLAYER_IN_ROOM = 2;
     private static final int MAX_PLAYER_IN_ROOM = 6;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private AccountService accountService;
 
     private List<Room> rooms;
@@ -89,11 +91,16 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
     }
 
     @Override
-    public void onUserReady(UserProfile user) {
+    public void onUserReady(UserProfile user, boolean isReady) {
         if (user != null) {
             Room room = findPlayerRoom(user);
             if (room != null) {
-                room.getPlayerByUser(user).setReady(true);
+                int playerId = room.getPlayerIdByUser(user);
+                room.getPlayers().get(playerId).setReady(isReady);
+                room.broadcastMessageExceptUser(new ReadyMessage(
+                        playerId,
+                        isReady
+                ), user);
             }
         }
     }

@@ -5,6 +5,7 @@ import model.snake.Snake;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("UnusedDeclaration")
 public class GameField {
     private static final int MAX_FPS = 30;
     private static final float DEFAULT_SNAKE_SPEED = 5;

@@ -2,10 +2,7 @@ package model.snake;
 
 
 
-public class SnakePartArc
-{
-
-
+public class SnakePartArc {
     private float y, x, r;
     private float angle, span;
     private int halfWidth;

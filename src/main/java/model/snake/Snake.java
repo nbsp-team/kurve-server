@@ -23,11 +23,13 @@ public class Snake {
     private int width;
 
     private TurnState turning;
+
     public enum TurnState {
         TURNING_LEFT,
         TURNING_RIGHT,
         NOT_TURNING
     }
+
     private float arcCenterX, arcCenterY;
     private float arcRadius, arcAngle, arcStartAngle;
 
@@ -58,6 +60,7 @@ public class Snake {
         turning = where;
         doArc();
     }
+
     public void stopTurning(TurnState where){
         if(turning==where) {
             turning = TurnState.NOT_TURNING;
@@ -66,6 +69,7 @@ public class Snake {
             doLine();
         }
     }
+
     private void doArc(){
 
         if(turning == TurnState.TURNING_LEFT){
@@ -84,6 +88,7 @@ public class Snake {
         snakeArcs.add(newArc);
         sendUpdatesToEveryone();
     }
+
     private void doLine(){
         if(!drawing()) return;
         SnakePartLine newLine = new SnakePartLine(x, y, vx, vy, width);
@@ -100,6 +105,7 @@ public class Snake {
             doArc();
         }
     }
+
     public void step() {
         makeHoles();
 
@@ -161,6 +167,7 @@ public class Snake {
         if(angle < 0) angle += 2*Math.PI;
         return angle;
     }
+
     private void makeHoles() {
         if(stepCounter > holeStopper) {
             stepCounter = 0;

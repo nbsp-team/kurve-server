@@ -25,7 +25,7 @@ public class Player {
     private Snake snake;
     private boolean isReady = false;
 
-    public Player(Color color, UserProfile userProfile) {
+    public Player(@SuppressWarnings("SameParameterValue") Color color, UserProfile userProfile) {
         this.connections = new HashSet<>();
         this.color = color;
         this.userProfile = userProfile;

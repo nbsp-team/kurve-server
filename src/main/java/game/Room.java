@@ -43,6 +43,15 @@ public class Room {
         }
     }
 
+    public void broadcastMessageExceptUser(Message message, UserProfile user) {
+        for(Player player : players) {
+            String roomUserLogin = player.getUserProfile().getLogin();
+            if (!roomUserLogin.equals(user.getLogin())) {
+                player.sendMessage(message);
+            }
+        }
+    }
+
     public Player getPlayerByUser(UserProfile userProfile) {
         for(Player player : players) {
             if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
@@ -50,6 +59,15 @@ public class Room {
             }
         }
         return null;
+    }
+
+    public int getPlayerIdByUser(UserProfile userProfile) {
+        for(int i = 0; i < players.size(); ++i) {
+            if (players.get(i).getUserProfile().getLogin().equals(userProfile.getLogin())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getPlayerCount() {

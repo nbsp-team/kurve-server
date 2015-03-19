@@ -1,6 +1,7 @@
 package websocket;
 
-import game.Game;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import main.AccountService;
 import model.UserProfile;
 import org.eclipse.jetty.websocket.api.Session;
@@ -20,6 +21,20 @@ import java.util.Optional;
  */
 
 public class GameWebSocketHandler extends WebSocketAdapter {
+    public static enum MessageType {
+        CODE_ROOM_PLAYERS_RESPONSE,
+        CODE_READY_REQUEST,
+        CODE_READY_RESPONSE,
+        CODE_INIT_STATE_RESPONSE,
+        CODE_KEY_REQUEST,
+        CODE_KEY_RESPONSE,
+        CODE_SNAKE_UPDATES_RESPONSE,
+        CODE_NEW_BONUS_RESPONSE,
+        CODE_BONUS_EAT_RESPONSE,
+        CODE_ROUND_END_RESPONSE,
+        CODE_GAME_OVER_RESPONSE
+    }
+
     private WebSocketMessageListener messageListener;
     private UserProfile userProfile;
 
@@ -41,7 +56,41 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     @Override
     public void onWebSocketText(String message) {
-        //TODO: route message to correct messageListener method
+        try {
+            JsonObject jresponse = (JsonObject) new JsonParser().parse(message);
+            MessageType responseType = MessageType.values()[jresponse.get("code").getAsInt()];
+
+            switch (responseType) {
+                case CODE_ROOM_PLAYERS_RESPONSE:
+                    break;
+                case CODE_READY_REQUEST:
+                    boolean isReady = jresponse.get("ready").getAsBoolean();
+                    messageListener.onUserReady(userProfile, isReady);
+                    break;
+                case CODE_READY_RESPONSE:
+                    break;
+                case CODE_INIT_STATE_RESPONSE:
+                    break;
+                case CODE_KEY_REQUEST:
+                    break;
+                case CODE_KEY_RESPONSE:
+                    break;
+                case CODE_SNAKE_UPDATES_RESPONSE:
+                    break;
+                case CODE_NEW_BONUS_RESPONSE:
+                    break;
+                case CODE_BONUS_EAT_RESPONSE:
+                    break;
+                case CODE_ROUND_END_RESPONSE:
+                    break;
+                case CODE_GAME_OVER_RESPONSE:
+                    break;
+            }
+        } catch (ClassCastException e) {
+            // TODO: error response
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -93,6 +142,6 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     public static interface WebSocketMessageListener {
         public void onNewConnection(UserProfile user, WebSocketConnection connection);
         public void onDisconnect(UserProfile user);
-        public void onUserReady(UserProfile user);
+        public void onUserReady(UserProfile user, boolean isReady);
     }
 }
