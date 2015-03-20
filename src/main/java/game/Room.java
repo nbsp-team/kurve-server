@@ -38,7 +38,7 @@ public class Room {
 
     public void onPlayerDisconnect(Player player) {
         players.remove(player);
-        //broadcastMessageExceptUser(new DisconnectedPlayerMessage(player), player.getUserProfile());
+        broadcastMessageExceptUser(new DisconnectedPlayerMessage(player), player.getUserProfile());
     }
 
     public void broadcastMessage(Message message) {
