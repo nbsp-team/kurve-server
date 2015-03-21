@@ -12,19 +12,19 @@ import java.util.Map;
  * nickolay, 28.02.15.
  */
 public class ServerStatusResponse extends SuccessResponse {
-    private int userCount;
-    private int sessionCount;
+    private long userCount;
+    private long sessionCount;
 
-    public ServerStatusResponse(int userCount, int sessionCount) {
+    public ServerStatusResponse(long userCount, long sessionCount) {
         this.userCount = userCount;
         this.sessionCount = sessionCount;
     }
 
-    public int getUserCount() {
+    public long getUserCount() {
         return userCount;
     }
 
-    public int getSessionCount() {
+    public long getSessionCount() {
         return sessionCount;
     }
 

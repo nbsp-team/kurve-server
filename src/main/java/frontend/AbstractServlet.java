@@ -5,7 +5,8 @@ import frontend.annotation.AuthenticationRequired;
 import frontend.response.ErrorResponse;
 import frontend.response.PermissionDeniedErrorResponse;
 import frontend.response.Response;
-import main.AccountService;
+import interfaces.AccountService;
+import main.MemoryAccountService;
 import model.UserProfile;
 
 import javax.servlet.ServletException;

@@ -2,6 +2,7 @@ package main;
 
 import frontend.servlet.*;
 import game.Game;
+import interfaces.AccountService;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -9,9 +10,6 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
-import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import utils.SessionManager;
 import websocket.GameWebSocketHandler;
@@ -39,7 +37,7 @@ public class Main {
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        AccountService accountService = new AccountService();
+        AccountService accountService = new MemoryAccountService();
 
         // Create servlets
         Servlet signIn = new SignInServlet(accountService);

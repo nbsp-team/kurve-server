@@ -4,7 +4,8 @@ import frontend.AbstractServlet;
 import frontend.annotation.AdminRightsRequired;
 import frontend.response.Response;
 import frontend.response.ServerStatusResponse;
-import main.AccountService;
+import interfaces.AccountService;
+import main.MemoryAccountService;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,8 @@ public class ServerStatusServlet extends AbstractServlet {
     }
 
     public Response onGet(HttpServletRequest request) {
-        int userCount = accountService.getUserCount();
-        int sessionCount = sessionIdManager.getSessions().size();
+        long userCount = accountService.getUserCount();
+        long sessionCount = sessionIdManager.getSessions().size();
         return new ServerStatusResponse(userCount, sessionCount);
     }
 }

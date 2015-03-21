@@ -3,7 +3,8 @@ package frontend.servlet;
 import frontend.AbstractServlet;
 import frontend.response.RatingResponse;
 import frontend.response.Response;
-import main.AccountService;
+import interfaces.AccountService;
+import main.MemoryAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 

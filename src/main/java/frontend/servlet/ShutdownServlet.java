@@ -4,7 +4,8 @@ import frontend.AbstractServlet;
 import frontend.annotation.AdminRightsRequired;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
-import main.AccountService;
+import interfaces.AccountService;
+import main.MemoryAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,13 +21,10 @@ public class ShutdownServlet extends AbstractServlet {
             int timeMS = Integer.valueOf(timeString);
             System.out.print("Server will be down after: "+ timeMS + " ms");
 
-            (new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    TimeHelper.sleep(timeMS);
-                    System.out.print("\nShutdown.");
-                    System.exit(0);
-                }
+            (new Thread(() -> {
+                TimeHelper.sleep(timeMS);
+                System.out.print("\nShutdown.");
+                System.exit(0);
             })).start();
         }
 

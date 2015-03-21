@@ -1,7 +1,5 @@
 package frontend.annotation;
 
-import main.AccountService;
-
 import java.lang.annotation.*;
 
 /**
