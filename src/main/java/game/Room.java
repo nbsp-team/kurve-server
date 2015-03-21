@@ -1,6 +1,8 @@
 package game;
 
 import model.UserProfile;
+import websocket.message.ConnectedPlayerMessage;
+import websocket.message.DisconnectedPlayerMessage;
 import websocket.message.Message;
 import websocket.message.RoomPlayersMessage;
 
@@ -25,7 +27,9 @@ public class Room {
 
     public void onNewPlayer(Player player) {
         players.add(player);
-        broadcastMessage(new RoomPlayersMessage(this));
+        player.sendMessage(new RoomPlayersMessage(this));
+        broadcastMessageExceptUser(new ConnectedPlayerMessage(player), player.getUserProfile());
+
     }
 
     public void onPlayerReady(Player player) {
@@ -34,7 +38,7 @@ public class Room {
 
     public void onPlayerDisconnect(Player player) {
         players.remove(player);
-        broadcastMessage(new RoomPlayersMessage(this));
+        broadcastMessageExceptUser(new DisconnectedPlayerMessage(player), player.getUserProfile());
     }
 
     public void broadcastMessage(Message message) {

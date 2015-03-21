@@ -24,6 +24,8 @@ import java.util.Optional;
 public class GameWebSocketHandler extends WebSocketAdapter {
     public static enum MessageType {
         CODE_ROOM_PLAYERS_RESPONSE,
+        CODE_PLAYER_CONNECTED_RESPONSE,
+        CODE_PLAYER_DISCONNECTED_RESPONSE,
         CODE_READY_REQUEST,
         CODE_READY_RESPONSE,
         CODE_INIT_STATE_RESPONSE,
