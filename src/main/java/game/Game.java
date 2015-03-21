@@ -9,6 +9,7 @@ import websocket.message.ReadyMessage;
 import websocket.message.RoomPlayersMessage;
 
 import java.awt.*;
+import java.sql.Connection;
 import java.util.*;
 import java.util.List;
 
@@ -60,19 +61,22 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
 
             // If founded room with enough space
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
-                Player newPlayer = new Player(Color.BLUE, user);
-                newPlayer.addConnection(connection);
-                room.onNewPlayer(newPlayer);
+                connectUserToRoom(connection, user, room);
                 return;
             }
         }
 
         // Room not found - create new
         Room newRoom = new Room();
-        Player newPlayer = new Player(Color.BLUE, user);
-        newPlayer.addConnection(connection);
-        newRoom.onNewPlayer(newPlayer);
+        connectUserToRoom(connection, user, newRoom);
         rooms.add(newRoom);
+    }
+
+    private void connectUserToRoom(WebSocketConnection connection, UserProfile userProfile, Room room) {
+        Color playerColor = getUnusedColor(room);
+        Player newPlayer = new Player(playerColor, userProfile);
+        newPlayer.addConnection(connection);
+        room.onNewPlayer(newPlayer);
     }
 
     @Override
@@ -101,6 +105,15 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
                 ), user);
             }
         }
+    }
+
+    private Color getUnusedColor(Room room) {
+        for(Color c : Player.playerColors) {
+            if (!room.isColorUsed(c)) {
+                return c;
+            }
+        }
+        return Color.BLACK;
     }
 
     private Room findPlayerRoom(UserProfile user) {

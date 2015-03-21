@@ -18,6 +18,17 @@ import java.util.Set;
  * nickolay, 21.02.15.
  */
 public class Player {
+    public static final Color playerColors[] = {
+            new Color(244, 67, 54),
+            new Color(76, 175, 80),
+            new Color(33, 150, 243),
+            new Color(233, 30, 99),
+            new Color(103, 58, 183),
+            new Color(255, 235, 59),
+            new Color(255, 152, 0),
+            new Color(156, 39, 176),
+    };
+
     private int points = 0;
     private Set<WebSocketConnection> connections;
     private Color color;

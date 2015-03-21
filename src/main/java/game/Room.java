@@ -6,6 +6,7 @@ import websocket.message.DisconnectedPlayerMessage;
 import websocket.message.Message;
 import websocket.message.RoomPlayersMessage;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,15 @@ public class Room {
             }
         }
         return -1;
+    }
+
+    public boolean isColorUsed(Color color) {
+        for(Player p : players) {
+            if (p.getColor().equals(color)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getPlayerCount() {
