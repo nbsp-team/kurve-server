@@ -1,10 +1,7 @@
 package game;
 
 import model.UserProfile;
-import websocket.message.ConnectedPlayerMessage;
-import websocket.message.DisconnectedPlayerMessage;
-import websocket.message.Message;
-import websocket.message.RoomPlayersMessage;
+import websocket.message.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,17 +26,23 @@ public class Room {
     public void onNewPlayer(Player player) {
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
-        broadcastMessageExceptUser(new ConnectedPlayerMessage(player), player.getUserProfile());
+        broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
+                getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
 
     }
 
-    public void onPlayerReady(Player player) {
-        player.setReady(true);
+    public void onPlayerReady(Player player, boolean isReady) {
+        player.setReady(isReady);
+        broadcastMessageExceptUser(new ReadyMessage(
+                getPlayerIdByUser(player.getUserProfile()),
+                isReady
+        ), player.getUserProfile());
     }
 
     public void onPlayerDisconnect(Player player) {
+        broadcastMessageExceptUser(new DisconnectedPlayerMessage(player,
+                getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
         players.remove(player);
-        broadcastMessageExceptUser(new DisconnectedPlayerMessage(player), player.getUserProfile());
     }
 
     public void broadcastMessage(Message message) {

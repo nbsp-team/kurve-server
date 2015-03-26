@@ -83,6 +83,7 @@ public class Player {
             jsonObject.addProperty("color",
                     "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
             );
+            System.out.println(jsonObject.get("color").getAsString());
 
             return jsonObject;
         }

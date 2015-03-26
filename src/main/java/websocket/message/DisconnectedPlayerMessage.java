@@ -12,9 +12,16 @@ import java.lang.reflect.Type;
 public class DisconnectedPlayerMessage extends Message {
 
     private Player player;
+    private int playerId;
 
-    public DisconnectedPlayerMessage(Player player) {
+    public DisconnectedPlayerMessage(Player player, int playerId) {
         this.player = player;
+        this.playerId = playerId;
+
+    }
+
+    public int getPlayerId() {
+        return playerId;
     }
 
     public Player getPlayer() {
@@ -26,7 +33,10 @@ public class DisconnectedPlayerMessage extends Message {
             JsonObject responseObject = new JsonObject();
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_PLAYER_DISCONNECTED_RESPONSE.ordinal());
 
-            responseObject.add("player", context.serialize(src.getPlayer()));
+            JsonObject playerObject = (JsonObject) context.serialize(src.getPlayer());
+            playerObject.addProperty("player_id", src.getPlayerId());
+
+            responseObject.add("player", playerObject);
 
             return responseObject;
         }

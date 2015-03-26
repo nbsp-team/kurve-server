@@ -42,7 +42,7 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
             Room tmpRoom = new Room();
             tmpRoom.onNewPlayer(
                     new Player(
-                            Color.BLUE,
+                            Color.GREEN,
                             new UserProfile("test", "test", "test@gmail.com")
                     )
             );
@@ -97,12 +97,8 @@ public class Game implements GameWebSocketHandler.WebSocketMessageListener {
         if (user != null) {
             Room room = findPlayerRoom(user);
             if (room != null) {
-                int playerId = room.getPlayerIdByUser(user);
-                room.getPlayers().get(playerId).setReady(isReady);
-                room.broadcastMessageExceptUser(new ReadyMessage(
-                        playerId,
-                        isReady
-                ), user);
+                Player player = room.getPlayerByUser(user);
+                room.onPlayerReady(player, isReady);
             }
         }
     }

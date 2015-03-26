@@ -12,6 +12,7 @@ public abstract class Message {
             .registerTypeAdapter(RoomPlayersMessage.class, new RoomPlayersMessage.serializer())
             .registerTypeAdapter(ConnectedPlayerMessage.class, new ConnectedPlayerMessage.serializer())
             .registerTypeAdapter(DisconnectedPlayerMessage.class, new DisconnectedPlayerMessage.serializer())
+            .registerTypeAdapter(ReadyMessage.class, new ReadyMessage.serializer())
             .registerTypeAdapter(Player.class, new Player.serializer())
             .serializeNulls()
             .create();
