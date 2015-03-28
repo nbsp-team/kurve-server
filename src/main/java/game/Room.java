@@ -33,15 +33,17 @@ public class Room {
 
     public void onPlayerReady(Player player, boolean isReady) {
         player.setReady(isReady);
-        broadcastMessageExceptUser(new ReadyMessage(
-                getPlayerIdByUser(player.getUserProfile()),
-                isReady
-        ), player.getUserProfile());
+        broadcastMessageExceptUser(
+                new ReadyMessage(player, isReady),
+                player.getUserProfile()
+        );
     }
 
     public void onPlayerDisconnect(Player player) {
-        broadcastMessageExceptUser(new DisconnectedPlayerMessage(player,
-                getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
+        broadcastMessageExceptUser(
+                new DisconnectedPlayerMessage(player),
+                player.getUserProfile()
+        );
         players.remove(player);
     }
 

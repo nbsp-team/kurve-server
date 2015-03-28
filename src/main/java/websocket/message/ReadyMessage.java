@@ -12,19 +12,19 @@ import java.lang.reflect.Type;
  */
 public class ReadyMessage extends Message {
     private boolean isReady;
-    private int playerId;
+    private Player player;
 
-    public ReadyMessage(int playerId, boolean isReady) {
+    public ReadyMessage(Player player, boolean isReady) {
         this.isReady = isReady;
-        this.playerId = playerId;
+        this.player = player;
     }
 
     public boolean isReady() {
         return isReady;
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public Player getPlayer() {
+        return player;
     }
 
     public static class serializer implements JsonSerializer<ReadyMessage> {
@@ -32,7 +32,7 @@ public class ReadyMessage extends Message {
             JsonObject responseObject = new JsonObject();
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_READY_RESPONSE.ordinal());
             responseObject.addProperty("ready", src.isReady());
-            responseObject.addProperty("player_id", src.getPlayerId());
+            responseObject.addProperty("player_id", src.getPlayer().getId());
             return responseObject;
         }
     }

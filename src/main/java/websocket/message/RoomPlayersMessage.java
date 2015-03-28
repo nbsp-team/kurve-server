@@ -31,9 +31,6 @@ public class RoomPlayersMessage extends Message {
             for(int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
                 Player player = src.getRoom().getPlayers().get(i);
                 JsonElement playerObject = context.serialize(player);
-                if (playerObject.isJsonObject()) {
-                    ((JsonObject) playerObject).addProperty("player_id", i);
-                }
                 playersArray.add(playerObject);
             }
 

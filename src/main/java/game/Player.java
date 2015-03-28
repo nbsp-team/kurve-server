@@ -13,6 +13,7 @@ import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * nickolay, 21.02.15.
@@ -29,6 +30,7 @@ public class Player {
             new Color(156, 39, 176),
     };
 
+    private String id;
     private int points = 0;
     private Set<WebSocketConnection> connections;
     private Color color;
@@ -36,7 +38,8 @@ public class Player {
     private Snake snake;
     private boolean isReady = false;
 
-    public Player(@SuppressWarnings("SameParameterValue") Color color, UserProfile userProfile) {
+    public Player(Color color, UserProfile userProfile) {
+        this.id = UUID.randomUUID().toString();
         this.connections = new HashSet<>();
         this.color = color;
         this.userProfile = userProfile;
@@ -73,17 +76,21 @@ public class Player {
         return snake;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public static class serializer implements JsonSerializer<Player> {
         public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
 
             jsonObject.addProperty("username", src.getUserProfile().getLogin());
+            jsonObject.addProperty("player_id", src.getId());
             jsonObject.addProperty("global_rating", 0);
             jsonObject.addProperty("is_ready", src.isReady());
             jsonObject.addProperty("color",
                     "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
             );
-            System.out.println(jsonObject.get("color").getAsString());
 
             return jsonObject;
         }

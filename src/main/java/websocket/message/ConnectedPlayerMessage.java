@@ -32,8 +32,6 @@ public class ConnectedPlayerMessage extends Message {
 
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_PLAYER_CONNECTED_RESPONSE.ordinal());
             JsonObject playerObject = (JsonObject) context.serialize(src.getPlayer());
-            playerObject.addProperty("player_id", src.getPlayerId());
-
             responseObject.add("player", playerObject);
 
             return responseObject;
