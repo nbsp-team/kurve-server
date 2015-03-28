@@ -14,10 +14,11 @@ public class SessionManager extends HashSessionIdManager {
     public Optional<HttpSession> getSessionById(String id) {
         Collection<HttpSession> sessions = getSession(id);
 
-        if(!sessions.isEmpty()) {
-            return Optional.ofNullable(sessions.iterator().next());
-        } else {
-            return null;
+        HttpSession session = null;
+        if (!sessions.isEmpty()) {
+            session = sessions.iterator().next();
         }
+
+        return Optional.ofNullable(session);
     }
 }
