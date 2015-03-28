@@ -1,7 +1,7 @@
 package main;
 
 import frontend.servlet.*;
-import game.Game;
+import game.GameManager;
 import interfaces.AccountService;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -64,7 +64,7 @@ public class Main {
 
 
         // Init game
-        Game game = new Game(accountService);
+        GameManager gameManager = new GameManager(accountService);
 
         // Create WebSocketHandler
         WebSocketHandler wsHandler = new WebSocketHandler() {
@@ -73,7 +73,7 @@ public class Main {
                 factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(
                         sessionManager,
                         accountService,
-                        game
+                        gameManager
                 ));
             }
         };
