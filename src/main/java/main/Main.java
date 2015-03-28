@@ -1,5 +1,7 @@
 package main;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import frontend.servlet.*;
 import game.GameManager;
 import interfaces.AccountService;
@@ -22,18 +24,12 @@ import java.net.InetSocketAddress;
  */
 public class Main {
     public static final int API_VERSION = 1;
+    public static final Config config = ConfigFactory.load();
 
     public static void main(String[] args) throws Exception {
+        System.out.append("Starting at port: ").append(String.valueOf(config.getInt("network.port"))).append('\n');
 
-        int port = 8080;
-        if (args.length == 1) {
-            String portString = args[0];
-            port = Integer.valueOf(portString);
-        }
-
-        System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
-
-        Server server = new Server(new InetSocketAddress("0.0.0.0", port));
+        Server server = new Server(new InetSocketAddress(config.getString("network.host"), config.getInt("network.port")));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
