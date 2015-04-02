@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import model.UserProfile;
-import model.snake.Snake;
 import websocket.WebSocketConnection;
 import websocket.message.Message;
 
@@ -35,7 +34,7 @@ public class Player {
     private Set<WebSocketConnection> connections;
     private Color color;
     private UserProfile userProfile;
-    private Snake snake;
+//  private Snake snake;
     private boolean isReady = false;
 
     public Player(Color color, UserProfile userProfile) {
@@ -72,9 +71,9 @@ public class Player {
         return userProfile;
     }
 
-    public Snake getSnake() {
-        return snake;
-    }
+//    public Snake getSnake() {
+//        return snake;
+//    }
 
     public String getId() {
         return id;

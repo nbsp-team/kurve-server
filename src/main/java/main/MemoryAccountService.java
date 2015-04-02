@@ -15,14 +15,14 @@ public class MemoryAccountService implements AccountService {
 
     public MemoryAccountService() {
         // TODO: for debugging only
-        addUser("admin", new UserProfile("admin", "admin", "didika914@gmail.com"));
+        addUser(new UserProfile("admin", "admin", "didika914@gmail.com"));
     }
 
     @Override
-    public boolean addUser(String userName, UserProfile userProfile) {
-        if (users.containsKey(userName))
+    public boolean addUser(UserProfile userProfile) {
+        if (users.containsKey(userProfile.getLogin()))
             return false;
-        users.put(userName, userProfile);
+        users.put(userProfile.getLogin(), userProfile);
         return true;
     }
 
@@ -34,5 +34,10 @@ public class MemoryAccountService implements AccountService {
     @Override
     public long getUserCount() {
         return users.size();
+    }
+
+    @Override
+    public void clear() {
+        users.clear();
     }
 }

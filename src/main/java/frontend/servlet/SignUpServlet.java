@@ -24,7 +24,7 @@ public class SignUpServlet extends AbstractServlet {
 
         if(username == null || email == null || password == null) {
             return new ErrorResponse(ErrorResponse.ERROR_INTERNAL_SERVER);
-        } else if (!accountService.addUser(username, new UserProfile(username, password, email))) {
+        } else if (!accountService.addUser(new UserProfile(username, password, email))) {
             return new AuthErrorResponse("User with name: " + username + " already exists");
         } else {
             UserProfile user = accountService.getUser(username);
