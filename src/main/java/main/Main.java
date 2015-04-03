@@ -58,7 +58,7 @@ public class Main {
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
-        GameManager gameManager = new GameManager(accountService);
+        GameManager gameManager = new GameManager();
 
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override

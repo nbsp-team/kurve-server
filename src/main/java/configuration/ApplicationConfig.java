@@ -8,9 +8,14 @@ public class ApplicationConfig {
     private int port;
     private String host;
 
-    public ApplicationConfig(int port, String host) {
+    private int minPlayerNumber;
+    private int maxPlayerNumber;
+
+    public ApplicationConfig(int port, String host, int minPlayers, int maxPlayers) {
         this.port = port;
         this.host = host;
+        this.minPlayerNumber = minPlayers;
+        this.maxPlayerNumber = maxPlayers;
     }
 
     public int getPort() {
@@ -19,5 +24,13 @@ public class ApplicationConfig {
 
     public String getHost() {
         return host;
+    }
+
+    public int getMinPlayerNumber() {
+        return minPlayerNumber;
+    }
+
+    public int getMaxPlayerNumber() {
+        return maxPlayerNumber;
     }
 }

@@ -56,7 +56,17 @@ public class ConfigLoader {
             String host = network.getElementsByTagName("host").item(0)
                     .getTextContent();
 
-            return new ApplicationConfig(port, host);
+            Element mechanics = (Element) root.getElementsByTagName("mechanics").item(0);
+
+            int minPlayers = Integer.valueOf(
+                    mechanics.getElementsByTagName("minPlayerNumber").item(0)
+                            .getTextContent());
+
+            int maxPlayers = Integer.valueOf(
+                    mechanics.getElementsByTagName("maxPlayerNumber").item(0)
+                            .getTextContent());
+
+            return new ApplicationConfig(port, host, minPlayers, maxPlayers);
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

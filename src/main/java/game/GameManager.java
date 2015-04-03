@@ -1,6 +1,7 @@
 package game;
 
 import interfaces.AccountService;
+import main.Main;
 import main.MemoryAccountService;
 import model.UserProfile;
 import websocket.GameWebSocketHandler;
@@ -17,16 +18,15 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 public class GameManager implements GameWebSocketHandler.WebSocketMessageListener {
-    private static final int MIN_PLAYER_IN_ROOM = 2;
-    private static final int MAX_PLAYER_IN_ROOM = 6;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private AccountService accountService;
+    private final int MIN_PLAYER_IN_ROOM;
+    private final int MAX_PLAYER_IN_ROOM;
 
     private List<Room> rooms;
 
-    public GameManager(AccountService accountService) {
-        this.accountService = accountService;
+    public GameManager() {
+        MIN_PLAYER_IN_ROOM = Main.appConfig.getMinPlayerNumber();
+        MAX_PLAYER_IN_ROOM = Main.appConfig.getMaxPlayerNumber();
+
         rooms = new ArrayList<>();
     }
 
