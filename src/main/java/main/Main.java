@@ -37,7 +37,6 @@ public class Main {
 
         AccountService accountService = new MemoryAccountService();
 
-        // Create servlets
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
@@ -46,7 +45,6 @@ public class Main {
         Servlet serverStatus = new ServerStatusServlet(accountService, sessionManager);
         Servlet serverShutdown = new ShutdownServlet(accountService);
 
-        // Build web app context
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(signIn), "/api/v" + API_VERSION + "/auth/signin");
         context.addServlet(new ServletHolder(signUp), "/api/v" + API_VERSION + "/auth/signup");
@@ -60,11 +58,8 @@ public class Main {
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
-
-        // Init game
         GameManager gameManager = new GameManager(accountService);
 
-        // Create WebSocketHandler
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
