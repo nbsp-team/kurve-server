@@ -10,12 +10,7 @@ import static org.junit.Assert.*;
  * nickolay, 01.04.15.
  */
 public class AccountServiceTests {
-    public static AccountService accountService;
-
-    @BeforeClass
-    public static void init() {
-        accountService = new MemoryAccountService();
-    }
+    public static AccountService accountService = new MemoryAccountService();;
 
     @Test
     public void testRegister() {
