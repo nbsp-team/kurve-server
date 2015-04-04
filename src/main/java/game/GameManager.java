@@ -1,17 +1,12 @@
 package game;
 
-import interfaces.AccountService;
 import main.Main;
-import main.MemoryAccountService;
 import model.UserProfile;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
-import websocket.message.ReadyMessage;
-import websocket.message.RoomPlayersMessage;
 
 import java.awt.*;
-import java.sql.Connection;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

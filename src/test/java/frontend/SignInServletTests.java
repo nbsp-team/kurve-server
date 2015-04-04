@@ -6,7 +6,6 @@ import frontend.servlet.SignInServlet;
 import interfaces.AccountService;
 import main.MemoryAccountService;
 import model.UserProfile;
-import org.eclipse.jetty.client.HttpRequest;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -16,12 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * nickolay, 03.04.15.

@@ -2,7 +2,6 @@ package main;
 
 import interfaces.AccountService;
 import model.UserProfile;
-import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,7 +3,6 @@ package websocket;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import interfaces.AccountService;
-import main.MemoryAccountService;
 import model.UserProfile;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;

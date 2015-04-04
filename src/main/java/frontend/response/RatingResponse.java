@@ -3,9 +3,6 @@ package frontend.response;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * nickolay, 28.02.15.

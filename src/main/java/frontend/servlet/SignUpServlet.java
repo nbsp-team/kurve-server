@@ -1,12 +1,10 @@
 package frontend.servlet;
 
 import frontend.AbstractServlet;
-import frontend.response.Response;
-import frontend.response.SignUpResponse;
 import frontend.response.AuthErrorResponse;
 import frontend.response.ErrorResponse;
-import interfaces.AccountService;
-import main.MemoryAccountService;
+import frontend.response.Response;
+import frontend.response.SignUpResponse;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;

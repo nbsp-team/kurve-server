@@ -5,7 +5,6 @@ import frontend.annotation.AuthenticationRequired;
 import frontend.response.GetUserResponse;
 import frontend.response.Response;
 import interfaces.AccountService;
-import main.MemoryAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 

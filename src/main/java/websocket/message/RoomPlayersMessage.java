@@ -6,7 +6,6 @@ import game.Room;
 import websocket.GameWebSocketHandler;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * nickolay, 17.03.15.

@@ -2,11 +2,9 @@ package frontend;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import frontend.servlet.SignInServlet;
 import frontend.servlet.SignOutServlet;
 import interfaces.AccountService;
 import main.MemoryAccountService;
-import model.UserProfile;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -68,7 +66,6 @@ public class SignOutServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        System.out.println(servletResponse);
         String rightResponse = "{\"error\":null,\"response\":{}}";
 
         verify(testSession, times(1)).removeAttribute("username");

@@ -3,7 +3,6 @@ package frontend.response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.UserProfile;
-import org.eclipse.jetty.server.Authentication;
 
 /**
  * nickolay, 25.02.15.

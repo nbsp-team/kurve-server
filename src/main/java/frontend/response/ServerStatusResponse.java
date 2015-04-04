@@ -1,12 +1,8 @@
 package frontend.response;
 
 import com.google.gson.*;
-import frontend.response.SuccessResponse;
-import model.UserProfile;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * nickolay, 28.02.15.

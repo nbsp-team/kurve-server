@@ -2,7 +2,6 @@ package websocket.message;
 
 import com.google.gson.*;
 import game.Player;
-import game.Room;
 import websocket.GameWebSocketHandler;
 
 import java.lang.reflect.Type;

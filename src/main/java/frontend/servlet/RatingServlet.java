@@ -4,7 +4,6 @@ import frontend.AbstractServlet;
 import frontend.response.RatingResponse;
 import frontend.response.Response;
 import interfaces.AccountService;
-import main.MemoryAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 
