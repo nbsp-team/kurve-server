@@ -5,6 +5,7 @@ import frontend.response.AuthErrorResponse;
 import frontend.response.ErrorResponse;
 import frontend.response.Response;
 import frontend.response.SignUpResponse;
+import interfaces.AccountService;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;

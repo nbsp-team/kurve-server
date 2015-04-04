@@ -3,6 +3,8 @@ package frontend.response;
 import com.google.gson.*;
 import model.UserProfile;
 
+import java.lang.reflect.Type;
+
 /**
  * nickolay, 25.02.15.
  */

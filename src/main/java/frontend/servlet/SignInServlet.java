@@ -4,6 +4,7 @@ import frontend.AbstractServlet;
 import frontend.response.AuthErrorResponse;
 import frontend.response.Response;
 import frontend.response.SignInResponse;
+import interfaces.AccountService;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;
