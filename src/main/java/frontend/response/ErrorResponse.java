@@ -9,33 +9,31 @@ import java.lang.reflect.Type;
  */
 public class ErrorResponse extends Response {
     public enum ErrorResponseCode {
-        ERROR_SIGNIN_FAILED,
-        ERROR_SINGUP_FAILED,
-        ERROR_EMPTY_RESPONSE,
-        ERROR_INVALID_PARAMS,
-        ERROR_PERMISSION_DENIED,
-        ERROR_INTERNAL_SERVER
+        ERROR_SIGNIN_FAILED("Ошибка авторизации пользователя"),
+        ERROR_SINGUP_FAILED("Ошибка при регистрации пользователя"),
+        ERROR_EMPTY_RESPONSE("Сервер возвратил пустой ответ"),
+        ERROR_INVALID_PARAMS("Неверные параметры"),
+        ERROR_PERMISSION_DENIED("Ошибка доступа"),
+        ERROR_INTERNAL_SERVER("Ошибка сервера");
+
+        private ErrorResponseCode(String description){
+            this.description = description;
+        }
+
+        private final String description;
+
+        public String getDescription(){return description;}
     }
-
-    private static final String[] DEFAULT_ERROR_DESCRIPTIONS = new String[]{
-            "Ошибка авторизации пользователя",
-            "Ошибка при регистрации пользователя",
-            "Сервер возвратил пустой ответ",
-            "Неверные параметры",
-            "Ошибка доступа",
-            "Ошибка сервера"
-    };
-
     private ErrorResponseCode errorCode;
-    private String description;
-
-    public ErrorResponse(ErrorResponseCode errorCode, String description) {
-        this.errorCode = errorCode;
-        this.description = description;
-    }
+    private String additionalDescription;
 
     public ErrorResponse(ErrorResponseCode errorCode) {
-        this(errorCode, DEFAULT_ERROR_DESCRIPTIONS[errorCode.ordinal()]);
+        this(errorCode, null);
+    }
+
+    public ErrorResponse(ErrorResponseCode errorCode, String additionalDescription) {
+        this.errorCode = errorCode;
+        this.additionalDescription = additionalDescription;
     }
 
     public ErrorResponseCode getErrorCode() {
@@ -43,7 +41,10 @@ public class ErrorResponse extends Response {
     }
 
     public String getErrorDescription() {
-        return description;
+        if (additionalDescription != null) {
+            return errorCode.getDescription() + " " + additionalDescription;
+        }
+        return errorCode.getDescription();
     }
 
     public static class serializer implements JsonSerializer<ErrorResponse> {
