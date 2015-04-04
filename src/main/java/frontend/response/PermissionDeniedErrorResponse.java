@@ -5,10 +5,10 @@ package frontend.response;
  */
 public class PermissionDeniedErrorResponse extends ErrorResponse {
     public PermissionDeniedErrorResponse() {
-        super(ERROR_PERMISSION_DENIED);
+        super(ErrorResponse.ErrorResponseCode.ERROR_PERMISSION_DENIED);
     }
 
     public PermissionDeniedErrorResponse(String message) {
-        super(ERROR_PERMISSION_DENIED, message);
+        super(ErrorResponse.ErrorResponseCode.ERROR_PERMISSION_DENIED, message);
     }
 }

@@ -8,12 +8,14 @@ import java.lang.reflect.Type;
  * nickolay, 25.02.15.
  */
 public class ErrorResponse extends Response {
-    public static final int ERROR_SIGNIN_FAILED = 0;
-    public static final int ERROR_SINGUP_FAILED = 1;
-    public static final int ERROR_EMPTY_RESPONSE = 2;
-    public static final int ERROR_INVALID_PARAMS = 3;
-    public static final int ERROR_PERMISSION_DENIED = 4;
-    public static final int ERROR_INTERNAL_SERVER = 5;
+    public enum ErrorResponseCode {
+        ERROR_SIGNIN_FAILED,
+        ERROR_SINGUP_FAILED,
+        ERROR_EMPTY_RESPONSE,
+        ERROR_INVALID_PARAMS,
+        ERROR_PERMISSION_DENIED,
+        ERROR_INTERNAL_SERVER
+    }
 
     private static final String[] DEFAULT_ERROR_DESCRIPTIONS = new String[]{
             "Ошибка авторизации пользователя",
@@ -24,19 +26,19 @@ public class ErrorResponse extends Response {
             "Ошибка сервера"
     };
 
-    private int errorCode;
+    private ErrorResponseCode errorCode;
     private String description;
 
-    public ErrorResponse(int errorCode, String description) {
+    public ErrorResponse(ErrorResponseCode errorCode, String description) {
         this.errorCode = errorCode;
         this.description = description;
     }
 
-    public ErrorResponse(int errorCode) {
-        this(errorCode, DEFAULT_ERROR_DESCRIPTIONS[errorCode]);
+    public ErrorResponse(ErrorResponseCode errorCode) {
+        this(errorCode, DEFAULT_ERROR_DESCRIPTIONS[errorCode.ordinal()]);
     }
 
-    public int getErrorCode() {
+    public ErrorResponseCode getErrorCode() {
         return errorCode;
     }
 
@@ -47,7 +49,7 @@ public class ErrorResponse extends Response {
     public static class serializer implements JsonSerializer<ErrorResponse> {
         public JsonElement serialize(ErrorResponse src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject errorObject = new JsonObject();
-            errorObject.add("code", new JsonPrimitive(src.getErrorCode()));
+            errorObject.add("code", new JsonPrimitive(src.getErrorCode().ordinal()));
             errorObject.add("description", new JsonPrimitive(src.getErrorDescription()));
 
             JsonObject jsonObject = new JsonObject();
