@@ -8,6 +8,7 @@ import main.MemoryAccountService;
 import model.UserProfile;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +73,7 @@ public class SignInServletTests {
         String servletResponse = servletResponseCaptor.getValue();
         String rightResponse = "{\"error\":null,\"response\":{\"user\":{\"username\":\"abc\",\"email\":\"def@gmail.com\",\"global_rating\":0}}}";
 
+        verify(httpSession, times(1)).setAttribute(eq("username"), Mockito.anyObject());
         assertEqualsJSON(servletResponse, rightResponse);
     }
 
