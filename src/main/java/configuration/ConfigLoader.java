@@ -19,7 +19,7 @@ public class ConfigLoader {
 
     private ApplicationConfig applicationConfig;
     private static final String APPLICATION_CONF_PATH =
-            "src/main/resources/configuration.xml";
+            "server_config.xml";
 
     private ConfigLoader() {}
 
