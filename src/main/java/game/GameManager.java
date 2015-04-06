@@ -4,6 +4,7 @@ import main.Main;
 import model.UserProfile;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
+import websocket.message.ControlMessage;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,16 +27,16 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onNewConnection(UserProfile user, WebSocketConnection connection) {
-        System.out.println("New ws: " + user);
+    public void onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection) {
+        System.out.println("New ws: " + handler.getUserProfile());
 
-        if (user == null) {
+        if (handler.getUserProfile() == null) {
             // connection.close();
             return;
         }
 
         for (Room room : rooms) {
-            Player player = room.getPlayerByUser(user);
+            Player player = room.getPlayerByUser(handler.getUserProfile());
 
             if (player != null) {
                 player.addConnection(connection);
@@ -43,44 +44,67 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
             }
 
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
-                connectUserToRoom(connection, user, room);
+                connectUserToRoom(connection, handler, room);
                 return;
             }
         }
 
         Room newRoom = new Room();
-        connectUserToRoom(connection, user, newRoom);
+        connectUserToRoom(connection, handler, newRoom);
         rooms.add(newRoom);
     }
 
-    private void connectUserToRoom(WebSocketConnection connection, UserProfile userProfile, Room room) {
+    private void connectUserToRoom(WebSocketConnection connection, GameWebSocketHandler handler, Room room) {
         Color playerColor = getUnusedColor(room);
-        Player newPlayer = new Player(playerColor, userProfile);
+        Player newPlayer = new Player(playerColor, handler.getUserProfile());
         newPlayer.addConnection(connection);
         room.onNewPlayer(newPlayer);
+        handler.setRoom(room);
+    }
+
+    private void checkRoomReady(Room room) {
+        int readyCount = room.getReadyPlayerCount();
+        System.out.println("Ready: " + readyCount);
+        if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM) {
+            room.startGame();
+        }
     }
 
     @Override
-    public void onDisconnect(UserProfile user) {
-        if (user == null) {
+    public void onDisconnect(GameWebSocketHandler handler) {
+        if (handler.getUserProfile() == null) {
             return;
         }
 
-        Room userRoom = findPlayerRoom(user);
+        Room userRoom = handler.getRoom();
         if (userRoom != null) {
-            Player player = userRoom.getPlayerByUser(user);
+            Player player = userRoom.getPlayerByUser(handler.getUserProfile());
             userRoom.onPlayerDisconnect(player);
+            handler.setRoom(null);
         }
     }
 
     @Override
-    public void onUserReady(UserProfile user, boolean isReady) {
-        if (user != null) {
-            Room room = findPlayerRoom(user);
+    public void onUserReady(GameWebSocketHandler handler, boolean isReady) {
+        if (handler.getUserProfile() != null) {
+            Room room = handler.getRoom();
             if (room != null) {
-                Player player = room.getPlayerByUser(user);
+                Player player = room.getPlayerByUser(handler.getUserProfile());
                 room.onPlayerReady(player, isReady);
+                checkRoomReady(room);
             }
+        }
+    }
+
+    @Override
+    public void onControl(GameWebSocketHandler handler, ControlMessage.KeyCode key, boolean pressed) {
+        Room room = handler.getRoom();
+        if (room != null) {
+            Player player = room.getPlayerByUser(handler.getUserProfile());
+            room.broadcastMessageExceptUser(
+                    new ControlMessage(player, key, pressed),
+                    handler.getUserProfile()
+            );
         }
     }
 
@@ -91,17 +115,5 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
             }
         }
         return Color.BLACK;
-    }
-
-    private Room findPlayerRoom(UserProfile user) {
-        for(Room room : rooms) {
-            Player player = room.getPlayerByUser(user);
-            if (player != null) {
-                if (player.getUserProfile().getLogin().equals(user.getLogin())) {
-                    return room;
-                }
-            }
-        }
-        return null;
     }
 }

@@ -93,12 +93,25 @@ public class Room {
         return players.size();
     }
 
+    public int getReadyPlayerCount() {
+        int readyUserCount = 0;
+        for(Player p : players) {
+            if (p.isReady()) {
+                readyUserCount++;
+            }
+        }
+        return readyUserCount;
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
 
-    private void startGame() {
+    public void startGame() {
         roomState = RoomState.GAME;
+        broadcastMessage(
+                new StartGameMessage(this)
+        );
     }
 
     public RoomState getRoomState() {
