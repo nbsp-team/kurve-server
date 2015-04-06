@@ -13,7 +13,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import configuration.ConfigLoader;
-import utils.SessionManager;
+import frontend.SessionManager;
 import websocket.GameWebSocketHandler;
 
 import javax.servlet.Servlet;

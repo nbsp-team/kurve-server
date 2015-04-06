@@ -9,7 +9,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import utils.SessionManager;
+import frontend.SessionManager;
 
 import javax.servlet.http.HttpSession;
 import java.net.HttpCookie;

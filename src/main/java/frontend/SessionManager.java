@@ -1,4 +1,4 @@
-package utils;
+package frontend;
 
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 
