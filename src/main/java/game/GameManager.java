@@ -20,8 +20,10 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     private List<Room> rooms;
 
     public GameManager() {
-        MIN_PLAYER_IN_ROOM = Main.appConfig.getMinPlayerNumber();
-        MAX_PLAYER_IN_ROOM = Main.appConfig.getMaxPlayerNumber();
+        MIN_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.minPlayerNumber);
+        MAX_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.maxPlayerNumber);
+
+        System.out.println(MAX_PLAYER_IN_ROOM);
 
         rooms = new ArrayList<>();
     }

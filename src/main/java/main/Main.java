@@ -1,6 +1,7 @@
 package main;
 
-import configuration.ApplicationConfig;
+import configuration.GameMechanicsConfig;
+import configuration.NetworkConfig;
 import frontend.servlet.*;
 import game.GameManager;
 import interfaces.AccountService;
@@ -12,7 +13,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import configuration.ConfigLoader;
+import configuration.XmlLoader;
 import frontend.SessionManager;
 import websocket.GameWebSocketHandler;
 
@@ -24,14 +25,19 @@ import java.net.InetSocketAddress;
  */
 public class Main {
     public static final int API_VERSION = 1;
-    public static final ApplicationConfig appConfig =
-            ConfigLoader.getInstance().loadApplicationConfig();
+
+    public static final NetworkConfig networkConfig =
+            (NetworkConfig) XmlLoader.getInstance()
+                    .load(NetworkConfig.class, "server_config.xml");
+
+    public static final GameMechanicsConfig mechanicsConfig =
+            (GameMechanicsConfig) XmlLoader.getInstance()
+                    .load(GameMechanicsConfig.class, "server_config.xml");
 
     public static void main(String[] args) throws Exception {
 
-        System.out.append("Starting at port: ").append(String.valueOf(appConfig.getPort())).append("\n");
-        System.out.println(appConfig.getHost());
-        Server server = new Server(new InetSocketAddress(appConfig.getHost(), appConfig.getPort()));
+        System.out.append("Starting at port: ").append(String.valueOf(networkConfig.port)).append("\n");
+        Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
