@@ -72,10 +72,12 @@ public class Room {
     }
 
     public int getPlayerIdByUser(UserProfile userProfile) {
-        for(int i = 0; i < players.size(); ++i) {
-            if (players.get(i).getUserProfile().getLogin().equals(userProfile.getLogin())) {
-                return i;
+        int index = 0;
+        for(Player player : players) {
+            if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
+                return index;
             }
+            index++;
         }
         return -1;
     }
