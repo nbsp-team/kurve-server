@@ -5,10 +5,10 @@ package frontend.response;
  */
 public class AuthErrorResponse extends ErrorResponse {
     public AuthErrorResponse() {
-        super(ERROR_SIGNIN_FAILED);
+        super(ErrorResponse.ErrorResponseCode.ERROR_SIGNIN_FAILED);
     }
 
     public AuthErrorResponse(String message) {
-        super(ERROR_SIGNIN_FAILED, message);
+        super(ErrorResponse.ErrorResponseCode.ERROR_SIGNIN_FAILED, message);
     }
 }

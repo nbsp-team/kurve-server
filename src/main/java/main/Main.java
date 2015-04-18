@@ -1,7 +1,7 @@
 package main;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
+import configuration.GameMechanicsConfig;
+import configuration.NetworkConfig;
 import frontend.servlet.*;
 import game.GameManager;
 import interfaces.AccountService;
@@ -13,7 +13,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import utils.SessionManager;
+import configuration.XmlLoader;
+import frontend.SessionManager;
+import websocket.GameWebSocketCreator;
 import websocket.GameWebSocketHandler;
 
 import javax.servlet.Servlet;
@@ -24,18 +26,25 @@ import java.net.InetSocketAddress;
  */
 public class Main {
     public static final int API_VERSION = 1;
-    public static final Config config = ConfigFactory.load();
+
+    public static final NetworkConfig networkConfig =
+            (NetworkConfig) XmlLoader.getInstance()
+                    .load(NetworkConfig.class, "server_config.xml");
+
+    public static final GameMechanicsConfig mechanicsConfig =
+            (GameMechanicsConfig) XmlLoader.getInstance()
+                    .load(GameMechanicsConfig.class, "server_config.xml");
 
     public static void main(String[] args) throws Exception {
-        System.out.append("Starting at port1: ").append(String.valueOf(config.getInt("network.port"))).append('\n');
 
-        Server server = new Server(new InetSocketAddress(config.getString("network.host"), config.getInt("network.port")));
+
+        System.out.append("Starting at port: ").append(String.valueOf(networkConfig.port)).append("\n");
+        Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        AccountService accountService = new MemoryAccountService();
+        AccountService accountService = new AccountServiceInMemory();
 
-        // Create servlets
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
@@ -44,7 +53,6 @@ public class Main {
         Servlet serverStatus = new ServerStatusServlet(accountService, sessionManager);
         Servlet serverShutdown = new ShutdownServlet(accountService);
 
-        // Build web app context
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(signIn), "/api/v" + API_VERSION + "/auth/signin");
         context.addServlet(new ServletHolder(signUp), "/api/v" + API_VERSION + "/auth/signup");
@@ -58,15 +66,12 @@ public class Main {
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
+        GameManager gameManager = new GameManager();
 
-        // Init game
-        GameManager gameManager = new GameManager(accountService);
-
-        // Create WebSocketHandler
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
-                factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(
+                factory.setCreator(new GameWebSocketCreator(
                         sessionManager,
                         accountService,
                         gameManager

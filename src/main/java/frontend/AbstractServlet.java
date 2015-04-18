@@ -6,7 +6,6 @@ import frontend.response.ErrorResponse;
 import frontend.response.PermissionDeniedErrorResponse;
 import frontend.response.Response;
 import interfaces.AccountService;
-import main.MemoryAccountService;
 import model.UserProfile;
 
 import javax.servlet.ServletException;
@@ -116,12 +115,12 @@ public abstract class AbstractServlet extends HttpServlet {
                 response.getWriter().println(apiResponse.getBody());
             } catch (IOException e) {
                 writeResponse(response,
-                        new ErrorResponse(ErrorResponse.ERROR_INTERNAL_SERVER));
+                        new ErrorResponse(ErrorResponse.ErrorResponseCode.ERROR_INTERNAL_SERVER));
                 e.printStackTrace();
             }
         } else {
             writeResponse(response,
-                    new ErrorResponse(ErrorResponse.ERROR_EMPTY_RESPONSE));
+                    new ErrorResponse(ErrorResponse.ErrorResponseCode.ERROR_EMPTY_RESPONSE));
         }
     }
 

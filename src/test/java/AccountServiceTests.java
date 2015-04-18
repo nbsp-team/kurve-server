@@ -1,7 +1,6 @@
 import interfaces.AccountService;
-import main.MemoryAccountService;
+import main.AccountServiceInMemory;
 import model.UserProfile;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,12 +9,7 @@ import static org.junit.Assert.*;
  * nickolay, 01.04.15.
  */
 public class AccountServiceTests {
-    public static AccountService accountService;
-
-    @BeforeClass
-    public static void init() {
-        accountService = new MemoryAccountService();
-    }
+    public static AccountService accountService = new AccountServiceInMemory();
 
     @Test
     public void testRegister() {

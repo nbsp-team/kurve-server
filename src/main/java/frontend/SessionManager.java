@@ -1,10 +1,9 @@
-package utils;
+package frontend;
 
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**

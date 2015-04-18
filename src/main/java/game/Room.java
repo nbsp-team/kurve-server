@@ -38,7 +38,9 @@ public class Room {
     }
 
     public void onNewPlayer(Player player) {
+
         if(roomState != RoomState.WAITING) return;
+
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
         broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
@@ -88,15 +90,13 @@ public class Room {
     public void endGame(){
         broadcastMessage(new GameOverMessage(this));
     }
-    private void startGame() {
+    public void startGame() {
         if(roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
-
         gameField = new GameField(players.size(), this);
         for(int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
-
 
         gameField.play();
     }
@@ -134,10 +134,12 @@ public class Room {
     }
 
     public int getPlayerIdByUser(UserProfile userProfile) {
-        for(int i = 0; i < players.size(); ++i) {
-            if (players.get(i).getUserProfile().getLogin().equals(userProfile.getLogin())) {
-                return i;
+        int index = 0;
+        for(Player player : players) {
+            if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
+                return index;
             }
+            index++;
         }
         return -1;
     }
@@ -155,10 +157,19 @@ public class Room {
         return players.size();
     }
 
+    public int getReadyPlayerCount() {
+        int readyUserCount = 0;
+        for(Player p : players) {
+            if (p.isReady()) {
+                readyUserCount++;
+            }
+        }
+        return readyUserCount;
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
-
 
 
     public RoomState getRoomState() {
