@@ -16,27 +16,89 @@ public class Room {
         GAME
     }
 
+
     private List<Player> players;
     private RoomState roomState = RoomState.WAITING;
+    private int readyPlayersCount;
+    private GameField gameField;
+
+    private int getPointsByDeathId(int deathId) {
+        int[] deathPoints = {1, 2, 3, 4, 5};
+        if(deathId >= 0 && deathId < 5) return deathPoints[deathId];
+        return 0;
+    }
+
+    public void onPlayerDeath(int playerId, int deathId){
+       players.get(playerId).setPoints(getPointsByDeathId(deathId));
+    }
 
     public Room() {
         players = new ArrayList<>();
+        readyPlayersCount = 0;
     }
 
     public void onNewPlayer(Player player) {
+        if(roomState != RoomState.WAITING) return;
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
         broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
                 getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
-
     }
 
     public void onPlayerReady(Player player, boolean isReady) {
+        if(roomState != RoomState.WAITING) return;
         player.setReady(isReady);
+        if(isReady) readyPlayersCount++;
+            else readyPlayersCount--;
+
+        if (readyPlayersCount == players.size()) {
+            startGame();
+            System.out.println("**started game**");
+        } else {
+            broadcastMessageExceptUser(
+                    new ReadyMessage(player, isReady),
+                    player.getUserProfile()
+            );
+        }
+    }
+
+    public void onKeyEvent(boolean isLeft, boolean isUp, UserProfile user) {
+        if(roomState != RoomState.GAME) return;
+
+        int sender = players.indexOf(getPlayerByUser(user));
+        System.out.println(sender);
         broadcastMessageExceptUser(
-                new ReadyMessage(player, isReady),
-                player.getUserProfile()
+                new KeyMessage(isLeft, isUp, sender), user
         );
+        if(isLeft){
+            if(isUp){
+                gameField.leftUp(sender);
+            } else {
+                gameField.leftDown(sender);
+            }
+        } else {
+            if(isUp){
+                gameField.rightUp(sender);
+            } else {
+                gameField.rightDown(sender);
+            }
+        }
+
+    }
+    public void endGame(){
+        broadcastMessage(new GameOverMessage(this));
+    }
+    private void startGame() {
+        if(roomState != RoomState.WAITING) return;
+        roomState = RoomState.GAME;
+
+        gameField = new GameField(players.size(), this);
+        for(int i = 0; i < players.size(); i++) {
+            players.get(i).sendMessage(new StartGameMessage(this, i));
+        }
+
+
+        gameField.play();
     }
 
     public void onPlayerDisconnect(Player player) {
@@ -97,9 +159,7 @@ public class Room {
         return players;
     }
 
-    private void startGame() {
-        roomState = RoomState.GAME;
-    }
+
 
     public RoomState getRoomState() {
         return roomState;

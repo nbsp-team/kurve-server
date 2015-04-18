@@ -17,7 +17,7 @@ public class SignUpServlet extends AbstractServlet {
     }
 
     public Response onPost(HttpServletRequest request) {
-
+        System.out.append("1111 ").append('\n');
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");

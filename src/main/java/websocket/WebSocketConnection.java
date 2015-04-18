@@ -28,6 +28,7 @@ public class WebSocketConnection {
             webSocketSession.getRemote().sendString(
                     message.getBody()
             );
+
         } catch (IOException e) {
             // TODO: error response
             try {

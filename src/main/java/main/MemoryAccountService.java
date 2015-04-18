@@ -16,6 +16,7 @@ public class MemoryAccountService implements AccountService {
     public MemoryAccountService() {
         // TODO: for debugging only
         addUser(new UserProfile("admin", "admin", "didika914@gmail.com"));
+        addUser(new UserProfile("q", "q", "q@gmail.com"));
     }
 
     @Override

@@ -50,6 +50,7 @@ public class Player {
     }
 
     public void sendMessage(Message message) {
+
         for(WebSocketConnection connection : connections) {
             connection.sendMessage(message);
         }
@@ -78,20 +79,27 @@ public class Player {
     public String getId() {
         return id;
     }
+    public void setPoints(int points){
+        this.points = points;
+    }
+
+    public int getPoints() {
+        return points;
+    }
 
     public static class serializer implements JsonSerializer<Player> {
-        public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
+            public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
+                JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("username", src.getUserProfile().getLogin());
-            jsonObject.addProperty("player_id", src.getId());
-            jsonObject.addProperty("global_rating", 0);
-            jsonObject.addProperty("is_ready", src.isReady());
-            jsonObject.addProperty("color",
-                    "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
-            );
+                jsonObject.addProperty("username", src.getUserProfile().getLogin());
+                jsonObject.addProperty("player_id", src.getId());
+                jsonObject.addProperty("global_rating", 0);
+                jsonObject.addProperty("is_ready", src.isReady());
+                jsonObject.addProperty("color",
+                        "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
+                );
 
-            return jsonObject;
-        }
+                return jsonObject;
+            }
     }
 }

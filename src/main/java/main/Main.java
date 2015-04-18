@@ -27,7 +27,7 @@ public class Main {
     public static final Config config = ConfigFactory.load();
 
     public static void main(String[] args) throws Exception {
-        System.out.append("Starting at port: ").append(String.valueOf(config.getInt("network.port"))).append('\n');
+        System.out.append("Starting at port1: ").append(String.valueOf(config.getInt("network.port"))).append('\n');
 
         Server server = new Server(new InetSocketAddress(config.getString("network.host"), config.getInt("network.port")));
         SessionManager sessionManager = new SessionManager();

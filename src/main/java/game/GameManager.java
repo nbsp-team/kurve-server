@@ -31,12 +31,12 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onNewConnection(UserProfile user, WebSocketConnection connection) {
+    public Room onNewConnection(UserProfile user, WebSocketConnection connection) {
         System.out.println("New ws: " + user);
 
         if (user == null) {
             // connection.close();
-            return;
+            return null;
         }
 
         for (Room room : rooms) {
@@ -44,18 +44,19 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
 
             if (player != null) {
                 player.addConnection(connection);
-                return;
+                return room;
             }
 
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
                 connectUserToRoom(connection, user, room);
-                return;
+                return room;
             }
         }
 
         Room newRoom = new Room();
         connectUserToRoom(connection, user, newRoom);
         rooms.add(newRoom);
+        return newRoom;
     }
 
     private void connectUserToRoom(WebSocketConnection connection, UserProfile userProfile, Room room) {

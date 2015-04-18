@@ -2,6 +2,7 @@ package websocket;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import game.Room;
 import interfaces.AccountService;
 import main.MemoryAccountService;
 import model.UserProfile;
@@ -13,7 +14,9 @@ import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import utils.SessionManager;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.net.HttpCookie;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +38,9 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         CODE_NEW_BONUS_RESPONSE,
         CODE_BONUS_EAT_RESPONSE,
         CODE_ROUND_END_RESPONSE,
-        CODE_GAME_OVER_RESPONSE
+        CODE_GAME_OVER_RESPONSE,
+        CODE_ROOM_START_RESPONSE,
+        CODE_SNAKE_ARC_RESPONSE
     }
 
     private WebSocketMessageListener messageListener;
@@ -75,6 +80,11 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_INIT_STATE_RESPONSE:
                     break;
                 case CODE_KEY_REQUEST:
+                    System.out.append("Event key: ").append(message).append('\n');
+                    boolean isLeft = jresponse.get("isLeft").getAsBoolean();
+                    boolean isUp = jresponse.get("isUp").getAsBoolean();
+                    room.onKeyEvent(isLeft, isUp, userProfile);
+                    
                     break;
                 case CODE_KEY_RESPONSE:
                     break;
@@ -96,16 +106,17 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     }
 
+    private Room room;
+
     @Override
     public void onWebSocketConnect(Session session) {
-        messageListener.onNewConnection(userProfile, new WebSocketConnection(session));
+        room = messageListener.onNewConnection(userProfile, new WebSocketConnection(session));
     }
 
     public static class GameWebSocketCreator implements WebSocketCreator {
         private AccountService accountService;
         private SessionManager sessionManager;
         private WebSocketMessageListener messageListener;
-
         public GameWebSocketCreator(SessionManager sessionManager, AccountService accountService, WebSocketMessageListener messageListener) {
             this.accountService = accountService;
             this.sessionManager = sessionManager;
@@ -143,7 +154,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     }
 
     public static interface WebSocketMessageListener {
-        public void onNewConnection(UserProfile user, WebSocketConnection connection);
+        public Room onNewConnection(UserProfile user, WebSocketConnection connection);
         public void onDisconnect(UserProfile user);
         public void onUserReady(UserProfile user, boolean isReady);
     }
