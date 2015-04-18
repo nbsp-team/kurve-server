@@ -9,10 +9,10 @@ import java.util.Map;
 /**
  * v.chibrikov, 13.09.2014.
  */
-public class MemoryAccountService implements AccountService {
+public class AccountServiceInMemory implements AccountService {
     private Map<String, UserProfile> users = new HashMap<>();
 
-    public MemoryAccountService() {
+    public AccountServiceInMemory() {
         // TODO: for debugging only
         addUser(new UserProfile("admin", "admin", "didika914@gmail.com"));
     }

@@ -1,11 +1,10 @@
 package frontend;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import frontend.servlet.SignInServlet;
 import interfaces.AccountService;
-import main.MemoryAccountService;
+import main.AccountServiceInMemory;
 import model.UserProfile;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -23,16 +22,10 @@ import static org.mockito.Mockito.*;
 /**
  * nickolay, 03.04.15.
  */
-public class SignInServletTests {
+public class SignInServletTests extends ServletTests {
     @Test
     public void testNotRegistered() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         AbstractServlet signInServlet = new SignInServlet(accountService);
-
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
 
         when(testRequest.getParameter("username")).thenReturn("abc");
         when(testRequest.getParameter("password")).thenReturn("def");
@@ -50,16 +43,9 @@ public class SignInServletTests {
 
     @Test
     public void testOk() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         accountService.addUser(new UserProfile("abc", "def", "def@gmail.com"));
 
         AbstractServlet signInServlet = new SignInServlet(accountService);
-
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession httpSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
 
         when(testRequest.getParameter("username")).thenReturn("abc");
         when(testRequest.getParameter("password")).thenReturn("def");
@@ -71,25 +57,17 @@ public class SignInServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":null,\"response\":{\"user\":{\"username\":\"abc\",\"email\":\"def@gmail.com\",\"global_rating\":0}}}";
+        String expectedResponse = "{\"error\":null,\"response\":{\"user\":{\"username\":\"abc\",\"email\":\"def@gmail.com\",\"global_rating\":0}}}";
 
         verify(httpSession, times(1)).setAttribute(eq("username"), Mockito.anyObject());
-        assertEqualsJSON(servletResponse, rightResponse);
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 
     @Test
     public void testIncorrectPassword() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         accountService.addUser(new UserProfile("abc", "def", "def@gmail.com"));
 
         AbstractServlet signInServlet = new SignInServlet(accountService);
-
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession httpSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
-
         when(testRequest.getParameter("username")).thenReturn("abc");
         when(testRequest.getParameter("password")).thenReturn("123");
 
@@ -101,23 +79,16 @@ public class SignInServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
+        String expectedResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
 
-        assertEqualsJSON(servletResponse, rightResponse);
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 
     @Test
     public void testWithoutPasswordParam() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         accountService.addUser(new UserProfile("abc", "def", "def@gmail.com"));
 
         AbstractServlet signInServlet = new SignInServlet(accountService);
-
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession httpSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
 
         when(testRequest.getParameter("username")).thenReturn("abc");
         when(testRequest.getSession()).thenReturn(httpSession);
@@ -128,26 +99,18 @@ public class SignInServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
+        String expectedResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
 
-        assertEqualsJSON(servletResponse, rightResponse);
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 
     @Test
     public void testWithoutUserParam() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         accountService.addUser(new UserProfile("abc", "def", "def@gmail.com"));
 
         AbstractServlet signInServlet = new SignInServlet(accountService);
 
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession httpSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
-
         when(testRequest.getParameter("password")).thenReturn("def");
-
         when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
 
@@ -156,16 +119,8 @@ public class SignInServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
+        String expectedResponse = "{\"error\":{\"code\":0,\"description\":\"Ошибка авторизации пользователя\"}}";
 
-        assertEqualsJSON(servletResponse, rightResponse);
-    }
-
-    private static void assertEqualsJSON(String json1, String json2) {
-        JsonParser parser = new JsonParser();
-        JsonElement o1 = parser.parse(json1);
-        JsonElement o2 = parser.parse(json2);
-
-        assertTrue(o1.equals(o2));
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 }

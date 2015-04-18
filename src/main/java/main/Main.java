@@ -41,7 +41,7 @@ public class Main {
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        AccountService accountService = new MemoryAccountService();
+        AccountService accountService = new AccountServiceInMemory();
 
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);

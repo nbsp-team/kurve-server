@@ -1,10 +1,9 @@
 package frontend;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import frontend.servlet.SignOutServlet;
 import interfaces.AccountService;
-import main.MemoryAccountService;
+import main.AccountServiceInMemory;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -21,19 +20,12 @@ import static org.mockito.Mockito.*;
 /**
  * nickolay, 03.04.15.
  */
-public class SignOutServletTests {
+public class SignOutServletTests extends ServletTests {
     @Test
     public void testNotAuth() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         AbstractServlet signOutServlet = new SignOutServlet(accountService);
 
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession testSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
-
-        when(testRequest.getSession()).thenReturn(testSession);
+        when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
 
         signOutServlet.doPost(testRequest, testResponse);
@@ -41,24 +33,17 @@ public class SignOutServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":{\"code\":4,\"description\":\"Ошибка доступа\"}}";
+        String expectedResponse = "{\"error\":{\"code\":4,\"description\":\"Ошибка доступа\"}}";
 
-        assertEqualsJSON(servletResponse, rightResponse);
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 
     @Test
     public void testOk() throws ServletException, IOException {
-        AccountService accountService = new MemoryAccountService();
         AbstractServlet signOutServlet = new SignOutServlet(accountService);
 
-        HttpServletRequest testRequest = mock(HttpServletRequest.class);
-        HttpServletResponse testResponse = mock(HttpServletResponse.class);
-        HttpSession testSession = mock(HttpSession.class);
-        PrintWriter responsePrintWriter = mock(PrintWriter.class);
-        ArgumentCaptor<String> servletResponseCaptor = ArgumentCaptor.forClass(String.class);
-
-        when(testSession.getAttribute("username")).thenReturn("abc");
-        when(testRequest.getSession()).thenReturn(testSession);
+        when(httpSession.getAttribute("username")).thenReturn("abc");
+        when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
 
         signOutServlet.doPost(testRequest, testResponse);
@@ -66,17 +51,9 @@ public class SignOutServletTests {
         verify(testResponse.getWriter()).println(servletResponseCaptor.capture());
 
         String servletResponse = servletResponseCaptor.getValue();
-        String rightResponse = "{\"error\":null,\"response\":{}}";
+        String expectedResponse = "{\"error\":null,\"response\":{}}";
 
-        verify(testSession, times(1)).removeAttribute("username");
-        assertEqualsJSON(servletResponse, rightResponse);
-    }
-
-    private static void assertEqualsJSON(String json1, String json2) {
-        JsonParser parser = new JsonParser();
-        JsonElement o1 = parser.parse(json1);
-        JsonElement o2 = parser.parse(json2);
-
-        assertTrue(o1.equals(o2));
+        verify(httpSession, times(1)).removeAttribute("username");
+        assertEqualsJSON(servletResponse, expectedResponse);
     }
 }
