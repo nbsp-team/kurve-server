@@ -41,7 +41,7 @@ public class ControlMessage extends Message {
         return isPressed;
     }
 
-    public static class serializer implements JsonSerializer<ControlMessage> {
+    public class serializer implements JsonSerializer<ControlMessage> {
         public JsonElement serialize(ControlMessage src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject responseObject = new JsonObject();
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_KEY_RESPONSE.ordinal());

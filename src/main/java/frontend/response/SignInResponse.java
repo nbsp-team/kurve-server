@@ -19,16 +19,4 @@ public class SignInResponse extends SuccessResponse {
         return userProfile;
     }
 
-    public static class serializer implements JsonSerializer<SignInResponse> {
-        public JsonElement serialize(SignInResponse src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.add("error", JsonNull.INSTANCE);
-
-            JsonObject responseObject = new JsonObject();
-            responseObject.add("user", context.serialize(src.getUserProfile()));
-            jsonObject.add("response", responseObject);
-
-            return jsonObject;
-        }
-    }
 }

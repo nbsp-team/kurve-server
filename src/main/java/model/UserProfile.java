@@ -46,20 +46,4 @@ public class UserProfile {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-
-    public static class serializer implements JsonSerializer<UserProfile> {
-        public JsonElement serialize(UserProfile src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
-
-            jsonObject.addProperty("username", src.getLogin());
-            jsonObject.addProperty("email", src.getEmail());
-            jsonObject.addProperty("global_rating", 0);
-
-            if (src.isAdmin()) {
-                jsonObject.addProperty("isAdmin", true);
-            }
-
-            return jsonObject;
-        }
-    }
 }

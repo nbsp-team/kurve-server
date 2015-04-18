@@ -15,6 +15,7 @@ import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import configuration.XmlLoader;
 import frontend.SessionManager;
+import websocket.GameWebSocketCreator;
 import websocket.GameWebSocketHandler;
 
 import javax.servlet.Servlet;
@@ -69,7 +70,7 @@ public class Main {
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
-                factory.setCreator(new GameWebSocketHandler.GameWebSocketCreator(
+                factory.setCreator(new GameWebSocketCreator(
                         sessionManager,
                         accountService,
                         gameManager

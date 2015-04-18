@@ -46,16 +46,4 @@ public class ErrorResponse extends Response {
         }
         return errorCode.getDescription();
     }
-
-    public static class serializer implements JsonSerializer<ErrorResponse> {
-        public JsonElement serialize(ErrorResponse src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject errorObject = new JsonObject();
-            errorObject.add("code", new JsonPrimitive(src.getErrorCode().ordinal()));
-            errorObject.add("description", new JsonPrimitive(src.getErrorDescription()));
-
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.add("error", errorObject);
-            return jsonObject;
-        }
-    }
 }

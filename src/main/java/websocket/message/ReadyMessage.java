@@ -25,14 +25,4 @@ public class ReadyMessage extends Message {
     public Player getPlayer() {
         return player;
     }
-
-    public static class serializer implements JsonSerializer<ReadyMessage> {
-        public JsonElement serialize(ReadyMessage src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject responseObject = new JsonObject();
-            responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_READY_RESPONSE.ordinal());
-            responseObject.addProperty("ready", src.isReady());
-            responseObject.addProperty("player_id", src.getPlayer().getId());
-            return responseObject;
-        }
-    }
 }

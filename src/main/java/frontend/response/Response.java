@@ -1,8 +1,10 @@
 package frontend.response;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
+import frontend.response.serializer.*;
 import model.UserProfile;
+
+import java.lang.reflect.Type;
 
 /**
  * nickolay, 25.02.15.
@@ -10,17 +12,17 @@ import model.UserProfile;
 public class Response {
     private static final Gson gson = new GsonBuilder()
             // Response adapters
-            .registerTypeAdapter(ErrorResponse.class, new ErrorResponse.serializer())
-            .registerTypeAdapter(AuthErrorResponse.class, new ErrorResponse.serializer())
-            .registerTypeAdapter(PermissionDeniedErrorResponse.class, new ErrorResponse.serializer())
-            .registerTypeAdapter(GetUserResponse.class, new GetUserResponse.serializer())
-            .registerTypeAdapter(RatingResponse.class, new RatingResponse.serializer())
-            .registerTypeAdapter(ServerStatusResponse.class, new ServerStatusResponse.serializer())
-            .registerTypeAdapter(SignInResponse.class, new SignInResponse.serializer())
-            .registerTypeAdapter(SignUpResponse.class, new SignUpResponse.serializer())
-            .registerTypeAdapter(SuccessResponse.class, new SuccessResponse.serializer())
+            .registerTypeAdapter(ErrorResponse.class, new ErrorResponseSerializer())
+            .registerTypeAdapter(PermissionDeniedErrorResponse.class, new ErrorResponseSerializer())
+            .registerTypeAdapter(AuthErrorResponse.class, new ErrorResponseSerializer())
+            .registerTypeAdapter(GetUserResponse.class, new GetUserResponseSerializer())
+            .registerTypeAdapter(RatingResponse.class, new RatingResponseSerializer())
+            .registerTypeAdapter(ServerStatusResponse.class, new ServerStatusResponseSerializer())
+            .registerTypeAdapter(SignInResponse.class, new SignInResponseSerializer())
+            .registerTypeAdapter(SignUpResponse.class, new SingUpResponseSerializer())
+            .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
             // Model adapters
-            .registerTypeAdapter(UserProfile.class, new UserProfile.serializer())
+            .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
             // Configure Gson
             .serializeNulls()
             .create();

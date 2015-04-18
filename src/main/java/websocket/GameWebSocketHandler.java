@@ -103,47 +103,6 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         messageListener.onNewConnection(this, new WebSocketConnection(session));
     }
 
-    public static class GameWebSocketCreator implements WebSocketCreator {
-        private AccountService accountService;
-        private SessionManager sessionManager;
-        private WebSocketMessageListener messageListener;
-
-        public GameWebSocketCreator(SessionManager sessionManager, AccountService accountService, WebSocketMessageListener messageListener) {
-            this.accountService = accountService;
-            this.sessionManager = sessionManager;
-            this.messageListener = messageListener;
-        }
-
-        @Override
-        public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
-            String sessionId = getSessionId(servletUpgradeRequest.getCookies());
-            return new GameWebSocketHandler(
-                    getUserBySessionId(sessionId),
-                    messageListener
-            );
-        }
-
-        private static String getSessionId(List<HttpCookie> cookieList) {
-            for(HttpCookie c : cookieList) {
-                if (c.getName().equals("JSESSIONID")) {
-                    return c.getValue();
-                }
-            }
-            return null;
-        }
-
-        private UserProfile getUserBySessionId(String sessionId) {
-            Optional<HttpSession> session = sessionManager.getSessionById(sessionId);
-
-            if (session.isPresent()) {
-                String username = (String) session.get().getAttribute("username");
-                return accountService.getUser(username);
-            } else {
-                return null;
-            }
-        }
-    }
-
     public UserProfile getUserProfile() {
         return userProfile;
     }
