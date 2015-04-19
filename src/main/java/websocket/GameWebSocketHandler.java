@@ -83,7 +83,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                     System.out.append("Event key: ").append(message).append('\n');
                     boolean isLeft = jresponse.get("isLeft").getAsBoolean();
                     boolean isUp = jresponse.get("isUp").getAsBoolean();
-                    room.onKeyEvent(isLeft, isUp, userProfile);
+                    messageListener.onControl(this, isLeft, isUp);
                     
                     break;
                 case CODE_KEY_RESPONSE:
@@ -131,7 +131,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
         public void onDisconnect(GameWebSocketHandler handler);
         public void onUserReady(GameWebSocketHandler handler, boolean isReady);
-        public void onControl(GameWebSocketHandler handler, ControlMessage.KeyCode key, boolean pressed);
+        public void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
 
     }
 }

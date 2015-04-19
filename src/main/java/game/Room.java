@@ -19,7 +19,6 @@ public class Room {
 
     private List<Player> players;
     private RoomState roomState = RoomState.WAITING;
-    private int readyPlayersCount;
     private GameField gameField;
 
     private int getPointsByDeathId(int deathId) {
@@ -34,7 +33,6 @@ public class Room {
 
     public Room() {
         players = new ArrayList<>();
-        readyPlayersCount = 0;
     }
 
     public void onNewPlayer(Player player) {
@@ -50,39 +48,27 @@ public class Room {
     public void onPlayerReady(Player player, boolean isReady) {
         if(roomState != RoomState.WAITING) return;
         player.setReady(isReady);
-        if(isReady) readyPlayersCount++;
-            else readyPlayersCount--;
 
-        if (readyPlayersCount == players.size()) {
-            startGame();
-            System.out.println("**started game**");
-        } else {
             broadcastMessageExceptUser(
                     new ReadyMessage(player, isReady),
                     player.getUserProfile()
             );
-        }
     }
 
-    public void onKeyEvent(boolean isLeft, boolean isUp, UserProfile user) {
+    public void onKeyEvent(boolean isLeft, boolean isUp, int playerId) {
         if(roomState != RoomState.GAME) return;
 
-        int sender = players.indexOf(getPlayerByUser(user));
-        System.out.println(sender);
-        broadcastMessageExceptUser(
-                new KeyMessage(isLeft, isUp, sender), user
-        );
         if(isLeft){
             if(isUp){
-                gameField.leftUp(sender);
+                gameField.leftUp(playerId);
             } else {
-                gameField.leftDown(sender);
+                gameField.leftDown(playerId);
             }
         } else {
             if(isUp){
-                gameField.rightUp(sender);
+                gameField.rightUp(playerId);
             } else {
-                gameField.rightDown(sender);
+                gameField.rightDown(playerId);
             }
         }
 

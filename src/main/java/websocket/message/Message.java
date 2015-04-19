@@ -12,11 +12,11 @@ import websocket.message.serializer.*;
  */
 public abstract class Message {
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(KeyMessage.class, new KeyMessage.serializer())
-            .registerTypeAdapter(SnakePartArc.class, new SnakePartArc.serializer())
-            .registerTypeAdapter(SnakePartLine.class, new SnakePartLine.serializer())
-            .registerTypeAdapter(SnakeUpdateMessage.class, new SnakeUpdateMessage.serializer())
-            .registerTypeAdapter(GameOverMessage.class, new GameOverMessage.serializer())
+            .registerTypeAdapter(ControlMessage.class, new ControlMessageSerializer())
+            .registerTypeAdapter(SnakePartArc.class, new SnakePartArcSerializer())
+            .registerTypeAdapter(SnakePartLine.class, new SnakePartLineSerializer())
+            .registerTypeAdapter(SnakeUpdateMessage.class, new SnakeUpdateMessageSerializer())
+            .registerTypeAdapter(GameOverMessage.class, new GameOverMessageSerializer())
             .registerTypeAdapter(RoomPlayersMessage.class, new RoomPlayersMessageSerializer())
             .registerTypeAdapter(ConnectedPlayerMessage.class, new ConnectedPlayerMessageSerializer())
             .registerTypeAdapter(DisconnectedPlayerMessage.class, new DisconnectedPlayerMesageSerializer())

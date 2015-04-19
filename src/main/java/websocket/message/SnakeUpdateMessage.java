@@ -23,14 +23,5 @@ public class SnakeUpdateMessage extends Message {
         return snake;
     }
 
-    public static class serializer implements JsonSerializer<SnakeUpdateMessage> {
-        public JsonElement serialize(SnakeUpdateMessage src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject responseObject = new JsonObject();
-            responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_SNAKE_ARC_RESPONSE.ordinal());
 
-            responseObject.add("snake", src.getSnake().getUpdatesJson(context));
-
-            return responseObject;
-        }
-    }
 }

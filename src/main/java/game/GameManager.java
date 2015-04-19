@@ -102,14 +102,15 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onControl(GameWebSocketHandler handler, ControlMessage.KeyCode key, boolean pressed) {
+    public void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp) {
         Room room = handler.getRoom();
         if (room != null) {
-            Player player = room.getPlayerByUser(handler.getUserProfile());
+            int sender = room.getPlayerIdByUser(handler.getUserProfile());
             room.broadcastMessageExceptUser(
-                    new ControlMessage(player, key, pressed),
+                    new ControlMessage(isLeft, isUp, sender),
                     handler.getUserProfile()
             );
+            room.onKeyEvent(isLeft, isUp, sender);
         }
     }
 

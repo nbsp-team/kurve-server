@@ -1,56 +1,34 @@
 package websocket.message;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import game.Player;
+import game.Room;
 import websocket.GameWebSocketHandler;
 
 import java.lang.reflect.Type;
 
 /**
- * nickolay, 20.03.15.
+ * egor, 18.04.15.
  */
 public class ControlMessage extends Message {
-    public enum KeyCode {
-        KEY_CODE_LEFT,
-        KEY_CODE_RIGHT,
-        KEY_CODE_BONUS
+    private boolean isLeft, isUp;
+    private int playerId;
+
+    public ControlMessage(boolean isLeft, boolean isUp, int playerId) {
+        this.isLeft = isLeft; this.isUp = isUp; this.playerId = playerId;
     }
 
-    private KeyCode keyCode;
-    private boolean isPressed;
-    private Player player;
-
-    public ControlMessage(Player player, KeyCode keyCode, boolean isPressed) {
-        this.player = player;
-        this.isPressed = isPressed;
-        this.keyCode = keyCode;
+    public boolean getIsLeft() {
+        return isLeft;
     }
 
-    public Player getPlayer() {
-        return player;
+    public boolean getIsUp() {
+        return isUp;
     }
 
-    public KeyCode getKeyCode() {
-        return keyCode;
+    public int getPlayerId() {
+        return playerId;
     }
 
-    public boolean isPressed() {
-        return isPressed;
-    }
 
-    public class serializer implements JsonSerializer<ControlMessage> {
-        public JsonElement serialize(ControlMessage src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject responseObject = new JsonObject();
-            responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_KEY_RESPONSE.ordinal());
-
-            responseObject.addProperty("player_id", src.getPlayer().getId());
-            responseObject.addProperty("keycode", src.getKeyCode().ordinal());
-            responseObject.addProperty("press", src.isPressed());
-
-            return responseObject;
-        }
-    }
 }

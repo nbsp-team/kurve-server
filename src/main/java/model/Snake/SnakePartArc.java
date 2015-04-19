@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import game.MathHelper;
 
 import java.lang.reflect.Type;
 
@@ -32,11 +33,11 @@ public class SnakePartArc{
         span += angleV;
     }
     public boolean isInside(double x, double y, int lineRadius){
-        double d = Math.sqrt((this.x-x)*(this.x-x)+(this.y-y)*(this.y-y));
+        double d = MathHelper.distance(this.x, this.y, x, y);
         if(Math.abs(d-r)>lineRadius + this.lineRadius) return false;
         double alpha = Math.atan2((y-this.y),(x-this.x));
 
-        return ((alpha<angle) != (alpha< angle + span));
+        return MathHelper.isBetween(alpha, angle, angle + span);
     }
 
     public double getX(){
@@ -68,19 +69,5 @@ public class SnakePartArc{
         return clockwise;
     }
 
-    public static class serializer implements JsonSerializer<SnakePartArc> {
-        public JsonElement serialize(SnakePartArc src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("id", src.getId());
-            jsonObject.addProperty("x", src.getX());
-            jsonObject.addProperty("y", src.getY());
-            jsonObject.addProperty("angle", src.getAngle());
-            jsonObject.addProperty("span", src.getSpan());
-            jsonObject.addProperty("radius", src.getRadius());
-            jsonObject.addProperty("lineRadius", src.getLineRadius());
-            jsonObject.addProperty("clockwise", src.isClockwise());
-            return jsonObject;
-        }
-    }
 }
