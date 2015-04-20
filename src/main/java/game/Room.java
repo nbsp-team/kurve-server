@@ -131,7 +131,7 @@ public class Room {
         return -1;
     }
 
-    public boolean isColorUsed(Color color) {
+    public boolean isColorUsed(String color) {
         for(Player p : players) {
             if (p.getColor().equals(color)) {
                 return true;

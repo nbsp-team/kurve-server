@@ -1,8 +1,11 @@
 package configuration;
+import frontend.annotation.xml.ArrayElement;
+import frontend.annotation.xml.ElementGroup;
 import frontend.annotation.xml.FieldElement;
 import frontend.annotation.xml.RootElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dimorinny on 03.04.15.
@@ -50,9 +55,26 @@ public class XmlLoader {
             for(Field field : clazz.getFields()) {
                 if(field.isAnnotationPresent(FieldElement.class)) {
                     String fieldElement = field.getAnnotation(FieldElement.class).name();
-                    field.set(instance, rootField.getElementsByTagName(fieldElement)
-                            .item(0).getTextContent());
+                    Element src = rootField;
+                    if(field.isAnnotationPresent(ElementGroup.class)) {
+                        src = (Element) root.getElementsByTagName(
+                                field.getAnnotation(ElementGroup.class).name()
+                        ).item(0);
+                    }
+
+                    if(field.isAnnotationPresent(ArrayElement.class)) {
+                        List<String> array = new ArrayList<>();
+                        NodeList elements = src.getElementsByTagName(fieldElement);
+                        for(int i = 0; i < elements.getLength(); i++){
+                            array.add(elements.item(i).getTextContent());
+                        }
+                        field.set(instance, array);
+                    } else {
+                        field.set(instance, src.getElementsByTagName(fieldElement)
+                                .item(0).getTextContent());
+                    }
                 }
+
             }
 
             return instance;

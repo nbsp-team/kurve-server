@@ -10,6 +10,8 @@ import java.util.List;
 /**
  * Created by egor on 12.04.15.
  */
+
+
 public class GameFieldImpl implements GameField{
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
@@ -38,22 +40,28 @@ public class GameFieldImpl implements GameField{
         }
         dead = 0;
     }
+    @Override
     public void doLeftDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_LEFT);
     }
+    @Override
     public void doLeftUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_LEFT);
     }
+    @Override
     public void doRightDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_RIGHT);
     }
+    @Override
     public void doRightUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_RIGHT);
     }
+    @Override
     public void play() {
         playing = true;
             run();
     }
+    @Override
     public void pause(){
         playing = false;
     }

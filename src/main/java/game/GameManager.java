@@ -60,7 +60,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     private void connectUserToRoom(WebSocketConnection connection, GameWebSocketHandler handler, Room room) {
-        Color playerColor = getUnusedColor(room);
+        String playerColor = getUnusedColor(room);
         Player newPlayer = new Player(playerColor, handler.getUserProfile());
         newPlayer.addConnection(connection);
         room.onNewPlayer(newPlayer);
@@ -114,12 +114,12 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         }
     }
 
-    private Color getUnusedColor(Room room) {
-        for(Color c : Player.playerColors) {
+    private String getUnusedColor(Room room) {
+        for(String c : Player.playerColors) {
             if (!room.isColorUsed(c)) {
                 return c;
             }
         }
-        return Color.BLACK;
+        return "#000000";
     }
 }

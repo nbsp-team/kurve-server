@@ -20,7 +20,7 @@ public class PlayerSerializer implements JsonSerializer<Player> {
         jsonObject.addProperty("global_rating", 0);
         jsonObject.addProperty("is_ready", src.isReady());
         jsonObject.addProperty("color",
-                "#" + Integer.toHexString(src.getColor().getRGB()).substring(2)
+                src.getColor()
         );
 
         return jsonObject;

@@ -2,14 +2,13 @@ package frontend.annotation.xml;
 
 import java.lang.annotation.*;
 
-
 /**
- * Created by Dimorinny on 07.04.15.
+ * Created by egor on 20.04.15.
  */
 
 @Inherited
 @Target(value= ElementType.FIELD)
 @Retention(value= RetentionPolicy.RUNTIME)
-public @interface FieldElement {
+public @interface ElementGroup {
     public String name();
 }

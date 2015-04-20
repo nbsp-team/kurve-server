@@ -1,7 +1,11 @@
 package configuration;
 
+import frontend.annotation.xml.ArrayElement;
 import frontend.annotation.xml.FieldElement;
+import frontend.annotation.xml.ElementGroup;
 import frontend.annotation.xml.RootElement;
+
+import java.util.List;
 
 /**
  * Created by Dimorinny on 07.04.15.
@@ -16,21 +20,33 @@ public class GameMechanicsConfig {
     @FieldElement(name = "maxPlayerNumber")
     public String maxPlayerNumber;
 
-    @FieldElement(name = "defaultSnakeSpeed")
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "defaultSpeed")
     public String snakeDefaultSpeed;
 
-    @FieldElement(name = "defaultSnakeAngleSpeed")
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "defaultAngleSpeed")
     public String snakeDefaultAngleSpeed;
+
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "defaultWidth")
+    public String defaultSnakeWidth;
 
     @FieldElement(name = "FPS")
     public String FPS;
 
-    @FieldElement(name = "gameFieldWidth")
+    @ElementGroup(name = "GameField")
+    @FieldElement(name = "width")
     public String gameFieldWidth;
 
-    @FieldElement(name = "gameFieldHeight")
+    @ElementGroup(name = "GameField")
+    @FieldElement(name = "height")
     public String gameFieldHeight;
 
-    @FieldElement(name = "defaultSnakeWidth")
-    public String defaultSnakeWidth;
+    @ElementGroup(name = "Snake")
+    @ArrayElement
+    @FieldElement(name = "color")
+    public List<String> colors;
+
+
 }
