@@ -1,5 +1,7 @@
 package game;
 
+import interfaces.GameField;
+import main.Main;
 import model.Snake.Snake;
 
 import java.util.ArrayList;
@@ -8,22 +10,19 @@ import java.util.List;
 /**
  * Created by egor on 12.04.15.
  */
-public class GameField {
-    public static final int FPS = 60;
-    public static final int width = 500;
-    public static final int height = 500;
+public class GameFieldImpl implements GameField{
+    public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
+    public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
+    public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
     private boolean playing;
     private int numPlayers, dead;
     private List<Snake> snakes;
 
-    private int stepCounter;
-    private int stepsTilUpdate;
     private  Room room;
-    public GameField(int numPlayers, Room room) {
+    public GameFieldImpl(int numPlayers, Room room) {
         this.room = room;
 
-        stepCounter = 0;
         playing = false;
         this.numPlayers = numPlayers;
 
@@ -39,26 +38,27 @@ public class GameField {
         }
         dead = 0;
     }
-    public void leftDown(int sender) {
+    public void doLeftDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_LEFT);
     }
-    public void leftUp(int sender) {
+    public void doLeftUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_LEFT);
     }
-    public void rightDown(int sender) {
+    public void doRightDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_RIGHT);
     }
-    public void rightUp(int sender) {
+    public void doRightUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_RIGHT);
     }
     public void play() {
         playing = true;
             run();
     }
+    public void pause(){
+        playing = false;
+    }
 
-    public void step () {
-
-
+    private void step () {
         for(Snake snake : snakes) {
             if(snake.isAlive()) {
                 snake.step();
@@ -91,7 +91,6 @@ public class GameField {
             playing = false;
             room.endGame();
         }
-        stepCounter++;
 
     }
 

@@ -1,5 +1,6 @@
 package game;
 
+import interfaces.GameField;
 import model.UserProfile;
 import websocket.message.*;
 
@@ -60,15 +61,15 @@ public class Room {
 
         if(isLeft){
             if(isUp){
-                gameField.leftUp(playerId);
+                gameField.doLeftUp(playerId);
             } else {
-                gameField.leftDown(playerId);
+                gameField.doLeftDown(playerId);
             }
         } else {
             if(isUp){
-                gameField.rightUp(playerId);
+                gameField.doRightUp(playerId);
             } else {
-                gameField.rightDown(playerId);
+                gameField.doRightDown(playerId);
             }
         }
 
@@ -79,7 +80,7 @@ public class Room {
     public void startGame() {
         if(roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
-        gameField = new GameField(players.size(), this);
+        gameField = new GameFieldImpl(players.size(), this);
         for(int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }

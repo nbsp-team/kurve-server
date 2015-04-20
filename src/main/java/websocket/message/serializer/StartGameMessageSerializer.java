@@ -1,8 +1,8 @@
 package websocket.message.serializer;
 
 import com.google.gson.*;
-import game.GameField;
 import game.Player;
+import main.Main;
 import model.Snake.Snake;
 import websocket.GameWebSocketHandler;
 import websocket.message.StartGameMessage;
@@ -16,9 +16,9 @@ public class StartGameMessageSerializer implements JsonSerializer<StartGameMessa
     public JsonElement serialize(StartGameMessage src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_INIT_STATE_RESPONSE.ordinal());
-        responseObject.addProperty("FPS", GameField.FPS);
-        responseObject.addProperty("width", GameField.width);
-        responseObject.addProperty("height", GameField.height);
+        responseObject.addProperty("FPS", Integer.valueOf(Main.mechanicsConfig.FPS));
+        responseObject.addProperty("width", Integer.valueOf(Main.mechanicsConfig.gameFieldWidth));
+        responseObject.addProperty("height", Integer.valueOf(Main.mechanicsConfig.gameFieldHeight));
         responseObject.addProperty("speed", Snake.defaultSpeed);
         responseObject.addProperty("angleSpeed", Snake.defaultAngleSpeed);
         responseObject.addProperty("partLength", Snake.defaultPartLength);

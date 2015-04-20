@@ -16,11 +16,11 @@ public class SnakePartArcSerializer implements JsonSerializer<SnakePartArc> {
         JsonObject jsonObject = new JsonObject();
 
         jsonObject.addProperty("id", src.getId());
-        jsonObject.addProperty("x", src.getX());
-        jsonObject.addProperty("y", src.getY());
+        jsonObject.addProperty("x", Math.round(src.getX()));
+        jsonObject.addProperty("y", Math.round(src.getY()));
         jsonObject.addProperty("angle", src.getAngle());
-        jsonObject.addProperty("span", src.getSpan());
-        jsonObject.addProperty("radius", src.getRadius());
+        jsonObject.addProperty("angle2", src.getAngle2());
+        jsonObject.addProperty("radius", Math.round(src.getRadius()));
         jsonObject.addProperty("lineRadius", src.getLineRadius());
         jsonObject.addProperty("clockwise", src.isClockwise());
         return jsonObject;

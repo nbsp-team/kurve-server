@@ -5,9 +5,17 @@ package game;
  */
 public class MathHelper {
     public static double distance(double x1, double y1, double x2, double y2){
-        return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+        return length(x2-x1, y2-y1);
+    }
+    public static double length(double dx, double dy){
+        return Math.sqrt(dx*dx+dy*dy);
     }
     public static boolean isBetween(double x, double lim1, double lim2){
         return ((x<lim1) != (x< lim2));
+    }
+    public static double normAngle(double x){
+        while(x >= 2*Math.PI) x -= 2*Math.PI;
+        while(x < 0) x += 2*Math.PI;
+        return x;
     }
 }

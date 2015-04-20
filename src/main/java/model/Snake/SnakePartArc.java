@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
  * Created by egor on 12.04.15.
  */
 public class SnakePartArc{
-    private double x, y, r, angle, span;
+    private double x, y, r, angle, angle2;
     private int lineRadius, id;
     private boolean clockwise;
 
@@ -23,21 +23,22 @@ public class SnakePartArc{
         this.y = y;
         this.clockwise = clockwise;
 
-        span = 0;
+
         this.lineRadius = lineRadius;
 
         angle = startAngle;
-
+        angle2 = angle;
     }
     public void updateHead(double angleV) {
-        span += angleV;
+        angle2 += angleV;
+        angle2 = MathHelper.normAngle(angle2);
     }
     public boolean isInside(double x, double y, int lineRadius){
         double d = MathHelper.distance(this.x, this.y, x, y);
         if(Math.abs(d-r)>lineRadius + this.lineRadius) return false;
-        double alpha = Math.atan2((y-this.y),(x-this.x));
+        double alpha = MathHelper.normAngle(Math.atan2((y - this.y), (x - this.x)));
 
-        return MathHelper.isBetween(alpha, angle, angle + span);
+        return MathHelper.isBetween(alpha, angle, angle2);
     }
 
     public double getX(){
@@ -58,7 +59,11 @@ public class SnakePartArc{
     }
 
     public double getSpan() {
-        return span;
+        return angle2-angle;
+    }
+
+    public double getAngle2() {
+        return angle2;
     }
 
     public int getId() {

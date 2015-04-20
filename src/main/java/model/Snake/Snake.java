@@ -1,9 +1,11 @@
 package model.Snake;
 
 import com.google.gson.*;
+import game.MathHelper;
 import game.Room;
 
 
+import main.Main;
 import websocket.message.SnakeUpdateMessage;
 
 import java.util.ArrayList;
@@ -14,8 +16,8 @@ import java.util.List;
  */
 
 public class Snake {
-    public static final int defaultSpeed = 100;
-    public static final int defaultAngleSpeed = 87;
+    public static final int defaultSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultSpeed);
+    public static final int defaultAngleSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultAngleSpeed);
     public static final int defaultPartLength = 100;
     public static final int defaultHoleLength = 20;
 
@@ -34,7 +36,7 @@ public class Snake {
     private int stepCounter = 0;
     private boolean drawing = true, alive = true;
     private turningState turning = turningState.NOT_TURNING;
-    private int radius = 4;
+    private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth);
     private int linesSent = 0, arcsSent = 0;
     private Room room;
 
@@ -82,6 +84,7 @@ public class Snake {
     public void stopTurning(turningState where) {
         if(turning==where) {
             turning = turningState.NOT_TURNING;
+            angle = MathHelper.normAngle(angle);
             vx = v*Math.cos(angle);
             vy = v*Math.sin(angle);
             doLine();
@@ -94,12 +97,12 @@ public class Snake {
         boolean clockwise;
         double arcStartAngle;
         if(turning == turningState.TURNING_LEFT){
-            arcStartAngle = angle + Math.PI/2;
+            arcStartAngle = MathHelper.normAngle(angle + Math.PI/2);
             arcCenterX = x + arcRadius*Math.sin(angle);
             arcCenterY = y - arcRadius*Math.cos(angle);
             clockwise = true;
         } else {
-            arcStartAngle = angle - Math.PI/2;
+            arcStartAngle = MathHelper.normAngle(angle - Math.PI/2);
             arcCenterX = x - arcRadius*Math.sin(angle);
             arcCenterY = y + arcRadius*Math.cos(angle);
             clockwise = false;

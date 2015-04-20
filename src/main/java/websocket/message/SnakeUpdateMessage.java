@@ -1,13 +1,6 @@
 package websocket.message;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import model.Snake.Snake;
-import websocket.GameWebSocketHandler;
-
-import java.lang.reflect.Type;
 
 /**
  * egor, 18.04.15.

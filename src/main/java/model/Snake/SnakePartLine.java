@@ -1,9 +1,6 @@
 package model.Snake;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import game.MathHelper;
 
 import java.lang.reflect.Type;
 
@@ -20,7 +17,7 @@ public class SnakePartLine{
         y1 = y-vy;
         x2 = x1;
         y2 = y1;
-        d = Math.sqrt(vx*vx+vy*vy);
+        d = MathHelper.length(vx, vy);
         A = -vy/d;
         B = vx/d;
         d = 0;
@@ -40,7 +37,6 @@ public class SnakePartLine{
         double proj = B*bx+A*by;
 
         if (Math.abs(A*x+B*y+C) >= this.lineRadius + lineRadius) return false;
-
 
         return ((proj>-lineRadius && proj <d));
     }

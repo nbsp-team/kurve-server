@@ -15,4 +15,22 @@ public class GameMechanicsConfig {
 
     @FieldElement(name = "maxPlayerNumber")
     public String maxPlayerNumber;
+
+    @FieldElement(name = "defaultSnakeSpeed")
+    public String snakeDefaultSpeed;
+
+    @FieldElement(name = "defaultSnakeAngleSpeed")
+    public String snakeDefaultAngleSpeed;
+
+    @FieldElement(name = "FPS")
+    public String FPS;
+
+    @FieldElement(name = "gameFieldWidth")
+    public String gameFieldWidth;
+
+    @FieldElement(name = "gameFieldHeight")
+    public String gameFieldHeight;
+
+    @FieldElement(name = "defaultSnakeWidth")
+    public String defaultSnakeWidth;
 }

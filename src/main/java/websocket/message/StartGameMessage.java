@@ -1,13 +1,6 @@
 package websocket.message;
 
-import com.google.gson.*;
-import game.GameField;
-import game.Player;
 import game.Room;
-import model.Snake.Snake;
-import websocket.GameWebSocketHandler;
-
-import java.lang.reflect.Type;
 
 /**
  * egor, 18.04.15.
