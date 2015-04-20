@@ -16,7 +16,8 @@ public class SnakePartArc{
     private int lineRadius, id;
     private boolean clockwise;
 
-    public SnakePartArc(double x, double y, double radius, double startAngle, int lineRadius, int id, boolean clockwise) {
+    public SnakePartArc(double x, double y, double radius, double startAngle
+            , int lineRadius, int id, boolean clockwise, double angleV) {
         this.id = id;
         this.r = radius;
         this.x = x;
@@ -26,7 +27,7 @@ public class SnakePartArc{
 
         this.lineRadius = lineRadius;
 
-        angle = startAngle;
+        angle = startAngle - angleV;
         angle2 = angle;
     }
     public void updateHead(double angleV) {
@@ -37,8 +38,19 @@ public class SnakePartArc{
         double d = MathHelper.distance(this.x, this.y, x, y);
         if(Math.abs(d-r)>lineRadius + this.lineRadius) return false;
         double alpha = MathHelper.normAngle(Math.atan2((y - this.y), (x - this.x)));
-
-        return MathHelper.isBetween(alpha, angle, angle2);
+        boolean ins;
+        if(clockwise) {
+            ins = MathHelper.isAngleBetween(alpha, angle2, angle);
+        } else {
+            ins = MathHelper.isAngleBetween(alpha, angle, angle2);
+        }
+        if(ins){
+            System.out.println(alpha);
+            System.out.println(angle);
+            System.out.println(angle2);
+            return true;
+        }
+        return false;
     }
 
     public double getX(){

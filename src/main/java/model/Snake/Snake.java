@@ -87,6 +87,7 @@ public class Snake {
             angle = MathHelper.normAngle(angle);
             vx = v*Math.cos(angle);
             vy = v*Math.sin(angle);
+
             doLine();
         }
     }
@@ -112,7 +113,7 @@ public class Snake {
         if(!drawing) return;
 
         SnakePartArc newArc = new SnakePartArc(arcCenterX, arcCenterY
-                , arcRadius, arcStartAngle, radius, snakeArcs.size(), clockwise);
+                , arcRadius, arcStartAngle, radius, snakeArcs.size(), clockwise, angleV);
 
         snakeArcs.add(newArc);
 

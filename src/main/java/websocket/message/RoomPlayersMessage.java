@@ -10,6 +10,7 @@ public class RoomPlayersMessage extends Message {
 
     public RoomPlayersMessage(Room room) {
         this.room = room;
+        buildBody();
     }
 
     public Room getRoom() {

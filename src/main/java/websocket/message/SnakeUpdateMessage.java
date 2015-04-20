@@ -10,6 +10,7 @@ public class SnakeUpdateMessage extends Message {
     public SnakeUpdateMessage(Snake snake){
 
         this.snake = snake;
+        buildBody();
     }
 
     public Snake getSnake() {

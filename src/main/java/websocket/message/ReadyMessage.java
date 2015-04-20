@@ -16,6 +16,7 @@ public class ReadyMessage extends Message {
     public ReadyMessage(Player player, boolean isReady) {
         this.isReady = isReady;
         this.player = player;
+        buildBody();
     }
 
     public boolean isReady() {

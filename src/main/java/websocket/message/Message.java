@@ -11,6 +11,9 @@ import websocket.message.serializer.*;
  * nickolay, 17.03.15.
  */
 public abstract class Message {
+    private String body;
+
+    protected void buildBody(){body = gson.toJson(this);}
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(ControlMessage.class, new ControlMessageSerializer())
             .registerTypeAdapter(SnakePartArc.class, new SnakePartArcSerializer())
@@ -27,7 +30,7 @@ public abstract class Message {
             .create();
 
     public String getBody() {
-        return gson.toJson(this);
+        return body;
 
     }
 }

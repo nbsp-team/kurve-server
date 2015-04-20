@@ -12,6 +12,7 @@ public class GameOverMessage extends Message {
 
     public GameOverMessage(Room room) {
         this.room = room;
+        buildBody();
     }
 
     public Room getRoom() {

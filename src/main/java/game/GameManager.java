@@ -70,7 +70,8 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     private void checkRoomReady(Room room) {
         int readyCount = room.getReadyPlayerCount();
         System.out.println("Ready: " + readyCount);
-        if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM) {
+        if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM
+                && readyCount == room.getPlayerCount()) {
             room.startGame();
         }
     }
