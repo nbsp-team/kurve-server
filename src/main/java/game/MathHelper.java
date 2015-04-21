@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 /**
  * Created by egor on 19.04.15.
  */
@@ -14,7 +16,7 @@ public class MathHelper {
         return ((x<lim1) != (x< lim2));
     }
     public static boolean isAngleBetween(double alpha, double lim1, double lim2){
-        return (lim2 > lim1) == ( (alpha > lim1) != (alpha > lim2) );
+        return (lim2 >= lim1) == ( (alpha > lim1) != (alpha > lim2) );
     }
     public static double normAngle(double x){
         while(x >= 2*Math.PI) x -= 2*Math.PI;
@@ -24,5 +26,10 @@ public class MathHelper {
     public static double shortDouble(double a){
         return Math.floor(16*a)/16f;
 
+    }
+    private static Random rand = new Random();
+
+    public static int randInt(int min, int max){
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

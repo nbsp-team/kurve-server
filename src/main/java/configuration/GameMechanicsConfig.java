@@ -25,8 +25,8 @@ public class GameMechanicsConfig {
     public String snakeDefaultSpeed;
 
     @ElementGroup(name = "Snake")
-    @FieldElement(name = "defaultAngleSpeed")
-    public String snakeDefaultAngleSpeed;
+    @FieldElement(name = "defaultTurnRadius")
+    public String snakeDefaultTurnRadius;
 
     @ElementGroup(name = "Snake")
     @FieldElement(name = "defaultWidth")
@@ -48,5 +48,15 @@ public class GameMechanicsConfig {
     @FieldElement(name = "color")
     public List<String> colors;
 
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "minPartLength")
+    public String snakeMinPartLength;
 
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "maxPartLength")
+    public String snakeMaxPartLength;
+
+    @ElementGroup(name = "Snake")
+    @FieldElement(name = "holeLength")
+    public String snakeHoleLength;
 }

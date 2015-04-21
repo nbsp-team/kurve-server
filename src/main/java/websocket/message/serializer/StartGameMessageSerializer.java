@@ -20,9 +20,9 @@ public class StartGameMessageSerializer implements JsonSerializer<StartGameMessa
         responseObject.addProperty("width", Integer.valueOf(Main.mechanicsConfig.gameFieldWidth));
         responseObject.addProperty("height", Integer.valueOf(Main.mechanicsConfig.gameFieldHeight));
         responseObject.addProperty("speed", Snake.defaultSpeed);
-        responseObject.addProperty("angleSpeed", Snake.defaultAngleSpeed);
+        responseObject.addProperty("angleSpeed", 180/(2*Math.PI)*(double)Snake.defaultSpeed/Snake.defaultTurnRadius);
         responseObject.addProperty("partLength", Snake.defaultPartLength);
-        responseObject.addProperty("holeLength", Snake.defaultHoleLength);
+        responseObject.addProperty("holeLength", Snake.holeLength);
         responseObject.addProperty("myId", src.getPlayerId());
         JsonArray playersArray = new JsonArray();
         for(int i = 0; i < src.getRoom().getPlayerCount(); ++i) {

@@ -17,48 +17,58 @@ import java.util.List;
 
 public class Snake {
     public static final int defaultSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultSpeed);
-    public static final int defaultAngleSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultAngleSpeed);
+    public static final int defaultTurnRadius = Integer.valueOf(Main.mechanicsConfig.snakeDefaultTurnRadius);
     public static final int defaultPartLength = 100;
-    public static final int defaultHoleLength = 20;
 
+
+    public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
+
+    public static final int holeLength = Integer.valueOf(Main.mechanicsConfig.snakeHoleLength)*FPS/defaultSpeed;
+    public static final int minPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMinPartLength)*FPS/defaultSpeed;
+    public static final int maxPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMaxPartLength)*FPS/defaultSpeed;
     private double angle;
 
     private int id;
     private double angleV;
     private double v, vx, vy;
     private double cosV, sinV;
-    private int partStopper, holeStopper;
+    private int partStopper, holeStopper, stepsInHole;
     private double x, y;
-    private double arcRadius, arcCenterX, arcCenterY;
+    private double turnRadius, arcCenterX, arcCenterY;
 
     private List<SnakePartLine> snakeLines;
     private List<SnakePartArc> snakeArcs;
     private int stepCounter = 0;
     private boolean drawing = true, alive = true;
     private turningState turning = turningState.NOT_TURNING;
-    private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth);
+    private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth)/2;
     private int linesSent = 0, arcsSent = 0;
     private Room room;
 
+
+    private int c = 0;
     public static enum turningState {
         TURNING_LEFT,
                 TURNING_RIGHT,
                 NOT_TURNING
     }
 
-    public Snake(double x, double y, double angle, int FPS, Room room, int id) {
+    public Snake(double x, double y, double angle, Room room, int id) {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
 
         this.room=room;
-        angleV = defaultAngleSpeed*2*Math.PI/180/FPS;
+
         v = (double)defaultSpeed / FPS;
+        angleV = v / defaultTurnRadius;
         this.angle = angle;
         vx = v * Math.cos(angle); vy = v * Math.sin(angle);
-        arcRadius = v / angleV;
-        partStopper = (int)Math.round(defaultPartLength / v);
-        holeStopper = (int)Math.round((defaultPartLength + defaultHoleLength) / v);
+        turnRadius = defaultTurnRadius;
+
+
+        partStopper = MathHelper.randInt(minPartLength, maxPartLength);
+        holeStopper = partStopper + holeLength;
 
         this.x = x;	this.y = y;
 
@@ -99,13 +109,13 @@ public class Snake {
         double arcStartAngle;
         if(turning == turningState.TURNING_LEFT){
             arcStartAngle = MathHelper.normAngle(angle + Math.PI/2);
-            arcCenterX = x + arcRadius*Math.sin(angle);
-            arcCenterY = y - arcRadius*Math.cos(angle);
+            arcCenterX = x + turnRadius *Math.sin(angle);
+            arcCenterY = y - turnRadius *Math.cos(angle);
             clockwise = true;
         } else {
             arcStartAngle = MathHelper.normAngle(angle - Math.PI/2);
-            arcCenterX = x - arcRadius*Math.sin(angle);
-            arcCenterY = y + arcRadius*Math.cos(angle);
+            arcCenterX = x - turnRadius *Math.sin(angle);
+            arcCenterY = y + turnRadius *Math.cos(angle);
             clockwise = false;
         }
 
@@ -113,10 +123,9 @@ public class Snake {
         if(!drawing) return;
 
         SnakePartArc newArc = new SnakePartArc(arcCenterX, arcCenterY
-                , arcRadius, arcStartAngle, radius, snakeArcs.size(), clockwise, angleV);
+                , turnRadius, arcStartAngle, radius, snakeArcs.size(), clockwise, angleV);
 
         snakeArcs.add(newArc);
-
     }
     public void sendUpdates(){
         room.broadcastMessage(new SnakeUpdateMessage(this));
@@ -156,8 +165,13 @@ public class Snake {
         }
         return false;
     }
+    public void multiplyRadiusBy(double koef){
+        radius *= koef;
+        doNewPart();
+    }
     public void step() {
         if (idunno) return;
+
         makeHoles();
         if(turning == turningState.NOT_TURNING) {
             x += vx;
@@ -173,6 +187,9 @@ public class Snake {
             if(drawing) lastArc().updateHead(angleV);
 
         }
+        c++;
+        //if(c == 3*60) multiplyTurnRadiusBy(0.5);
+        //if(c == 7*60) multiplyTurnRadiusBy(2);
     }
     private void makeHoles() {
         stepCounter++;
@@ -180,13 +197,10 @@ public class Snake {
             drawing = false;
             if(stepCounter == holeStopper) {
                 stepCounter = 0;
+                partStopper = MathHelper.randInt(minPartLength, maxPartLength);
+                holeStopper = partStopper + holeLength;
                 drawing = true;
-                if(turning == turningState.NOT_TURNING) {
-                    doLine();
-                } else {
-                    doArc();
-                }
-
+                doNewPart();
             }
         }
 
@@ -197,14 +211,33 @@ public class Snake {
     private SnakePartArc lastArc() {
         return snakeArcs.get(snakeArcs.size()-1);
     }
-
-    public void teleport(double newX, double newY) {
-        x = newX;	y = newY;
+    private void multiplyTurnRadiusBy(double koef){
+        turnRadius *= koef;
+        angleV /= koef;
+        cosV = Math.cos(angleV); sinV = Math.sin(angleV);
+        if(turning != turningState.NOT_TURNING){
+            doArc();
+        } else sendUpdates();
+    }
+    private void multiplySpeedBy(double koef){
+        v *= koef;
+        vx *= koef;
+        vy *= koef;
+        turnRadius *= koef;
+        if(turning != turningState.NOT_TURNING){
+            doArc();
+        } else sendUpdates();
+    }
+    private void doNewPart(){
         if(turning == turningState.NOT_TURNING) {
             doLine();
         } else {
             doArc();
         }
+    }
+    public void teleport(double newX, double newY) {
+        x = newX;	y = newY;
+        doNewPart();
     }
     public boolean isAlive(){
         return alive;
@@ -240,11 +273,15 @@ public class Snake {
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("angle", angle);
+        jsonObject.addProperty("angleV", angleV);//for debug only
+        jsonObject.addProperty("v", v);//for debug only
         jsonObject.addProperty("nlines", snakeLines.size());
         jsonObject.addProperty("narcs", snakeArcs.size());
         jsonObject.addProperty("radius", radius);
         jsonObject.addProperty("steps", stepCounter);
         jsonObject.addProperty("alive", alive);
+        jsonObject.addProperty("turnRadius", turnRadius);
+        jsonObject.addProperty("partStopper", partStopper);
         if(turning != turningState.NOT_TURNING) {
             arcsSent = Math.max(0, snakeArcs.size()-1);
             linesSent = snakeLines.size();

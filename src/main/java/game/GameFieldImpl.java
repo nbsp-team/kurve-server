@@ -36,7 +36,7 @@ public class GameFieldImpl implements GameField{
             double x = width/2 + mindim*0.25*Math.cos(angle);
             double y = height/2 + mindim*0.25*Math.sin(angle);
 
-            snakes.add(new Snake(x, y, angle+Math.PI/2, FPS, room, i));
+            snakes.add(new Snake(x, y, angle+Math.PI/2, room, i));
         }
         dead = 0;
     }
