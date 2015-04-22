@@ -1,7 +1,6 @@
 package game;
 
 import model.Bonus.Bonus;
-import model.Bonus.BonusEffect;
 import model.Bonus.Effects.TemporaryEffect;
 import model.Bonus.Effects.SpeedSelfEffect;
 import model.Snake.Snake;
