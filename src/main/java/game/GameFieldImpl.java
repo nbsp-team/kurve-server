@@ -20,6 +20,7 @@ public class GameFieldImpl implements GameField{
     private boolean playing;
     private int numPlayers, dead;
     private List<Snake> snakes;
+    private BonusManager bonusManager;
 
     private  Room room;
     public GameFieldImpl(int numPlayers, Room room) {
@@ -39,6 +40,7 @@ public class GameFieldImpl implements GameField{
             snakes.add(new Snake(x, y, angle+Math.PI/2, room, i));
         }
         dead = 0;
+        bonusManager = new BonusManager(snakes);
     }
     @Override
     public void doLeftDown(int sender) {
@@ -92,6 +94,7 @@ public class GameFieldImpl implements GameField{
 
                     }
                 }
+                bonusManager.timeStep();
             }
         }
         if(dead==numPlayers) {

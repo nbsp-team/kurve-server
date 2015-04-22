@@ -24,7 +24,7 @@ public class MathHelper {
         return x;
     }
     public static double shortDouble(double a){
-        return Math.floor(16*a)/16f;
+        return Math.floor(16*a)/16;
 
     }
     private static Random rand = new Random();
