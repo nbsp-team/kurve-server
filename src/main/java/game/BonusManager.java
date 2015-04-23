@@ -3,8 +3,12 @@ package game;
 import model.Bonus.Bonus;
 import model.Bonus.Effects.TemporaryEffect;
 import model.Bonus.Effects.SpeedSelfEffect;
+import model.Bonus.Effects.ThinSelfEffect;
 import model.Snake.Snake;
+import websocket.message.NewBonusMessage;
+import websocket.message.EatBonusMessage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,24 +20,39 @@ public class BonusManager {
     List<TemporaryEffect> activeEffects = new LinkedList<>();
     List<Snake> snakes;
     List<Bonus> bonuses = new LinkedList<>();
+    Room room;
 
-    public BonusManager(List<Snake> snakes){
+    public BonusManager(List<Snake> snakes, Room room){
+        this.room = room;
         this.snakes = snakes;
-        bonuses.add(new Bonus(375, 400, Bonus.Kind.SPEED_SELF));
     }
 
-    public void applyBonus(Bonus bonus, Snake snake){
+    private void addBonus(Bonus bonus){
+        bonuses.add(bonus);
+        room.broadcastMessage(new NewBonusMessage(bonus));
+    }
+
+    private void applyTempEffect(TemporaryEffect effect){
+        effect.activate();
+        activeEffects.add(effect);
+    }
+
+    private void applyBonus(Bonus bonus, Snake snake){
 
         switch(bonus.getKind()){
             case SPEED_SELF:
-                TemporaryEffect effect = new SpeedSelfEffect(snake);
-                effect.activate();
-                activeEffects.add(effect);
+                applyTempEffect(new SpeedSelfEffect(snake));
                 break;
             case THIN_SELF:
-                //activeEffects.add(new BonusEffect(bonus, snake, 3));
+                applyTempEffect(new ThinSelfEffect(snake));
+                break;
+            case ERASE_SELF:
+                snake.eraseSelf();
+                break;
         }
     }
+
+    private int c = 0;
     public void timeStep(){
         for(Iterator<TemporaryEffect> iter = activeEffects.iterator(); iter.hasNext();){
             TemporaryEffect effect = iter.next();
@@ -48,9 +67,14 @@ public class BonusManager {
                 if (bonus.isReachableBy(snake)){
                     System.out.println("nom");
                     applyBonus(bonus, snake);
+                    room.broadcastMessage(new EatBonusMessage(bonus.getId()));
                     bonusIter.remove();
                 }
             }
+        }
+        c++;
+        if(c == 60*3) {
+            addBonus(new Bonus(100, 100, Bonus.Kind.SPEED_SELF));
         }
     }
 }

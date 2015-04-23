@@ -15,7 +15,6 @@ public class DisconnectedPlayerMessage extends Message {
 
     public DisconnectedPlayerMessage(Player player) {
         this.player = player;
-        buildBody();
     }
 
     public Player getPlayer() {

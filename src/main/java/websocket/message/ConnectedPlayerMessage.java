@@ -17,7 +17,6 @@ public class ConnectedPlayerMessage extends Message {
     public ConnectedPlayerMessage(Player player, int playerId) {
         this.player = player;
         this.playerId = playerId;
-        buildBody();
     }
 
     public Player getPlayer() {

@@ -13,7 +13,6 @@ public class StartGameMessage extends Message {
         this.playerId = playerId;
 
         this.room = room;
-        buildBody();
     }
 
     public Room getRoom() {

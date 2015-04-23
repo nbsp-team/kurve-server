@@ -40,7 +40,7 @@ public class GameFieldImpl implements GameField{
             snakes.add(new Snake(x, y, angle+Math.PI/2, room, i));
         }
         dead = 0;
-        bonusManager = new BonusManager(snakes);
+        bonusManager = new BonusManager(snakes, room);
     }
     @Override
     public void doLeftDown(int sender) {

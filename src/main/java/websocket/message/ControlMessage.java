@@ -16,7 +16,6 @@ public class ControlMessage extends Message {
 
     public ControlMessage(boolean isLeft, boolean isUp, int playerId) {
         this.isLeft = isLeft; this.isUp = isUp; this.playerId = playerId;
-        buildBody();
     }
 
     public boolean getIsLeft() {

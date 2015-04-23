@@ -80,7 +80,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_INIT_STATE_RESPONSE:
                     break;
                 case CODE_KEY_REQUEST:
-                    System.out.append("Event key: ").append(message).append('\n');
+                    //System.out.append("Event key: ").append(message).append('\n');
                     boolean isLeft = jresponse.get("isLeft").getAsBoolean();
                     boolean isUp = jresponse.get("isUp").getAsBoolean();
                     messageListener.onControl(this, isLeft, isUp);

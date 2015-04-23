@@ -30,6 +30,9 @@ public class SnakePartLine{
         x2 = newX;
         y2 = newY;
         d += v;
+        if(MathHelper.distance(x2, y2, newX, newY) > 10){
+            System.out.println("breach");
+        }
     }
     public boolean isInside(double x, double y, int lineRadius) {
         double bx = x-x1;

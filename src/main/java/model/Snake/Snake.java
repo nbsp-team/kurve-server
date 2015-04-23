@@ -47,6 +47,14 @@ public class Snake {
 
 
     private int c = 0;
+
+    public void eraseSelf() {
+        snakeArcs.clear();
+        snakeLines.clear();
+        doNewPart();
+//        sendUpdates();
+    }
+
     public static enum turningState {
         TURNING_LEFT,
                 TURNING_RIGHT,
@@ -82,6 +90,7 @@ public class Snake {
     }
     private  boolean idunno = false;
     public void	startTurning(turningState where) {
+       // System.out.println("start turn") ;
         idunno = true;
         if((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
             angleV = -angleV;
@@ -92,6 +101,7 @@ public class Snake {
         idunno = false;
     }
     public void stopTurning(turningState where) {
+        idunno = true;
         if(turning==where) {
             turning = turningState.NOT_TURNING;
             angle = MathHelper.normAngle(angle);
@@ -100,6 +110,7 @@ public class Snake {
 
             doLine();
         }
+        idunno = false;
     }
     private void doArc(){
         arcsSent = Math.min(arcsSent, snakeArcs.size() - 1);
@@ -264,8 +275,8 @@ public class Snake {
         for(int i = Math.max(0, linesSent); i < snakeLines.size(); i++){
             linesToSend.add(context.serialize(snakeLines.get(i)));
         }
-        System.out.print(linesToSend.size());  System.out.print(" lines and ");
-        System.out.print(arcsToSend.size());   System.out.println(" arcs to send");
+        //System.out.print(linesToSend.size());  System.out.print(" lines and ");
+        //System.out.print(arcsToSend.size());   System.out.println(" arcs to send");
         jsonObject.add("lines", linesToSend);
         jsonObject.add("arcs", arcsToSend);
 
