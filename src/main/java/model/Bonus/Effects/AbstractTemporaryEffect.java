@@ -8,6 +8,7 @@ import main.Main;
 public abstract class AbstractTemporaryEffect implements TemporaryEffect {
     private int countDownCounter = 0;
 
+
     protected void setDuration(int seconds){
         countDownCounter = seconds*Integer.valueOf(Main.mechanicsConfig.FPS);
     }

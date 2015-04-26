@@ -17,7 +17,8 @@ public class BonusSerializer implements JsonSerializer<Bonus> {
         responseObject.addProperty("kind", src.getKind().ordinal());
         responseObject.addProperty("x", Math.floor(src.getX()));
         responseObject.addProperty("y", Math.floor(src.getY()));
-
+        responseObject.addProperty("id", src.getId());
+        responseObject.addProperty("color", src.getColor());
 
         return responseObject;
     }

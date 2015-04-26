@@ -10,10 +10,19 @@ public class Bonus {
     private static int next_id = 0;
 
     private int id;
+    private String color = "#33EE33";
+
+    public String getColor() {
+        return color;
+    }
+
     public static enum Kind {
         SPEED_SELF,
         THIN_SELF,
-        ERASE_SELF
+        ERASE_SELF,
+        SLOW_SELF,
+        BIG_HOLE_SELF,
+        TRAVERSE_WALLS_SELF
     }
     private Kind kind;
     private double x, y;
@@ -25,6 +34,14 @@ public class Bonus {
         this.kind = kind;
         id = next_id;
         next_id++;
+        initColor();
+    }
+
+    private void initColor() {
+        switch(kind){
+            case BIG_HOLE_SELF: color = "#11EEFF"; break;//test
+
+        }
     }
 
     public int getId() {

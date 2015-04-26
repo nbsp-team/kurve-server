@@ -18,11 +18,7 @@ import java.util.List;
 public class Snake {
     public static final int defaultSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultSpeed);
     public static final int defaultTurnRadius = Integer.valueOf(Main.mechanicsConfig.snakeDefaultTurnRadius);
-
-
-
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
-
     public static final int holeLength = Integer.valueOf(Main.mechanicsConfig.snakeHoleLength);
     public static final int minPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMinPartLength);
     public static final int maxPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMaxPartLength);
@@ -38,22 +34,15 @@ public class Snake {
 
     private List<SnakePartLine> snakeLines;
     private List<SnakePartArc> snakeArcs;
-    private double distSinceLastHole = 0;
+    private double travSinceLastHole = 0;
     private boolean drawing = true, alive = true;
     private turningState turning = turningState.NOT_TURNING;
     private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth)/2;
     private int linesSent = 0, arcsSent = 0;
     private Room room;
 
-
-    private int c = 0;
-
-    public void eraseSelf() {
-        snakeArcs.clear();
-        snakeLines.clear();
-        doNewPart();
-//        sendUpdates();
-    }
+    private boolean bigHole = false;
+    private boolean travThroughWalls = false;
 
     public static enum turningState {
         TURNING_LEFT,
@@ -150,16 +139,7 @@ public class Snake {
         SnakePartLine newLine = new SnakePartLine(x, y, vx, vy, radius, snakeLines.size());
         snakeLines.add(newLine);
     }
-    public void changeRadius(int radius) {
-        this.radius = radius;
-        if(drawing) {
-            if(turning == turningState.TURNING_LEFT) {
-                doLine();
-            } else {
-                doArc();
-            }
-        }
-    }
+
     public boolean isInside(double x, double y, boolean itself, int radius) {
 
         int lim = snakeLines.size();
@@ -198,16 +178,14 @@ public class Snake {
             if(drawing) lastArc().updateHead(angleV);
 
         }
-        c++;
-        //if(c == 3*60) multiplyTurnRadiusBy(0.5);
-        //if(c == 7*60) multiplyTurnRadiusBy(2);
+
     }
     private void makeHoles() {
-        distSinceLastHole += v;
-        if(distSinceLastHole > partStopper){
+        travSinceLastHole += v;
+        if(travSinceLastHole > partStopper){
 
-            if(distSinceLastHole >= holeStopper) {
-                distSinceLastHole = 0;
+            if(travSinceLastHole >= holeStopper) {
+                travSinceLastHole = 0;
                 partStopper = MathHelper.randInt(minPartLength, maxPartLength);
                 holeStopper = partStopper + holeLength;
                 drawing = true;
@@ -222,7 +200,7 @@ public class Snake {
     private SnakePartArc lastArc() {
         return snakeArcs.get(snakeArcs.size()-1);
     }
-    private void multiplyTurnRadiusBy(double koef){
+    public void multiplyTurnRadiusBy(double koef){
         turnRadius *= koef;
         angleV /= koef;
         cosV = Math.cos(angleV); sinV = Math.sin(angleV);
@@ -289,7 +267,7 @@ public class Snake {
         jsonObject.addProperty("nlines", snakeLines.size());
         jsonObject.addProperty("narcs", snakeArcs.size());
         jsonObject.addProperty("radius", radius);
-        jsonObject.addProperty("distance", distSinceLastHole);
+        jsonObject.addProperty("distance", travSinceLastHole);
         jsonObject.addProperty("alive", alive);
         jsonObject.addProperty("turnRadius", MathHelper.shortDouble(turnRadius));
         jsonObject.addProperty("partStopper", partStopper);
@@ -303,5 +281,23 @@ public class Snake {
 
         return jsonObject;
     }
+    public void eraseSelf() {
+        snakeArcs.clear();
+        snakeLines.clear();
+        doNewPart();
+//        sendUpdates();
+    }
 
+    public void setBigHole(boolean bigHole) {
+        this.bigHole = bigHole;
+    }
+    public boolean isBigHole() {
+        return bigHole;
+    }
+    public void setTravThroughWalls(boolean travThroughWalls) {
+        this.travThroughWalls = travThroughWalls;
+    }
+    public boolean canTravThroughWalls() {
+        return travThroughWalls;
+    }
 }

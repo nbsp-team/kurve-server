@@ -1,9 +1,7 @@
 package game;
 
 import model.Bonus.Bonus;
-import model.Bonus.Effects.TemporaryEffect;
-import model.Bonus.Effects.SpeedSelfEffect;
-import model.Bonus.Effects.ThinSelfEffect;
+import model.Bonus.Effects.*;
 import model.Snake.Snake;
 import websocket.message.NewBonusMessage;
 import websocket.message.EatBonusMessage;
@@ -49,6 +47,15 @@ public class BonusManager {
             case ERASE_SELF:
                 snake.eraseSelf();
                 break;
+            case SLOW_SELF:
+                applyTempEffect(new SlowSelfEffect(snake));
+                break;
+            case BIG_HOLE_SELF:
+                applyTempEffect(new BigHoleSelfEffect(snake));
+                break;
+            case TRAVERSE_WALLS_SELF:
+                applyTempEffect(new TravWallsSelfEffect(snake));
+                break;
         }
     }
 
@@ -65,7 +72,7 @@ public class BonusManager {
             for(Iterator<Bonus> bonusIter = bonuses.iterator();bonusIter.hasNext();){
                 Bonus bonus = bonusIter.next();
                 if (bonus.isReachableBy(snake)){
-                    System.out.println("nom");
+
                     applyBonus(bonus, snake);
                     room.broadcastMessage(new EatBonusMessage(bonus.getId()));
                     bonusIter.remove();
@@ -74,7 +81,9 @@ public class BonusManager {
         }
         c++;
         if(c == 60*3) {
-            addBonus(new Bonus(100, 100, Bonus.Kind.SPEED_SELF));
+            addBonus(new Bonus(100, 100, Bonus.Kind.TRAVERSE_WALLS_SELF));
+            addBonus(new Bonus(100, 200, Bonus.Kind.SPEED_SELF));
+            addBonus(new Bonus(100, 300, Bonus.Kind.THIN_SELF));
         }
     }
 }

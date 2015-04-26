@@ -68,30 +68,43 @@ public class GameFieldImpl implements GameField{
         playing = false;
     }
 
+    private void teleportOrKill(Snake snake, double x, double y){
+        if(snake.canTravThroughWalls()){
+            snake.teleport(x, y);
+        } else {
+            kill(snake);
+        }
+    }
+
+    private void kill(Snake snake){
+        snake.kill();
+        int lastKilled = snakes.indexOf(snake);
+        room.onPlayerDeath(lastKilled, dead);
+        dead++;
+    }
+
     private void step () {
         for(Snake snake : snakes) {
             if(snake.isAlive()) {
                 snake.step();
+
                 double x = snake.getX(); double y = snake.getY();
                 if(x > width) {
-                    snake.teleport(0, snake.getX());
+                    teleportOrKill(snake, 0, snake.getY());
                 } else if(x < 0) {
-                    snake.teleport(width, snake.getY());
+                    teleportOrKill(snake, width, snake.getY());
                 }
                 if(y > height) {
-                    snake.teleport(snake.getX(), 0);
+                    teleportOrKill(snake, snake.getX(), 0);
                 } else if(y < 0) {
-                    snake.teleport(snake.getX(), height);
+                    teleportOrKill(snake, snake.getX(), height);
                 }
-                for(Snake otherSnake : snakes){
-                    if(otherSnake.isInside(snake.getX()
-                            ,snake.getY(), snake == otherSnake, snake.getRadius())){
-                        snake.kill();
-                        int lastKilled = snakes.indexOf(snake);
-                        room.onPlayerDeath(lastKilled, dead);
-                        dead++;
-
-
+                if(!snake.isBigHole()) {
+                    for (Snake otherSnake : snakes) {
+                        if (otherSnake.isInside(snake.getX()
+                                , snake.getY(), snake == otherSnake, snake.getRadius())) {
+                            kill(snake);
+                        }
                     }
                 }
                 bonusManager.timeStep();
