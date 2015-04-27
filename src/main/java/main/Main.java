@@ -2,6 +2,8 @@ package main;
 
 import configuration.GameMechanicsConfig;
 import configuration.NetworkConfig;
+import configuration.XmlLoader;
+import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameManager;
 import interfaces.AccountService;
@@ -15,8 +17,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import configuration.XmlLoader;
-import frontend.SessionManager;
 import websocket.GameWebSocketCreator;
 
 import javax.servlet.Servlet;

@@ -37,7 +37,7 @@ public class GameWebSocketCreator implements WebSocketCreator {
     }
 
     private String getSessionId(List<HttpCookie> cookieList) {
-        for(HttpCookie c : cookieList) {
+        for (HttpCookie c : cookieList) {
             if (c.getName().equals("JSESSIONID")) {
                 return c.getValue();
             }

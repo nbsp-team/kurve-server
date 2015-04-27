@@ -4,7 +4,6 @@ import interfaces.GameField;
 import model.UserProfile;
 import websocket.message.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +23,12 @@ public class Room {
 
     private int getPointsByDeathId(int deathId) {
         int[] deathPoints = {1, 2, 3, 4, 5};
-        if(deathId >= 0 && deathId < 5) return deathPoints[deathId];
+        if (deathId >= 0 && deathId < 5) return deathPoints[deathId];
         return 0;
     }
 
-    public void onPlayerDeath(int playerId, int deathId){
-       players.get(playerId).setPoints(getPointsByDeathId(deathId));
+    public void onPlayerDeath(int playerId, int deathId) {
+        players.get(playerId).setPoints(getPointsByDeathId(deathId));
     }
 
     public Room() {
@@ -38,7 +37,7 @@ public class Room {
 
     public void onNewPlayer(Player player) {
 
-        if(roomState != RoomState.WAITING) return;
+        if (roomState != RoomState.WAITING) return;
 
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
@@ -47,26 +46,26 @@ public class Room {
     }
 
     public void onPlayerReady(Player player, boolean isReady) {
-        if(roomState != RoomState.WAITING) return;
+        if (roomState != RoomState.WAITING) return;
         player.setReady(isReady);
 
-            broadcastMessageExceptUser(
-                    new ReadyMessage(player, isReady),
-                    player.getUserProfile()
-            );
+        broadcastMessageExceptUser(
+                new ReadyMessage(player, isReady),
+                player.getUserProfile()
+        );
     }
 
     public void onKeyEvent(boolean isLeft, boolean isUp, int playerId) {
-        if(roomState != RoomState.GAME) return;
+        if (roomState != RoomState.GAME) return;
 
-        if(isLeft){
-            if(isUp){
+        if (isLeft) {
+            if (isUp) {
                 gameField.doLeftUp(playerId);
             } else {
                 gameField.doLeftDown(playerId);
             }
         } else {
-            if(isUp){
+            if (isUp) {
                 gameField.doRightUp(playerId);
             } else {
                 gameField.doRightDown(playerId);
@@ -74,14 +73,16 @@ public class Room {
         }
 
     }
-    public void endGame(){
+
+    public void endGame() {
         broadcastMessage(new GameOverMessage(this));
     }
+
     public void startGame() {
-        if(roomState != RoomState.WAITING) return;
+        if (roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
         gameField = new GameFieldImpl(players.size(), this);
-        for(int i = 0; i < players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
 
@@ -97,13 +98,13 @@ public class Room {
     }
 
     public void broadcastMessage(Message message) {
-        for(Player player : players) {
+        for (Player player : players) {
             player.sendMessage(message);
         }
     }
 
     public void broadcastMessageExceptUser(Message message, UserProfile user) {
-        for(Player player : players) {
+        for (Player player : players) {
             String roomUserLogin = player.getUserProfile().getLogin();
             if (!roomUserLogin.equals(user.getLogin())) {
                 player.sendMessage(message);
@@ -112,7 +113,7 @@ public class Room {
     }
 
     public Player getPlayerByUser(UserProfile userProfile) {
-        for(Player player : players) {
+        for (Player player : players) {
             if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
                 return player;
             }
@@ -122,7 +123,7 @@ public class Room {
 
     public int getPlayerIdByUser(UserProfile userProfile) {
         int index = 0;
-        for(Player player : players) {
+        for (Player player : players) {
             if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
                 return index;
             }
@@ -132,7 +133,7 @@ public class Room {
     }
 
     public boolean isColorUsed(String color) {
-        for(Player p : players) {
+        for (Player p : players) {
             if (p.getColor().equals(color)) {
                 return true;
             }
@@ -146,7 +147,7 @@ public class Room {
 
     public int getReadyPlayerCount() {
         int readyUserCount = 0;
-        for(Player p : players) {
+        for (Player p : players) {
             if (p.isReady()) {
                 readyUserCount++;
             }

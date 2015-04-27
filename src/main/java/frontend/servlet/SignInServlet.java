@@ -14,7 +14,7 @@ public class SignInServlet extends AbstractServlet {
         super(accountService);
     }
 
-    public Response onPost(HttpServletRequest request)  {
+    public Response onPost(HttpServletRequest request) {
         String name = request.getParameter("username");
         String password = request.getParameter("password");
 

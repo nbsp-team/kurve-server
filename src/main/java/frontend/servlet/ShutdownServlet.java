@@ -18,7 +18,7 @@ public class ShutdownServlet extends AbstractServlet {
         String timeString = request.getParameter("time");
         if (timeString != null) {
             int timeMS = Integer.valueOf(timeString);
-            System.out.print("Server will be down after: "+ timeMS + " ms");
+            System.out.print("Server will be down after: " + timeMS + " ms");
 
             (new Thread(() -> {
                 TimeHelper.sleep(timeMS);
@@ -31,8 +31,8 @@ public class ShutdownServlet extends AbstractServlet {
     }
 
     public static class TimeHelper {
-        public static void sleep(int period){
-            try{
+        public static void sleep(int period) {
+            try {
                 Thread.sleep(period);
             } catch (InterruptedException e) {
                 e.printStackTrace();

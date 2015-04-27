@@ -1,4 +1,5 @@
 package configuration;
+
 import frontend.annotation.xml.ArrayElement;
 import frontend.annotation.xml.ElementGroup;
 import frontend.annotation.xml.FieldElement;
@@ -26,10 +27,11 @@ public class XmlLoader {
 
     private static XmlLoader instance;
 
-    private XmlLoader() {}
+    private XmlLoader() {
+    }
 
     public static XmlLoader getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new XmlLoader();
         }
         return instance;
@@ -52,20 +54,20 @@ public class XmlLoader {
 
             Object instance = clazz.getConstructors()[0].newInstance();
 
-            for(Field field : clazz.getFields()) {
-                if(field.isAnnotationPresent(FieldElement.class)) {
+            for (Field field : clazz.getFields()) {
+                if (field.isAnnotationPresent(FieldElement.class)) {
                     String fieldElement = field.getAnnotation(FieldElement.class).name();
                     Element src = rootField;
-                    if(field.isAnnotationPresent(ElementGroup.class)) {
+                    if (field.isAnnotationPresent(ElementGroup.class)) {
                         src = (Element) root.getElementsByTagName(
                                 field.getAnnotation(ElementGroup.class).name()
                         ).item(0);
                     }
 
-                    if(field.isAnnotationPresent(ArrayElement.class)) {
+                    if (field.isAnnotationPresent(ArrayElement.class)) {
                         List<String> array = new ArrayList<>();
                         NodeList elements = src.getElementsByTagName(fieldElement);
-                        for(int i = 0; i < elements.getLength(); i++){
+                        for (int i = 0; i < elements.getLength(); i++) {
                             array.add(elements.item(i).getTextContent());
                         }
                         field.set(instance, array);

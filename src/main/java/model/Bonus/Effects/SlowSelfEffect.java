@@ -8,7 +8,7 @@ import model.Snake.Snake;
 public class SlowSelfEffect extends AbstractTemporaryEffect {
     private Snake snake;
 
-    public SlowSelfEffect(Snake snake){
+    public SlowSelfEffect(Snake snake) {
         this.snake = snake;
         setDuration(10);
     }

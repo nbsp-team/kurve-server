@@ -9,12 +9,12 @@ import model.UserProfile;
 import websocket.WebSocketConnection;
 import websocket.message.Message;
 
-import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.List;
+
 /**
  * nickolay, 21.02.15.
  */
@@ -42,7 +42,7 @@ public class Player {
 
     public void sendMessage(Message message) {
 
-        for(WebSocketConnection connection : connections) {
+        for (WebSocketConnection connection : connections) {
             connection.sendMessage(message);
         }
     }
@@ -67,7 +67,8 @@ public class Player {
     public String getId() {
         return id;
     }
-    public void setPoints(int points){
+
+    public void setPoints(int points) {
         this.points = points;
     }
 
@@ -76,18 +77,18 @@ public class Player {
     }
 
     public static class serializer implements JsonSerializer<Player> {
-            public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
-                JsonObject jsonObject = new JsonObject();
+        public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
 
-                jsonObject.addProperty("username", src.getUserProfile().getLogin());
-                jsonObject.addProperty("player_id", src.getId());
-                jsonObject.addProperty("global_rating", 0);
-                jsonObject.addProperty("is_ready", src.isReady());
-                jsonObject.addProperty("color",
-                        src.getColor()
-                );
+            jsonObject.addProperty("username", src.getUserProfile().getLogin());
+            jsonObject.addProperty("player_id", src.getId());
+            jsonObject.addProperty("global_rating", 0);
+            jsonObject.addProperty("is_ready", src.isReady());
+            jsonObject.addProperty("color",
+                    src.getColor()
+            );
 
-                return jsonObject;
-            }
+            return jsonObject;
+        }
     }
 }

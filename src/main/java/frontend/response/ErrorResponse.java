@@ -1,9 +1,5 @@
 package frontend.response;
 
-import com.google.gson.*;
-
-import java.lang.reflect.Type;
-
 /**
  * nickolay, 25.02.15.
  */
@@ -16,14 +12,17 @@ public class ErrorResponse extends Response {
         ERROR_PERMISSION_DENIED("Ошибка доступа"),
         ERROR_INTERNAL_SERVER("Ошибка сервера");
 
-        private ErrorResponseCode(String description){
+        private ErrorResponseCode(String description) {
             this.description = description;
         }
 
         private final String description;
 
-        public String getDescription(){return description;}
+        public String getDescription() {
+            return description;
+        }
     }
+
     private ErrorResponseCode errorCode;
     private String additionalDescription;
 

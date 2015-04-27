@@ -8,7 +8,7 @@ import model.Snake.Snake;
 public class ThinSelfEffect extends AbstractTemporaryEffect {
     private Snake snake;
 
-    public ThinSelfEffect(Snake snake){
+    public ThinSelfEffect(Snake snake) {
         this.snake = snake;
         setDuration(15);
     }

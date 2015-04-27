@@ -1,8 +1,8 @@
 package configuration;
 
 import frontend.annotation.xml.ArrayElement;
-import frontend.annotation.xml.FieldElement;
 import frontend.annotation.xml.ElementGroup;
+import frontend.annotation.xml.FieldElement;
 import frontend.annotation.xml.RootElement;
 
 import java.util.List;

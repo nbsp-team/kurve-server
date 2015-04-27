@@ -1,7 +1,6 @@
 package frontend.annotation.xml;
 
 import java.lang.annotation.*;
-import java.lang.reflect.Type;
 
 
 /**
@@ -9,8 +8,8 @@ import java.lang.reflect.Type;
  */
 
 @Inherited
-@Target(value= ElementType.FIELD)
-@Retention(value= RetentionPolicy.RUNTIME)
+@Target(value = ElementType.FIELD)
+@Retention(value = RetentionPolicy.RUNTIME)
 public @interface FieldElement {
     public String name();
 }

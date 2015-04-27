@@ -8,7 +8,7 @@ import model.Snake.Snake;
 public class BigHoleSelfEffect extends AbstractTemporaryEffect {
     private Snake snake;
 
-    public BigHoleSelfEffect(Snake snake){
+    public BigHoleSelfEffect(Snake snake) {
         this.snake = snake;
         setDuration(6);
     }

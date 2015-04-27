@@ -115,7 +115,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     private String getUnusedColor(Room room) {
-        for(String c : Player.playerColors) {
+        for (String c : Player.playerColors) {
             if (!room.isColorUsed(c)) {
                 return c;
             }

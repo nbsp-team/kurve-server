@@ -1,10 +1,9 @@
 package frontend.response;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import frontend.response.serializer.*;
 import model.UserProfile;
-
-import java.lang.reflect.Type;
 
 /**
  * nickolay, 25.02.15.
@@ -21,9 +20,9 @@ public class Response {
             .registerTypeAdapter(SignInResponse.class, new SignInResponseSerializer())
             .registerTypeAdapter(SignUpResponse.class, new SingUpResponseSerializer())
             .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
-            // Model adapters
+                    // Model adapters
             .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
-            // Configure Gson
+                    // Configure Gson
             .serializeNulls()
             .create();
 

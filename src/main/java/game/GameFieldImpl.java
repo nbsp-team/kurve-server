@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 
-public class GameFieldImpl implements GameField{
+public class GameFieldImpl implements GameField {
     public static final Logger LOG = LogManager.getLogger(GameManager.class);
 
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
@@ -26,7 +26,8 @@ public class GameFieldImpl implements GameField{
     private List<Snake> snakes;
     private BonusManager bonusManager;
 
-    private  Room room;
+    private Room room;
+
     public GameFieldImpl(int numPlayers, Room room) {
         this.room = room;
 
@@ -36,74 +37,81 @@ public class GameFieldImpl implements GameField{
         snakes = new ArrayList<>();
         int mindim = Math.min(width, height);
 
-        for(int i = 0; i < numPlayers; i++) {
-            double angle = i*2*Math.PI/numPlayers;
-            double x = width/2 + mindim*0.25*Math.cos(angle);
-            double y = height/2 + mindim*0.25*Math.sin(angle);
+        for (int i = 0; i < numPlayers; i++) {
+            double angle = i * 2 * Math.PI / numPlayers;
+            double x = width / 2 + mindim * 0.25 * Math.cos(angle);
+            double y = height / 2 + mindim * 0.25 * Math.sin(angle);
 
-            snakes.add(new Snake(x, y, angle+Math.PI/2, room, i));
+            snakes.add(new Snake(x, y, angle + Math.PI / 2, room, i));
         }
         dead = 0;
         bonusManager = new BonusManager(snakes, room);
     }
+
     @Override
     public void doLeftDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_LEFT);
     }
+
     @Override
     public void doLeftUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_LEFT);
     }
+
     @Override
     public void doRightDown(int sender) {
         snakes.get(sender).startTurning(Snake.turningState.TURNING_RIGHT);
     }
+
     @Override
     public void doRightUp(int sender) {
         snakes.get(sender).stopTurning(Snake.turningState.TURNING_RIGHT);
     }
+
     @Override
     public void play() {
         playing = true;
-            run();
+        run();
     }
+
     @Override
-    public void pause(){
+    public void pause() {
         playing = false;
     }
 
-    private void teleportOrKill(Snake snake, double x, double y){
-        if(snake.canTravThroughWalls()){
+    private void teleportOrKill(Snake snake, double x, double y) {
+        if (snake.canTravThroughWalls()) {
             snake.teleport(x, y);
         } else {
             kill(snake);
         }
     }
 
-    private void kill(Snake snake){
+    private void kill(Snake snake) {
         snake.kill();
         int lastKilled = snakes.indexOf(snake);
         room.onPlayerDeath(lastKilled, dead);
         dead++;
     }
 
-    private void step () {
-        for(Snake snake : snakes) {
-            if(snake.isAlive()) {
+    private void step() {
+        for (Snake snake : snakes) {
+            if (snake.isAlive()) {
                 snake.step();
 
-                double x = snake.getX(); double y = snake.getY();
-                if(x > width) {
+                double x = snake.getX();
+                double y = snake.getY();
+                if (x > width) {
                     teleportOrKill(snake, 0, snake.getY());
-                } else if(x < 0) {
+                } else if (x < 0) {
                     teleportOrKill(snake, width, snake.getY());
                 }
-                if(y > height) {
+                if (y > height) {
                     teleportOrKill(snake, snake.getX(), 0);
-                } else if(y < 0) {
+                } else if (y < 0) {
                     teleportOrKill(snake, snake.getX(), height);
                 }
-                if(!snake.isBigHole()) {
+                if (!snake.isBigHole()) {
                     for (Snake otherSnake : snakes) {
                         if (otherSnake.isInside(snake.getX()
                                 , snake.getY(), snake == otherSnake, snake.getRadius())) {
@@ -114,7 +122,7 @@ public class GameFieldImpl implements GameField{
                 bonusManager.timeStep();
             }
         }
-        if(dead == numPlayers) {
+        if (dead == numPlayers) {
             LOG.debug("Round over");
             playing = false;
             room.endGame();
@@ -122,18 +130,18 @@ public class GameFieldImpl implements GameField{
 
     }
 
-    public void run(){
-        Runnable gameLoop = new Runnable(){
+    public void run() {
+        Runnable gameLoop = new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 long now, dt = 0;
                 long last = System.nanoTime();
-                long stepTime = 1000000000/FPS;
-                while(playing) {
+                long stepTime = 1000000000 / FPS;
+                while (playing) {
                     now = System.nanoTime();
                     dt += Math.min(1000000000, (now - last));
-                    if(dt > stepTime){
-                        while(dt > stepTime) {
+                    if (dt > stepTime) {
+                        while (dt > stepTime) {
                             dt -= stepTime;
                             step();
                         }

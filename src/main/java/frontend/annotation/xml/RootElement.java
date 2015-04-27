@@ -7,8 +7,8 @@ import java.lang.annotation.*;
  */
 
 @Inherited
-@Target(value= ElementType.TYPE)
-@Retention(value= RetentionPolicy.RUNTIME)
+@Target(value = ElementType.TYPE)
+@Retention(value = RetentionPolicy.RUNTIME)
 public @interface RootElement {
     public String name();
 }

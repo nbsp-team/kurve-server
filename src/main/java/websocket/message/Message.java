@@ -33,7 +33,7 @@ public abstract class Message {
             .create();
 
     public String getBody() {
-        if(body == null) body = gson.toJson(this);
+        if (body == null) body = gson.toJson(this);
         return body;
 
     }

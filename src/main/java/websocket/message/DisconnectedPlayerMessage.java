@@ -1,10 +1,6 @@
 package websocket.message;
 
-import com.google.gson.*;
 import game.Player;
-import websocket.GameWebSocketHandler;
-
-import java.lang.reflect.Type;
 
 /**
  * Created by Dimorinny on 20.03.15.

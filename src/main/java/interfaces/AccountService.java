@@ -7,7 +7,10 @@ import model.UserProfile;
  */
 public interface AccountService {
     public boolean addUser(UserProfile userProfile);
+
     public UserProfile getUser(String userName);
+
     public long getUserCount();
+
     public void clear();
 }

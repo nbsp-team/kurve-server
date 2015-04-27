@@ -41,7 +41,7 @@ public class MathHelper {
 
     public static double squareSqrt(double... values) {
         double result = 0;
-        for(double value : values) {
+        for (double value : values) {
             result += Math.pow(value, 2);
         }
         return Math.sqrt(result);

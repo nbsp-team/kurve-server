@@ -1,10 +1,5 @@
 package model;
 
-import com.google.gson.*;
-import frontend.response.GetUserResponse;
-
-import java.lang.reflect.Type;
-
 /**
  * nickolay, 13.09.2014.
  */

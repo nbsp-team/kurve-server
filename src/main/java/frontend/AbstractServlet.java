@@ -26,7 +26,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!checkPermissions(request, response)) {
+        if (!checkPermissions(request, response)) {
             writeResponse(response, new PermissionDeniedErrorResponse());
         } else {
             writeResponse(response, onGet(request));
@@ -34,7 +34,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!checkPermissions(request, response)) {
+        if (!checkPermissions(request, response)) {
             writeResponse(response, new PermissionDeniedErrorResponse());
         } else {
             writeResponse(response, onHead(request));
@@ -42,7 +42,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!checkPermissions(request, response)) {
+        if (!checkPermissions(request, response)) {
             writeResponse(response, new PermissionDeniedErrorResponse());
         } else {
             writeResponse(response, onPost(request));
@@ -50,7 +50,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!checkPermissions(request, response)) {
+        if (!checkPermissions(request, response)) {
             writeResponse(response, new PermissionDeniedErrorResponse());
         } else {
             writeResponse(response, onPut(request));
@@ -58,7 +58,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!checkPermissions(request, response)) {
+        if (!checkPermissions(request, response)) {
             writeResponse(response, new PermissionDeniedErrorResponse());
         } else {
             writeResponse(response, onDelete(request));

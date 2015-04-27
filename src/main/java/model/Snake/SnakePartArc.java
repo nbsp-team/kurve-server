@@ -1,17 +1,11 @@
 package model.Snake;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import game.MathHelper;
-
-import java.lang.reflect.Type;
 
 /**
  * Created by egor on 12.04.15.
  */
-public class SnakePartArc{
+public class SnakePartArc {
     private double x, y, r, angle, angle2;
     private int lineRadius, id;
     private boolean clockwise;
@@ -30,21 +24,23 @@ public class SnakePartArc{
         angle = startAngle - angleV;
         angle2 = angle;
     }
+
     public void updateHead(double angleV) {
         angle2 += angleV;
         angle2 = MathHelper.normAngle(angle2);
     }
-    public boolean isInside(double x, double y, int lineRadius){
+
+    public boolean isInside(double x, double y, int lineRadius) {
         double d = MathHelper.distance(this.x, this.y, x, y);
-        if(Math.abs(d-r)>lineRadius + this.lineRadius) return false;
+        if (Math.abs(d - r) > lineRadius + this.lineRadius) return false;
         double alpha = MathHelper.normAngle(Math.atan2((y - this.y), (x - this.x)));
         boolean ins;
-        if(clockwise) {
+        if (clockwise) {
             ins = MathHelper.isAngleBetween(alpha, angle2, angle);
         } else {
             ins = MathHelper.isAngleBetween(alpha, angle, angle2);
         }
-        if(ins){
+        if (ins) {
             System.out.println(alpha);
             System.out.println(angle);
             System.out.println(angle2);
@@ -53,16 +49,19 @@ public class SnakePartArc{
         return false;
     }
 
-    public double getX(){
+    public double getX() {
         return x;
     }
-    public double getY(){
+
+    public double getY() {
         return y;
     }
-    public double getRadius(){
+
+    public double getRadius() {
         return r;
     }
-    public double getLineRadius(){
+
+    public double getLineRadius() {
         return lineRadius;
     }
 
@@ -71,7 +70,7 @@ public class SnakePartArc{
     }
 
     public double getSpan() {
-        return angle2-angle;
+        return angle2 - angle;
     }
 
     public double getAngle2() {

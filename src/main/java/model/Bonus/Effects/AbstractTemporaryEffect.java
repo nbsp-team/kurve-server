@@ -9,11 +9,11 @@ public abstract class AbstractTemporaryEffect implements TemporaryEffect {
     private int countDownCounter = 0;
 
 
-    protected void setDuration(int seconds){
-        countDownCounter = seconds*Integer.valueOf(Main.mechanicsConfig.FPS);
+    protected void setDuration(int seconds) {
+        countDownCounter = seconds * Integer.valueOf(Main.mechanicsConfig.FPS);
     }
 
-    public boolean timeStep(){
+    public boolean timeStep() {
         countDownCounter--;
         return (countDownCounter <= 0);
     }

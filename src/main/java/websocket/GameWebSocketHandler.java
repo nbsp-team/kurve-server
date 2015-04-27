@@ -75,7 +75,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                     boolean isLeft = jresponse.get("isLeft").getAsBoolean();
                     boolean isUp = jresponse.get("isUp").getAsBoolean();
                     messageListener.onControl(this, isLeft, isUp);
-                    
+
                     break;
                 case CODE_KEY_RESPONSE:
                     break;
@@ -120,8 +120,11 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     public static interface WebSocketMessageListener {
 
         public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
+
         public void onDisconnect(GameWebSocketHandler handler);
+
         public void onUserReady(GameWebSocketHandler handler, boolean isReady);
+
         public void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
 
     }

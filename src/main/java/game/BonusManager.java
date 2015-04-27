@@ -3,10 +3,9 @@ package game;
 import model.Bonus.Bonus;
 import model.Bonus.Effects.*;
 import model.Snake.Snake;
-import websocket.message.NewBonusMessage;
 import websocket.message.EatBonusMessage;
+import websocket.message.NewBonusMessage;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,24 +19,24 @@ public class BonusManager {
     List<Bonus> bonuses = new LinkedList<>();
     Room room;
 
-    public BonusManager(List<Snake> snakes, Room room){
+    public BonusManager(List<Snake> snakes, Room room) {
         this.room = room;
         this.snakes = snakes;
     }
 
-    private void addBonus(Bonus bonus){
+    private void addBonus(Bonus bonus) {
         bonuses.add(bonus);
         room.broadcastMessage(new NewBonusMessage(bonus));
     }
 
-    private void applyTempEffect(TemporaryEffect effect){
+    private void applyTempEffect(TemporaryEffect effect) {
         effect.activate();
         activeEffects.add(effect);
     }
 
-    private void applyBonus(Bonus bonus, Snake snake){
+    private void applyBonus(Bonus bonus, Snake snake) {
 
-        switch(bonus.getKind()){
+        switch (bonus.getKind()) {
             case SPEED_SELF:
                 applyTempEffect(new SpeedSelfEffect(snake));
                 break;
@@ -60,18 +59,19 @@ public class BonusManager {
     }
 
     private int c = 0;
-    public void timeStep(){
-        for(Iterator<TemporaryEffect> iter = activeEffects.iterator(); iter.hasNext();){
+
+    public void timeStep() {
+        for (Iterator<TemporaryEffect> iter = activeEffects.iterator(); iter.hasNext(); ) {
             TemporaryEffect effect = iter.next();
-            if(effect.timeStep()){
+            if (effect.timeStep()) {
                 effect.deactivate();
                 iter.remove();
             }
         }
-        for(Snake snake : snakes){
-            for(Iterator<Bonus> bonusIter = bonuses.iterator();bonusIter.hasNext();){
+        for (Snake snake : snakes) {
+            for (Iterator<Bonus> bonusIter = bonuses.iterator(); bonusIter.hasNext(); ) {
                 Bonus bonus = bonusIter.next();
-                if (bonus.isReachableBy(snake)){
+                if (bonus.isReachableBy(snake)) {
 
                     applyBonus(bonus, snake);
                     room.broadcastMessage(new EatBonusMessage(bonus.getId()));
@@ -80,7 +80,7 @@ public class BonusManager {
             }
         }
         c++;
-        if(c == 60*3) {
+        if (c == 60 * 3) {
             addBonus(new Bonus(100, 100, Bonus.Kind.TRAVERSE_WALLS_SELF));
             addBonus(new Bonus(100, 200, Bonus.Kind.SPEED_SELF));
             addBonus(new Bonus(100, 300, Bonus.Kind.THIN_SELF));

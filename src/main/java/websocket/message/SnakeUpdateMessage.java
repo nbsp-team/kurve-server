@@ -7,7 +7,8 @@ import model.Snake.Snake;
  */
 public class SnakeUpdateMessage extends Message {
     private Snake snake;
-    public SnakeUpdateMessage(Snake snake){
+
+    public SnakeUpdateMessage(Snake snake) {
 
         this.snake = snake;
     }

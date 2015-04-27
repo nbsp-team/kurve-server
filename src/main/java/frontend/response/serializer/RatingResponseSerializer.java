@@ -16,7 +16,7 @@ public class RatingResponseSerializer implements JsonSerializer<RatingResponse> 
         JsonObject responseObject = new JsonObject();
 
         JsonArray usersArray = new JsonArray();
-        for(int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 20; ++i) {
             JsonObject user = new JsonObject();
             user.addProperty("username", "user" + i);
             user.addProperty("global_rating", 100 + i * 5);

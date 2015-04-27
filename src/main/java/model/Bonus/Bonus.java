@@ -29,7 +29,7 @@ public class Bonus {
     private double x, y;
     private static final int radius = 10;
 
-    public Bonus(int x, int y, Kind kind){
+    public Bonus(int x, int y, Kind kind) {
         this.x = x;
         this.y = y;
         this.kind = kind;
@@ -39,8 +39,10 @@ public class Bonus {
     }
 
     private void initColor() {
-        switch(kind){
-            case BIG_HOLE_SELF: color = "#11EEFF"; break;//test
+        switch (kind) {
+            case BIG_HOLE_SELF:
+                color = "#11EEFF";
+                break;//test
 
         }
     }
@@ -61,7 +63,7 @@ public class Bonus {
         return y;
     }
 
-    public boolean isReachableBy(Snake snake){
+    public boolean isReachableBy(Snake snake) {
         return radius > MathHelper.distance(snake.getX(), snake.getY(), x, y);
     }
 

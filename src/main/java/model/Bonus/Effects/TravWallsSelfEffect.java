@@ -8,7 +8,7 @@ import model.Snake.Snake;
 public class TravWallsSelfEffect extends AbstractTemporaryEffect {
     private Snake snake;
 
-    public TravWallsSelfEffect(Snake snake){
+    public TravWallsSelfEffect(Snake snake) {
         this.snake = snake;
         setDuration(15);
     }
