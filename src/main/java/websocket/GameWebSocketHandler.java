@@ -3,28 +3,19 @@ package websocket;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import game.Room;
-import interfaces.AccountService;
 import model.UserProfile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
-import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import frontend.SessionManager;
-import websocket.message.ControlMessage;
-
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.HttpCookie;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * nickolay, 21.02.15.
  */
 
 public class GameWebSocketHandler extends WebSocketAdapter {
+    public static final Logger LOG = LogManager.getLogger(GameWebSocketHandler.class);
+
     public static enum MessageType {
         CODE_ROOM_PLAYERS_RESPONSE,
         CODE_PLAYER_CONNECTED_RESPONSE,
@@ -53,12 +44,12 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     @Override
     public void onWebSocketError(Throwable cause) {
-        System.out.println("Close: statusCode=" + cause.toString());
+        LOG.debug("WebSocket error: " + cause.toString() + " for user " + userProfile);
     }
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
-        System.out.println("Close: statusCode=" + statusCode + " " + reason);
+        LOG.debug("WebSocket closed: " + statusCode + " for user " + userProfile);
         messageListener.onDisconnect(this);
     }
 

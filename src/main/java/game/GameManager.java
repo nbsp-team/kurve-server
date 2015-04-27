@@ -1,12 +1,12 @@
 package game;
 
 import main.Main;
-import model.UserProfile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
 import websocket.message.ControlMessage;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +14,8 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 public class GameManager implements GameWebSocketHandler.WebSocketMessageListener {
+    public static final Logger LOG = LogManager.getLogger(GameManager.class);
+
     private final int MIN_PLAYER_IN_ROOM;
     private final int MAX_PLAYER_IN_ROOM;
 
@@ -23,16 +25,13 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         MIN_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.minPlayerNumber);
         MAX_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.maxPlayerNumber);
 
-        System.out.println(MAX_PLAYER_IN_ROOM);
-
         rooms = new ArrayList<>();
     }
 
     @Override
 
     public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection) {
-        System.out.println("New ws: " + handler.getUserProfile());
-
+        LOG.debug("New WebSocket connection: " + handler.getUserProfile());
 
         if (handler.getUserProfile() == null) {
             // connection.close();
@@ -69,7 +68,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
 
     private void checkRoomReady(Room room) {
         int readyCount = room.getReadyPlayerCount();
-        System.out.println("Ready: " + readyCount);
+
         if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM
                 && readyCount == room.getPlayerCount()) {
             room.startGame();

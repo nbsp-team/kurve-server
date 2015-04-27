@@ -20,6 +20,9 @@
                         <manifest>
                             <mainClass>main.Main</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>${basedir}/../config/</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -114,5 +117,16 @@
             <version>1.9.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.2</version>
+        </dependency>
     </dependencies>
 </project>

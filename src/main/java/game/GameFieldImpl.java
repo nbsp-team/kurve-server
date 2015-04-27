@@ -3,6 +3,8 @@ package game;
 import interfaces.GameField;
 import main.Main;
 import model.Snake.Snake;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
 
 
 public class GameFieldImpl implements GameField{
+    public static final Logger LOG = LogManager.getLogger(GameManager.class);
+
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
@@ -110,8 +114,8 @@ public class GameFieldImpl implements GameField{
                 bonusManager.timeStep();
             }
         }
-        if(dead==numPlayers) {
-            System.out.println("ALL DEAD");
+        if(dead == numPlayers) {
+            LOG.debug("Round over");
             playing = false;
             room.endGame();
         }
@@ -120,7 +124,6 @@ public class GameFieldImpl implements GameField{
 
     public void run(){
         Runnable gameLoop = new Runnable(){
-
             @Override
             public void run(){
                 long now, dt = 0;
@@ -142,9 +145,7 @@ public class GameFieldImpl implements GameField{
             }
         };
 
-
         Thread loopThread = new Thread(gameLoop);
         loopThread.start();
-
     }
 }

@@ -24,6 +24,7 @@ public class Bonus {
         BIG_HOLE_SELF,
         TRAVERSE_WALLS_SELF
     }
+
     private Kind kind;
     private double x, y;
     private static final int radius = 10;

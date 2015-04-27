@@ -5,6 +5,8 @@ import configuration.NetworkConfig;
 import frontend.servlet.*;
 import game.GameManager;
 import interfaces.AccountService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -16,7 +18,6 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import configuration.XmlLoader;
 import frontend.SessionManager;
 import websocket.GameWebSocketCreator;
-import websocket.GameWebSocketHandler;
 
 import javax.servlet.Servlet;
 import java.net.InetSocketAddress;
@@ -25,20 +26,23 @@ import java.net.InetSocketAddress;
  * @author v.chibrikov
  */
 public class Main {
+    public static final Logger LOG = LogManager.getLogger(Main.class);
+
     public static final int API_VERSION = 1;
+
+    public static final String SERVER_CONFIG_FILE = "config/server_config.xml";
 
     public static final NetworkConfig networkConfig =
             (NetworkConfig) XmlLoader.getInstance()
-                    .load(NetworkConfig.class, "server_config.xml");
+                    .load(NetworkConfig.class, SERVER_CONFIG_FILE);
 
     public static final GameMechanicsConfig mechanicsConfig =
             (GameMechanicsConfig) XmlLoader.getInstance()
-                    .load(GameMechanicsConfig.class, "server_config.xml");
+                    .load(GameMechanicsConfig.class, SERVER_CONFIG_FILE);
 
     public static void main(String[] args) throws Exception {
+        LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
 
-
-        System.out.append("Starting at port: ").append(String.valueOf(networkConfig.port)).append("\n");
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
