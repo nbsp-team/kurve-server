@@ -71,8 +71,12 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
 
         if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM
                 && readyCount == room.getPlayerCount()) {
-            room.startGame();
+            room.startGame(this);
         }
+    }
+
+    public void destroyRoom(Room room) {
+        rooms.remove(room);
     }
 
     @Override

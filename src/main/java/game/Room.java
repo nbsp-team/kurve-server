@@ -78,10 +78,10 @@ public class Room {
         broadcastMessage(new GameOverMessage(this));
     }
 
-    public void startGame() {
+    public void startGame(GameManager gameManager) {
         if (roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
-        gameField = new GameFieldImpl(players.size(), this);
+        gameField = new GameFieldImpl(this, gameManager);
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }

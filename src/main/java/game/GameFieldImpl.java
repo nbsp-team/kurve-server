@@ -21,6 +21,8 @@ public class GameFieldImpl implements GameField {
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
+    private final GameManager gameManager;
+
     private boolean playing;
     private int numPlayers, dead;
     private List<Snake> snakes;
@@ -28,11 +30,12 @@ public class GameFieldImpl implements GameField {
 
     private Room room;
 
-    public GameFieldImpl(int numPlayers, Room room) {
+    public GameFieldImpl(Room room, GameManager gameManager) {
         this.room = room;
+        this.gameManager = gameManager;
 
         playing = false;
-        this.numPlayers = numPlayers;
+        this.numPlayers = room.getPlayerCount();
 
         snakes = new ArrayList<>();
         int mindim = Math.min(width, height);
@@ -44,6 +47,7 @@ public class GameFieldImpl implements GameField {
 
             snakes.add(new Snake(x, y, angle + Math.PI / 2, room, i));
         }
+
         dead = 0;
         bonusManager = new BonusManager(snakes, room);
     }
@@ -126,6 +130,7 @@ public class GameFieldImpl implements GameField {
             LOG.debug("Round over");
             playing = false;
             room.endGame();
+            gameManager.destroyRoom(room);
         }
 
     }
