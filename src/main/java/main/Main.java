@@ -47,8 +47,9 @@ public class Main {
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        AccountService accountService = new AccountServiceInMemory();
+//        AccountService accountService = new MongoAccountService("127.0.0.1", 27017, "test");
 
+        AccountService accountService = new AccountServiceInMemory();
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
