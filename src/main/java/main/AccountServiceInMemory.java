@@ -12,12 +12,6 @@ import java.util.Map;
 public class AccountServiceInMemory implements AccountService {
     private Map<String, UserProfile> users = new HashMap<>();
 
-    public AccountServiceInMemory() {
-        // TODO: for debugging only
-        addUser(new UserProfile("admin", "admin", "didika914@gmail.com"));
-        addUser(new UserProfile("q", "q", "q@gmail.com"));
-    }
-
     @Override
     public boolean addUser(UserProfile userProfile) {
         if (users.containsKey(userProfile.getLogin()))

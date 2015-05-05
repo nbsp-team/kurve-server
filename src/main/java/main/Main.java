@@ -1,5 +1,7 @@
 package main;
 
+import com.mongodb.*;
+import configuration.DatabaseConfig;
 import configuration.GameMechanicsConfig;
 import configuration.NetworkConfig;
 import configuration.XmlLoader;
@@ -15,12 +17,14 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import websocket.GameWebSocketCreator;
 
 import javax.servlet.Servlet;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 
 /**
  * @author v.chibrikov
@@ -36,6 +40,10 @@ public class Main {
             (NetworkConfig) XmlLoader.getInstance()
                     .load(NetworkConfig.class, SERVER_CONFIG_FILE);
 
+    public static final DatabaseConfig dbConfig =
+            (DatabaseConfig) XmlLoader.getInstance()
+                    .load(DatabaseConfig.class, SERVER_CONFIG_FILE);
+
     public static final GameMechanicsConfig mechanicsConfig =
             (GameMechanicsConfig) XmlLoader.getInstance()
                     .load(GameMechanicsConfig.class, SERVER_CONFIG_FILE);
@@ -43,13 +51,21 @@ public class Main {
     public static void main(String[] args) throws Exception {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
 
+        ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
+        MongoCredential credential = MongoCredential.createCredential(
+                dbConfig.username,
+                dbConfig.name,
+                dbConfig.password.toCharArray()
+        );
+
+        MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{ add(credential);}});
+        DB db = mongoClient.getDB(dbConfig.name);
+
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-//        AccountService accountService = new MongoAccountService("127.0.0.1", 27017, "test");
-
-        AccountService accountService = new AccountServiceInMemory();
+        AccountService accountService = new MongoAccountService(db);
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);
