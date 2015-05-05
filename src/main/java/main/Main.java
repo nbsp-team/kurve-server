@@ -1,6 +1,9 @@
 package main;
 
-import com.mongodb.*;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import configuration.DatabaseConfig;
 import configuration.GameMechanicsConfig;
 import configuration.NetworkConfig;
@@ -17,7 +20,6 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import websocket.GameWebSocketCreator;
@@ -58,7 +60,9 @@ public class Main {
                 dbConfig.password.toCharArray()
         );
 
-        MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{ add(credential);}});
+        MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
+            add(credential);
+        }});
         DB db = mongoClient.getDB(dbConfig.name);
 
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));

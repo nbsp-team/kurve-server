@@ -1,12 +1,10 @@
 package main;
 
-import com.mongodb.*;
+import com.mongodb.DB;
 import dao.UsersDao;
 import interfaces.AccountService;
 import model.UserProfile;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.net.UnknownHostException;
 
 

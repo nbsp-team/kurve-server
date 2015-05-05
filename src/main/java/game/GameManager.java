@@ -34,7 +34,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         LOG.debug("New WebSocket connection: " + handler.getUserProfile());
 
         if (handler.getUserProfile() == null) {
-            // connection.close();
+            connection.disconnect(WebSocketConnection.CLOSE_REASON_NO_AUTH, "Auth required");
             return null;
         }
 

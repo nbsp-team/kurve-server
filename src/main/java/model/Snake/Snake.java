@@ -84,7 +84,6 @@ public class Snake {
     private boolean idunno = false;
 
     public void startTurning(turningState where) {
-        // System.out.println("start turn") ;
         idunno = true;
         if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
             angleV = -angleV;
@@ -276,8 +275,7 @@ public class Snake {
         for (int i = Math.max(0, linesSent); i < snakeLines.size(); i++) {
             linesToSend.add(context.serialize(snakeLines.get(i)));
         }
-        //System.out.print(linesToSend.size());  System.out.print(" lines and ");
-        //System.out.print(arcsToSend.size());   System.out.println(" arcs to send");
+
         jsonObject.add("lines", linesToSend);
         jsonObject.add("arcs", arcsToSend);
 
@@ -285,8 +283,8 @@ public class Snake {
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("angle", angle);
-        jsonObject.addProperty("angleV", angleV);//for debug only
-        jsonObject.addProperty("v", v);//for debug only
+        jsonObject.addProperty("angleV", angleV); // TODO: for debug only
+        jsonObject.addProperty("v", v); // TODO: for debug only
         jsonObject.addProperty("nlines", snakeLines.size());
         jsonObject.addProperty("narcs", snakeArcs.size());
         jsonObject.addProperty("radius", radius);

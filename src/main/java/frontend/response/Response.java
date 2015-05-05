@@ -10,7 +10,6 @@ import model.UserProfile;
  */
 public class Response {
     private static final Gson gson = new GsonBuilder()
-            // Response adapters
             .registerTypeAdapter(ErrorResponse.class, new ErrorResponseSerializer())
             .registerTypeAdapter(PermissionDeniedErrorResponse.class, new ErrorResponseSerializer())
             .registerTypeAdapter(AuthErrorResponse.class, new ErrorResponseSerializer())
@@ -20,9 +19,9 @@ public class Response {
             .registerTypeAdapter(SignInResponse.class, new SignInResponseSerializer())
             .registerTypeAdapter(SignUpResponse.class, new SingUpResponseSerializer())
             .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
-                    // Model adapters
+
             .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
-                    // Configure Gson
+
             .serializeNulls()
             .create();
 

@@ -42,7 +42,7 @@ public class Bonus {
         switch (kind) {
             case BIG_HOLE_SELF:
                 color = "#11EEFF";
-                break;//test
+                break;
 
         }
     }
