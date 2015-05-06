@@ -29,6 +29,7 @@ public abstract class Message {
             .registerTypeAdapter(NewBonusMessage.class, new NewBonusMessageSerializer())
             .registerTypeAdapter(EatBonusMessage.class, new EatBonusMessageSerializer())
             .registerTypeAdapter(Bonus.class, new BonusSerializer())
+	    .registerTypeAdapter(SnakePatchMessage.class, new SnakePatchMessageSerializer())
             .serializeNulls()
             .create();
 

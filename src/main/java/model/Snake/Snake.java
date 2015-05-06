@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import game.MathHelper;
 import game.Room;
 import main.Main;
+import websocket.SnakeUpdatesManager;
 import websocket.message.SnakeUpdateMessage;
 
 import java.util.ArrayList;
@@ -39,10 +40,22 @@ public class Snake {
     private turningState turning = turningState.NOT_TURNING;
     private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth) / 2;
     private int linesSent = 0, arcsSent = 0;
-    private Room room;
 
+    private SnakeUpdatesManager updatesManager;
     private boolean bigHole = false;
     private boolean travThroughWalls = false;
+
+    public List<SnakePartLine> getSnakeLines() {
+        return snakeLines;
+    }
+
+    public List<SnakePartArc> getSnakeArcs() {
+        return snakeArcs;
+    }
+
+    public boolean isTurning() {
+        return turning != turningState.NOT_TURNING;
+    }
 
     public static enum turningState {
         TURNING_LEFT,
@@ -54,8 +67,8 @@ public class Snake {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
+	    this.updatesManager = room.getUpdatesManager();
 
-        this.room = room;
 
         v = (double) defaultSpeed / FPS;
         angleV = v / defaultTurnRadius;
@@ -133,9 +146,9 @@ public class Snake {
 
         snakeArcs.add(newArc);
     }
-
     public void sendUpdates() {
-        room.broadcastMessage(new SnakeUpdateMessage(this));
+	    updatesManager.broadcast(this);
+
     }
 
     private void doLine() {

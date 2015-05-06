@@ -2,6 +2,7 @@ package game;
 
 import interfaces.GameField;
 import model.UserProfile;
+import websocket.SnakeUpdatesManager;
 import websocket.message.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Room {
     private List<Player> players;
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
+    private SnakeUpdatesManager updatesManager;
 
     private int getPointsByDeathId(int deathId) {
         int[] deathPoints = {1, 2, 3, 4, 5};
@@ -33,11 +35,12 @@ public class Room {
 
     public Room() {
         players = new ArrayList<>();
+        updatesManager = new SnakeUpdatesManager(this);
     }
 
     public void onNewPlayer(Player player) {
 
-        if (roomState != RoomState.WAITING) return;
+        //if (roomState != RoomState.WAITING) return;
 
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
@@ -79,7 +82,7 @@ public class Room {
     }
 
     public void startGame(GameManager gameManager) {
-        if (roomState != RoomState.WAITING) return;
+        //if (roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
         gameField = new GameFieldImpl(this, gameManager);
         for (int i = 0; i < players.size(); i++) {
@@ -155,10 +158,17 @@ public class Room {
         return readyUserCount;
     }
 
+    public void sendPatchToUser(UserProfile user, List<Integer> lostIds){
+        getPlayerByUser(user).sendMessage(new SnakePatchMessage(updatesManager.getListByIds(lostIds)));
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
 
+    public SnakeUpdatesManager getUpdatesManager() {
+        return updatesManager;
+    }
 
     public RoomState getRoomState() {
         return roomState;

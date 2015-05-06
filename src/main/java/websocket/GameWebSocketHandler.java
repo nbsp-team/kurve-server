@@ -1,5 +1,7 @@
 package websocket;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import game.Room;
@@ -8,6 +10,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import websocket.message.SnakePatchMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * nickolay, 21.02.15.
@@ -31,7 +37,9 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         CODE_ROUND_END_RESPONSE,
         CODE_GAME_OVER_RESPONSE,
         CODE_ROOM_START_RESPONSE,
-        CODE_SNAKE_ARC_RESPONSE
+        CODE_SNAKE_ARC_RESPONSE,
+        CODE_SNAKE_PATCH_REQUEST,//15
+        CODE_SNAKE_PATCH_RESPONSE
     }
 
     private WebSocketMessageListener messageListener;
@@ -79,6 +87,16 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_KEY_RESPONSE:
                     break;
                 case CODE_SNAKE_UPDATES_RESPONSE:
+                    break;
+		        case CODE_SNAKE_PATCH_REQUEST:
+                    LOG.debug("got patch request!");
+                    JsonArray array = jresponse.get("ids").getAsJsonArray();
+                    List<Integer> lostIds = new ArrayList<>();
+                    for(JsonElement elem : array){
+                        lostIds.add(elem.getAsInt());
+                    }
+
+                    room.sendPatchToUser(userProfile, lostIds);
                     break;
                 case CODE_NEW_BONUS_RESPONSE:
                     break;
