@@ -45,16 +45,14 @@ public class Snake {
     private boolean bigHole = false;
     private boolean travThroughWalls = false;
 
-    public List<SnakePartLine> getSnakeLines() {
-        return snakeLines;
+
+
+    public void setArcsSent(int arcsSent) {
+        this.arcsSent = arcsSent;
     }
 
-    public List<SnakePartArc> getSnakeArcs() {
-        return snakeArcs;
-    }
-
-    public boolean isTurning() {
-        return turning != turningState.NOT_TURNING;
+    public void setLinesSent(int linesSent) {
+        this.linesSent = linesSent;
     }
 
     public static enum turningState {
@@ -161,23 +159,6 @@ public class Snake {
         snakeLines.add(newLine);
     }
 
-    public boolean isInside(double x, double y, boolean itself, int radius) {
-
-        int lim = snakeLines.size();
-        if (itself && turning == turningState.NOT_TURNING) {
-            lim--;
-        }
-        for (int i = 0; i < lim; i++) {
-            if (snakeLines.get(i).isInside(x, y, radius)) return true;
-        }
-        lim = snakeArcs.size();
-        if (itself && turning != turningState.NOT_TURNING) lim--;
-        for (int i = 0; i < lim; i++) {
-            if (snakeArcs.get(i).isInside(x, y, radius)) return true;
-        }
-        return false;
-    }
-
     public void multiplyRadiusBy(double koef) {
         radius *= koef;
         doNewPart();
@@ -277,44 +258,6 @@ public class Snake {
         return radius;
     }
 
-    public JsonObject getUpdatesJson(JsonSerializationContext context) {
-        JsonObject jsonObject = new JsonObject();
-
-        JsonArray arcsToSend = new JsonArray();
-        for (int i = Math.max(0, arcsSent); i < snakeArcs.size(); i++) {
-            arcsToSend.add(context.serialize(snakeArcs.get(i)));
-        }
-        JsonArray linesToSend = new JsonArray();
-        for (int i = Math.max(0, linesSent); i < snakeLines.size(); i++) {
-            linesToSend.add(context.serialize(snakeLines.get(i)));
-        }
-
-        jsonObject.add("lines", linesToSend);
-        jsonObject.add("arcs", arcsToSend);
-
-        jsonObject.addProperty("id", id);
-        jsonObject.addProperty("x", x);
-        jsonObject.addProperty("y", y);
-        jsonObject.addProperty("angle", angle);
-        jsonObject.addProperty("angleV", angleV); // TODO: for debug only
-        jsonObject.addProperty("v", v); // TODO: for debug only
-        jsonObject.addProperty("nlines", snakeLines.size());
-        jsonObject.addProperty("narcs", snakeArcs.size());
-        jsonObject.addProperty("radius", radius);
-        jsonObject.addProperty("distance", travSinceLastHole);
-        jsonObject.addProperty("alive", alive);
-        jsonObject.addProperty("turnRadius", MathHelper.shortDouble(turnRadius));
-        jsonObject.addProperty("partStopper", partStopper);
-        if (turning != turningState.NOT_TURNING) {
-            arcsSent = Math.max(0, snakeArcs.size() - 1);
-            linesSent = snakeLines.size();
-        } else {
-            arcsSent = snakeArcs.size();
-            linesSent = Math.max(0, snakeLines.size() - 1);
-        }
-
-        return jsonObject;
-    }
 
     public void eraseSelf() {
         snakeArcs.clear();
@@ -337,5 +280,53 @@ public class Snake {
 
     public boolean canTravThroughWalls() {
         return travThroughWalls;
+    }
+
+    public List<SnakePartLine> getSnakeLines() {
+        return snakeLines;
+    }
+
+    public List<SnakePartArc> getSnakeArcs() {
+        return snakeArcs;
+    }
+
+    public boolean isTurning() {
+        return turning != turningState.NOT_TURNING;
+    }
+
+    public int getArcsSent() {
+        return arcsSent;
+    }
+
+    public int getLinesSent() {
+        return linesSent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public double getAngleSpeed() {
+        return angleV;
+    }
+
+    public double getSpeed() {
+        return v;
+    }
+
+    public double getTravSinceLastHole() {
+        return travSinceLastHole;
+    }
+
+    public double getTurnRadius() {
+        return turnRadius;
+    }
+
+    public int getPartStopper() {
+        return partStopper;
     }
 }

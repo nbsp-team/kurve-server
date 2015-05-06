@@ -18,7 +18,7 @@ public class SnakeUpdateMessageSerializer implements JsonSerializer<SnakeUpdateM
             JsonObject responseObject = new JsonObject();
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_SNAKE_ARC_RESPONSE.ordinal());
 
-            responseObject.add("snake", src.getSnake().getUpdatesJson(context));
+            responseObject.add("snake", context.serialize(src.getSnake()));
             responseObject.addProperty("id", src.getId());
             src.setJsonElement(responseObject);
         }
