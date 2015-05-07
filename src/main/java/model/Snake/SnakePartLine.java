@@ -15,6 +15,7 @@ public class SnakePartLine {
         y1 = y - vy;
         x2 = x1;
         y2 = y1;
+
         d = MathHelper.length(vx, vy);
         A = -vy / d;
         B = vx / d;

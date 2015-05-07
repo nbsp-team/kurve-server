@@ -24,7 +24,7 @@ public class BonusManager {
         this.snakes = snakes;
     }
 
-    private void addBonus(Bonus bonus) {
+    public void addBonus(Bonus bonus) {
         bonuses.add(bonus);
         room.broadcastMessage(new NewBonusMessage(bonus));
     }
