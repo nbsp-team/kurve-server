@@ -36,19 +36,21 @@ public class Main {
 
     public static final int API_VERSION = 1;
 
-    public static final String SERVER_CONFIG_FILE = "config/server_config.xml";
+    public static final String NETWORK_CONFIG_FILE = "config/network.xml";
+    public static final String MECHANICS_CONFIG_FILE = "config/mechanics.xml";
+    public static final String DB_CONFIG_FILE = "config/db.xml";
 
     public static final NetworkConfig networkConfig =
             (NetworkConfig) XmlLoader.getInstance()
-                    .load(NetworkConfig.class, SERVER_CONFIG_FILE);
+                    .load(NetworkConfig.class, NETWORK_CONFIG_FILE);
 
     public static final DatabaseConfig dbConfig =
             (DatabaseConfig) XmlLoader.getInstance()
-                    .load(DatabaseConfig.class, SERVER_CONFIG_FILE);
+                    .load(DatabaseConfig.class, DB_CONFIG_FILE);
 
     public static final GameMechanicsConfig mechanicsConfig =
             (GameMechanicsConfig) XmlLoader.getInstance()
-                    .load(GameMechanicsConfig.class, SERVER_CONFIG_FILE);
+                    .load(GameMechanicsConfig.class, MECHANICS_CONFIG_FILE);
 
     public static void main(String[] args) throws Exception {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
