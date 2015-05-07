@@ -5,6 +5,7 @@ import main.Main;
 import model.Snake.Snake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class GameFieldImpl implements GameField {
     private int numPlayers, dead;
     private List<Snake> snakes;
     private BonusManager bonusManager;
+    private SnakeCollisionChecker snakeCollisionChecker;
 
     private Room room;
 
@@ -51,6 +53,7 @@ public class GameFieldImpl implements GameField {
 
         dead = 0;
         bonusManager = new BonusManager(snakes, room);
+        snakeCollisionChecker = new SnakeCollisionChecker(snakes, this);
     }
 
     @Override
@@ -88,11 +91,11 @@ public class GameFieldImpl implements GameField {
         if (snake.canTravThroughWalls()) {
             snake.teleport(x, y);
         } else {
-            kill(snake);
+            killSnake(snake);
         }
     }
 
-    private void kill(Snake snake) {
+    public void killSnake(Snake snake) {
         snake.kill();
         int lastKilled = snakes.indexOf(snake);
         room.onPlayerDeath(lastKilled, dead);
@@ -116,17 +119,12 @@ public class GameFieldImpl implements GameField {
                 } else if (y < 0) {
                     teleportOrKill(snake, snake.getX(), height);
                 }
-                if (!snake.isBigHole()) {
-                    for (Snake otherSnake : snakes) {
-                        if (otherSnake.isInside(snake.getX()
-                                , snake.getY(), snake == otherSnake, snake.getRadius())) {
-                            kill(snake);
-                        }
-                    }
-                }
-                bonusManager.timeStep();
+
+
             }
         }
+        snakeCollisionChecker.timeStep();
+        bonusManager.timeStep();
         if (dead == numPlayers) {
             LOG.debug("Round over");
             playing = false;

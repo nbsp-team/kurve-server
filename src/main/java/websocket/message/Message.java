@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import game.Player;
 import model.Bonus.Bonus;
+import model.Snake.Snake;
 import model.Snake.SnakePartArc;
 import model.Snake.SnakePartLine;
 import websocket.message.serializer.*;
@@ -29,6 +30,8 @@ public abstract class Message {
             .registerTypeAdapter(NewBonusMessage.class, new NewBonusMessageSerializer())
             .registerTypeAdapter(EatBonusMessage.class, new EatBonusMessageSerializer())
             .registerTypeAdapter(Bonus.class, new BonusSerializer())
+	        .registerTypeAdapter(SnakePatchMessage.class, new SnakePatchMessageSerializer())
+            .registerTypeAdapter(Snake.class, new SnakeUpdatesSerializer())
             .serializeNulls()
             .create();
 

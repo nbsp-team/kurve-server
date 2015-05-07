@@ -1,5 +1,7 @@
 package interfaces;
 
+import model.Snake.Snake;
+
 /**
  * Created by egor on 20.04.15.
  */
@@ -18,5 +20,6 @@ public interface GameField {
 
     public void doRightUp(int sender);
 
-
+    
+    public void killSnake(Snake snake);
 }

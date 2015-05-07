@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import game.MathHelper;
 import game.Room;
 import main.Main;
+import websocket.SnakeUpdatesManager;
 import websocket.message.SnakeUpdateMessage;
 
 import java.util.ArrayList;
@@ -39,10 +40,20 @@ public class Snake {
     private turningState turning = turningState.NOT_TURNING;
     private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth) / 2;
     private int linesSent = 0, arcsSent = 0;
-    private Room room;
 
+    private SnakeUpdatesManager updatesManager;
     private boolean bigHole = false;
     private boolean travThroughWalls = false;
+
+
+
+    public void setArcsSent(int arcsSent) {
+        this.arcsSent = arcsSent;
+    }
+
+    public void setLinesSent(int linesSent) {
+        this.linesSent = linesSent;
+    }
 
     public static enum turningState {
         TURNING_LEFT,
@@ -54,8 +65,8 @@ public class Snake {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
+	    this.updatesManager = room.getUpdatesManager();
 
-        this.room = room;
 
         v = (double) defaultSpeed / FPS;
         angleV = v / defaultTurnRadius;
@@ -133,9 +144,9 @@ public class Snake {
 
         snakeArcs.add(newArc);
     }
-
     public void sendUpdates() {
-        room.broadcastMessage(new SnakeUpdateMessage(this));
+	    updatesManager.broadcast(this);
+
     }
 
     private void doLine() {
@@ -146,23 +157,6 @@ public class Snake {
         if (!drawing) return;
         SnakePartLine newLine = new SnakePartLine(x, y, vx, vy, radius, snakeLines.size());
         snakeLines.add(newLine);
-    }
-
-    public boolean isInside(double x, double y, boolean itself, int radius) {
-
-        int lim = snakeLines.size();
-        if (itself && turning == turningState.NOT_TURNING) {
-            lim--;
-        }
-        for (int i = 0; i < lim; i++) {
-            if (snakeLines.get(i).isInside(x, y, radius)) return true;
-        }
-        lim = snakeArcs.size();
-        if (itself && turning != turningState.NOT_TURNING) lim--;
-        for (int i = 0; i < lim; i++) {
-            if (snakeArcs.get(i).isInside(x, y, radius)) return true;
-        }
-        return false;
     }
 
     public void multiplyRadiusBy(double koef) {
@@ -264,44 +258,6 @@ public class Snake {
         return radius;
     }
 
-    public JsonObject getUpdatesJson(JsonSerializationContext context) {
-        JsonObject jsonObject = new JsonObject();
-
-        JsonArray arcsToSend = new JsonArray();
-        for (int i = Math.max(0, arcsSent); i < snakeArcs.size(); i++) {
-            arcsToSend.add(context.serialize(snakeArcs.get(i)));
-        }
-        JsonArray linesToSend = new JsonArray();
-        for (int i = Math.max(0, linesSent); i < snakeLines.size(); i++) {
-            linesToSend.add(context.serialize(snakeLines.get(i)));
-        }
-
-        jsonObject.add("lines", linesToSend);
-        jsonObject.add("arcs", arcsToSend);
-
-        jsonObject.addProperty("id", id);
-        jsonObject.addProperty("x", x);
-        jsonObject.addProperty("y", y);
-        jsonObject.addProperty("angle", angle);
-        jsonObject.addProperty("angleV", angleV); // TODO: for debug only
-        jsonObject.addProperty("v", v); // TODO: for debug only
-        jsonObject.addProperty("nlines", snakeLines.size());
-        jsonObject.addProperty("narcs", snakeArcs.size());
-        jsonObject.addProperty("radius", radius);
-        jsonObject.addProperty("distance", travSinceLastHole);
-        jsonObject.addProperty("alive", alive);
-        jsonObject.addProperty("turnRadius", MathHelper.shortDouble(turnRadius));
-        jsonObject.addProperty("partStopper", partStopper);
-        if (turning != turningState.NOT_TURNING) {
-            arcsSent = Math.max(0, snakeArcs.size() - 1);
-            linesSent = snakeLines.size();
-        } else {
-            arcsSent = snakeArcs.size();
-            linesSent = Math.max(0, snakeLines.size() - 1);
-        }
-
-        return jsonObject;
-    }
 
     public void eraseSelf() {
         snakeArcs.clear();
@@ -324,5 +280,53 @@ public class Snake {
 
     public boolean canTravThroughWalls() {
         return travThroughWalls;
+    }
+
+    public List<SnakePartLine> getSnakeLines() {
+        return snakeLines;
+    }
+
+    public List<SnakePartArc> getSnakeArcs() {
+        return snakeArcs;
+    }
+
+    public boolean isTurning() {
+        return turning != turningState.NOT_TURNING;
+    }
+
+    public int getArcsSent() {
+        return arcsSent;
+    }
+
+    public int getLinesSent() {
+        return linesSent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public double getAngleSpeed() {
+        return angleV;
+    }
+
+    public double getSpeed() {
+        return v;
+    }
+
+    public double getTravSinceLastHole() {
+        return travSinceLastHole;
+    }
+
+    public double getTurnRadius() {
+        return turnRadius;
+    }
+
+    public int getPartStopper() {
+        return partStopper;
     }
 }
