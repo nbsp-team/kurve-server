@@ -30,6 +30,7 @@ public class Room {
     }
 
     public void onPlayerDeath(int playerId, int deathId) {
+        if(playerId >= players.size()) return;
         players.get(playerId).setPoints(getPointsByDeathId(deathId));
     }
 
@@ -84,11 +85,11 @@ public class Room {
     public void startGame(GameManager gameManager) {
         //if (roomState != RoomState.WAITING) return;
         roomState = RoomState.GAME;
-        gameField = new GameFieldImpl(this, gameManager);
+
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
-
+        gameField = new GameFieldImpl(this, gameManager);
         gameField.play();
     }
 
