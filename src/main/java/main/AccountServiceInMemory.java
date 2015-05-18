@@ -12,6 +12,10 @@ import java.util.Map;
 public class AccountServiceInMemory implements AccountService {
     private Map<String, UserProfile> users = new HashMap<>();
 
+    public AccountServiceInMemory() {
+        users.put("q", new UserProfile("q", "q", "q"));
+    }
+
     @Override
     public boolean addUser(UserProfile userProfile) {
         if (users.containsKey(userProfile.getLogin()))

@@ -14,7 +14,6 @@ public class SnakeTests {
     private Room room;
     @Before
     public void before(){
-        //this.room = new mock(Room.class);
         this.room = new Room();
     }
     @Test

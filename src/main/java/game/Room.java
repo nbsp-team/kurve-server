@@ -174,4 +174,8 @@ public class Room {
     public RoomState getRoomState() {
         return roomState;
     }
+
+    public GameField getGameField() {
+        return gameField;
+    }
 }

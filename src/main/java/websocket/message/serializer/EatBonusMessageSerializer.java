@@ -18,7 +18,7 @@ public class EatBonusMessageSerializer implements JsonSerializer<EatBonusMessage
         responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_BONUS_EAT_RESPONSE.ordinal());
 
         responseObject.add("bonus_id", context.serialize(src.getBonus_id()));
-
+        responseObject.addProperty("eater_id", src.getEater().getId());
 
         return responseObject;
     }

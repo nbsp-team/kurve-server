@@ -93,9 +93,10 @@ public class Snake {
     }
 
     private boolean idunno = false;
-
+    private boolean reversed = false;
     public void startTurning(turningState where) {
         idunno = true;
+        if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
         if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
             angleV = -angleV;
             sinV = -sinV;
@@ -107,6 +108,7 @@ public class Snake {
 
     public void stopTurning(turningState where) {
         idunno = true;
+        if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
         if (turning == where) {
             turning = turningState.NOT_TURNING;
             angle = MathHelper.normAngle(angle);
@@ -218,11 +220,21 @@ public class Snake {
         } else sendUpdates();
     }
 
+    public void reverse(){
+        if(reversed){
+            startTurning(turning);
+            reversed = !reversed;
+        } else {
+            reversed = !reversed;
+            startTurning(turning);
+        }
+    }
+
     public void multiplySpeedBy(double koef) {
         v *= koef;
         vx *= koef;
         vy *= koef;
-        turnRadius *= koef;
+        //turnRadius *= koef;
         if (turning != turningState.NOT_TURNING) {
             doArc();
         } else sendUpdates();

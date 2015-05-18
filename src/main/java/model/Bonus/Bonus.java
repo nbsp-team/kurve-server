@@ -22,7 +22,15 @@ public class Bonus {
         ERASE_SELF,
         SLOW_SELF,
         BIG_HOLE_SELF,
-        TRAVERSE_WALLS_SELF
+        TRAVERSE_WALLS_SELF,
+        SHARP_CORNERS_SELF,
+        SPEED_ENEMY,
+        THICK_ENEMY,
+        SLOW_ENEMY,
+        BIG_TURNS_ENEMY,
+        TRAVERSE_WALLS_ALL,
+        DEATH_ALL,
+        REVERSE_ENEMY
     }
 
     private Kind kind;
