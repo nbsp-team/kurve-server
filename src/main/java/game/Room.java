@@ -17,7 +17,6 @@ public class Room {
         GAME
     }
 
-
     private List<Player> players;
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
