@@ -9,6 +9,7 @@ import websocket.message.ConnectedPlayerMessage;
 import websocket.message.ControlMessage;
 import websocket.message.RoomPlayersMessage;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onDisconnect(GameWebSocketHandler handler) {
+    public void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection) {
         if (handler.getUserProfile() == null) {
             return;
         }
@@ -93,8 +94,12 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         Room userRoom = handler.getRoom();
         if (userRoom != null) {
             Player player = userRoom.getPlayerByUser(handler.getUserProfile());
-            userRoom.onPlayerDisconnect(player);
-            handler.setRoom(null);
+            if (player.getConnectionCount() == 1) {
+                userRoom.onPlayerDisconnect(player);
+                handler.setRoom(null);
+            } else {
+                player.removeConnection(connection);
+            }
         }
     }
 

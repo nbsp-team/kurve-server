@@ -22,7 +22,7 @@ import java.util.List;
 public class GameWebSocketHandler extends WebSocketAdapter {
     public static final Logger LOG = LogManager.getLogger(GameWebSocketHandler.class);
 
-    public static enum MessageType {
+    public enum MessageType {
         CODE_ROOM_PLAYERS_RESPONSE,
         CODE_PLAYER_CONNECTED_RESPONSE,
         CODE_PLAYER_DISCONNECTED_RESPONSE,
@@ -44,6 +44,8 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     private WebSocketMessageListener messageListener;
     private UserProfile userProfile;
+    private Room room;
+    private WebSocketConnection connection;
 
     public GameWebSocketHandler(UserProfile userProfile, WebSocketMessageListener messageListener) {
         this.userProfile = userProfile;
@@ -58,7 +60,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         LOG.debug("WebSocket closed: " + statusCode + " for user " + userProfile);
-        messageListener.onDisconnect(this);
+        messageListener.onDisconnect(this, connection);
     }
 
     @Override
@@ -114,12 +116,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     }
 
-    private Room room;
-
     @Override
     public void onWebSocketConnect(Session session) {
-
-        room = messageListener.onNewConnection(this, new WebSocketConnection(session));
+        connection = new WebSocketConnection(session);
+        room = messageListener.onNewConnection(this, connection);
     }
 
     public UserProfile getUserProfile() {
@@ -134,15 +134,15 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         this.room = room;
     }
 
-    public static interface WebSocketMessageListener {
+    public interface WebSocketMessageListener {
 
-        public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
+        Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
 
-        public void onDisconnect(GameWebSocketHandler handler);
+        void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection);
 
-        public void onUserReady(GameWebSocketHandler handler, boolean isReady);
+        void onUserReady(GameWebSocketHandler handler, boolean isReady);
 
-        public void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
+        void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
 
     }
 }

@@ -36,8 +36,15 @@ public class Player {
     }
 
     public void addConnection(WebSocketConnection connection) {
-
         connections.add(connection);
+    }
+
+    public int getConnectionCount() {
+        return connections.size();
+    }
+
+    public void removeConnection(WebSocketConnection connection) {
+        connections.remove(connection);
     }
 
     public void sendMessage(Message message) {
