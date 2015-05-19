@@ -5,7 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
+import websocket.message.ConnectedPlayerMessage;
 import websocket.message.ControlMessage;
+import websocket.message.RoomPlayersMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,9 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
 
             if (player != null) {
                 player.addConnection(connection);
+                player.sendMessage(new RoomPlayersMessage(room));
+                room.broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
+                        room.getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
                 return room;
             }
 
