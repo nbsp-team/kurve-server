@@ -8,6 +8,7 @@ import websocket.WebSocketConnection;
 import websocket.message.ConnectedPlayerMessage;
 import websocket.message.ControlMessage;
 import websocket.message.RoomPlayersMessage;
+import websocket.message.StartGameMessage;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -111,6 +112,12 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
                 Player player = room.getPlayerByUser(handler.getUserProfile());
                 room.onPlayerReady(player, isReady);
                 checkRoomReady(room);
+
+                if (room.getRoomState() == Room.RoomState.GAME) {
+                    handler.getConnection().sendMessage(
+                            new StartGameMessage(room, room.getPlayerIdByUser(player.getUserProfile()))
+                    );
+                }
             }
         }
     }

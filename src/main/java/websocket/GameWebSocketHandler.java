@@ -122,6 +122,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         room = messageListener.onNewConnection(this, connection);
     }
 
+    public WebSocketConnection getConnection() {
+        return connection;
+    }
+
     public UserProfile getUserProfile() {
         return userProfile;
     }
