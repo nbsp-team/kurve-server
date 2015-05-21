@@ -16,7 +16,7 @@ public class Bonus {
         return color;
     }
 
-    public static enum Kind {
+    public enum Kind {
         SPEED_SELF,
         THIN_SELF,
         ERASE_SELF,

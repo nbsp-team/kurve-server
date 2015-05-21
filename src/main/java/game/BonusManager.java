@@ -1,27 +1,36 @@
 package game;
 
+import main.Main;
 import model.Bonus.Bonus;
 import model.Bonus.Effects.*;
 import model.Snake.Snake;
+import utils.RandomUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by egor on 22.04.15.
  */
 public class BonusManager {
+    public static final int DEFAULT_BONUS_MIN_TIME = 2 * 60;
+    public static final int DEFAULT_BONUS_MAX_TIME = 8 * 60;
+    public static final int BONUS_SPAWN_PADDING = 60;
+
     List<TemporaryEffect> activeEffects = new LinkedList<>();
     List<Snake> snakes;
     List<Bonus> bonuses = new LinkedList<>();
     Room room;
+    private final Random random;
 
     public BonusManager(List<Snake> snakes, Room room) {
         this.room = room;
         this.snakes = snakes;
+        this.random = new Random();
     }
 
     public void addBonus(Bonus bonus) {
@@ -105,11 +114,15 @@ public class BonusManager {
                 }
             }
         }
+
         c++;
-        if (c == 60 * 3) {
-            addBonus(new Bonus(100, 100, Bonus.Kind.ERASE_SELF));
-            addBonus(new Bonus(200, 300, Bonus.Kind.REVERSE_ENEMY));
-            //addBonus(new Bonus(100, 300, Bonus.Kind.THIN_SELF));
+        if (c % RandomUtils.randInt(random, DEFAULT_BONUS_MIN_TIME, DEFAULT_BONUS_MAX_TIME) == 0) {
+            Bonus.Kind bonusKind = Bonus.Kind.values()[random.nextInt(Bonus.Kind.values().length)];
+
+            int x = RandomUtils.randInt(random, BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
+            int y = RandomUtils.randInt(random, BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
+
+            addBonus(new Bonus(x, y, bonusKind));
         }
     }
 }

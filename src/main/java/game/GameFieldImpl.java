@@ -19,6 +19,7 @@ public class GameFieldImpl implements GameField {
     public static final Logger LOG = LogManager.getLogger(GameManager.class);
 
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
+    public static final int STEP_TIME = 1000000000 / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
@@ -135,25 +136,22 @@ public class GameFieldImpl implements GameField {
     }
 
     public void run() {
-        Runnable gameLoop = new Runnable() {
-            @Override
-            public void run() {
-                long now, dt = 0;
-                long last = System.nanoTime();
-                long stepTime = 1000000000 / FPS;
-                while (playing) {
-                    now = System.nanoTime();
-                    dt += Math.min(1000000000, (now - last));
-                    if (dt > stepTime) {
-                        while (dt > stepTime) {
-                            dt -= stepTime;
-                            step();
-                        }
-
-
+        Runnable gameLoop = () -> {
+            long now, dt = 0;
+            long last = System.nanoTime();
+            long stepTime = STEP_TIME;
+            while (playing) {
+                now = System.nanoTime();
+                dt += Math.min(1000000000, (now - last));
+                if (dt > stepTime) {
+                    while (dt > stepTime) {
+                        dt -= stepTime;
+                        step();
                     }
-                    last = now;
+
+
                 }
+                last = now;
             }
         };
 
