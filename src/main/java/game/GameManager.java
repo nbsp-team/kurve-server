@@ -127,9 +127,9 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         Room room = handler.getRoom();
         if (room != null) {
             int sender = room.getPlayerIdByUser(handler.getUserProfile());
-            room.broadcastMessageExceptUser(
+            room.broadcastMessageExceptConnection(
                     new ControlMessage(isLeft, isUp, sender),
-                    handler.getUserProfile()
+                    handler.getConnection()
             );
             room.onKeyEvent(isLeft, isUp, sender);
         }

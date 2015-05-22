@@ -3,6 +3,7 @@ package game;
 import interfaces.GameField;
 import model.UserProfile;
 import websocket.SnakeUpdatesManager;
+import websocket.WebSocketConnection;
 import websocket.message.*;
 
 import java.util.ArrayList;
@@ -112,6 +113,12 @@ public class Room {
             if (!roomUserLogin.equals(user.getLogin())) {
                 player.sendMessage(message);
             }
+        }
+    }
+
+    public void broadcastMessageExceptConnection(Message message, WebSocketConnection connection) {
+        for (Player player : players) {
+            player.sendMessageExceptConnection(message, connection);
         }
     }
 

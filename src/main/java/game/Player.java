@@ -48,9 +48,16 @@ public class Player {
     }
 
     public void sendMessage(Message message) {
-
         for (WebSocketConnection connection : connections) {
             connection.sendMessage(message);
+        }
+    }
+
+    public void sendMessageExceptConnection(Message message, WebSocketConnection exceptedConnection) {
+        for (WebSocketConnection connection : connections) {
+            if (!connection.equals(exceptedConnection)) {
+                connection.sendMessage(message);
+            }
         }
     }
 
