@@ -1,6 +1,5 @@
-package Game;
+package game;
 
-import game.Room;
 import model.Snake.Snake;
 import org.junit.Before;
 import org.junit.Test;

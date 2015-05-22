@@ -1,7 +1,5 @@
-package Game;
+package game;
 
-import game.BonusManager;
-import game.Room;
 import model.Bonus.Bonus;
 import model.Snake.Snake;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 import model.Snake.SnakePartArc;
 import model.Snake.SnakePartLine;
@@ -11,8 +11,6 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class SnakePartsTests {
-
-
     @Test
     public void testArcCollisions() {
         for(int i=0; i<2;i++) {
