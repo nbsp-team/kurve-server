@@ -13,7 +13,7 @@ public class WebSocketConnection {
     public static final int CLOSE_REASON_NO_AUTH = 1;
     public static final int CLOSE_REASON_ROOM_NOT_FOUND = 2;
 
-    private Session webSocketSession;
+    private final Session webSocketSession;
 
     public WebSocketConnection(Session webSocketSession) {
         this.webSocketSession = webSocketSession;
@@ -25,9 +25,12 @@ public class WebSocketConnection {
 
     public void sendMessage(Message message) {
         try {
-            webSocketSession.getRemote().sendString(
-                    message.getBody()
-            );
+
+            synchronized (webSocketSession) {
+                webSocketSession.getRemote().sendString(
+                        message.getBody()
+                );
+            }
 
         } catch (IOException e) {
             // TODO: error response

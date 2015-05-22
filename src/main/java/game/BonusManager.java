@@ -35,6 +35,7 @@ public class BonusManager {
     }
 
     public void addBonus(Bonus bonus) {
+        System.out.println(bonus.getKind().ordinal());
         bonuses.add(bonus);
         room.broadcastMessage(new NewBonusMessage(bonus));
     }

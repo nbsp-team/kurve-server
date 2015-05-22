@@ -8,34 +8,28 @@ import model.Snake.Snake;
  */
 public class Bonus {
     private static int next_id = 0;
-
     private int id;
-    private String color = "#33EE33";
-
-    public String getColor() {
-        return color;
-    }
 
     public enum Kind {
         SPEED_SELF,
         THIN_SELF,
-        ERASE_SELF,
         SLOW_SELF,
         BIG_HOLE_SELF,
         TRAVERSE_WALLS_SELF,
         SHARP_CORNERS_SELF,
+        ERASE_SELF,
         SPEED_ENEMY,
         THICK_ENEMY,
         SLOW_ENEMY,
+        REVERSE_ENEMY,
         BIG_TURNS_ENEMY,
         TRAVERSE_WALLS_ALL,
-        DEATH_ALL,
-        REVERSE_ENEMY
+        DEATH_ALL
     }
 
     private Kind kind;
     private double x, y;
-    private static final int radius = 10;
+    private static final int radius = 48 / 2;
 
     public Bonus(int x, int y, Kind kind) {
         this.x = x;
@@ -43,16 +37,6 @@ public class Bonus {
         this.kind = kind;
         id = next_id;
         next_id++;
-        initColor();
-    }
-
-    private void initColor() {
-        switch (kind) {
-            case BIG_HOLE_SELF:
-                color = "#11EEFF";
-                break;
-
-        }
     }
 
     public int getId() {
@@ -72,8 +56,7 @@ public class Bonus {
     }
 
     public boolean isReachableBy(Snake snake) {
-        return radius + snake.getRadius() > MathHelper.distance(snake.getX(), snake.getY(), x, y);
+        return radius + snake.getRadius() > MathHelper.distance(snake.getX(),
+                snake.getY(), x + radius, y + radius);
     }
-
-
 }
