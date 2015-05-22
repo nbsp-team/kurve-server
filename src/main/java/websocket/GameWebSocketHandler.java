@@ -91,7 +91,6 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_SNAKE_UPDATES_RESPONSE:
                     break;
 		        case CODE_SNAKE_PATCH_REQUEST:
-                    LOG.debug("got patch request!");
                     JsonArray array = jresponse.get("ids").getAsJsonArray();
                     List<Integer> lostIds = new ArrayList<>();
                     for(JsonElement elem : array){

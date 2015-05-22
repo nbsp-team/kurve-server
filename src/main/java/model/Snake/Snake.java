@@ -92,10 +92,9 @@ public class Snake {
         sendUpdates();
     }
 
-    private boolean idunno = false;
     private boolean reversed = false;
-    public void startTurning(turningState where) {
-        idunno = true;
+    public synchronized void startTurning(turningState where) {
+
         if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
         if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
             angleV = -angleV;
@@ -103,11 +102,11 @@ public class Snake {
         }
         turning = where;
         doArc();
-        idunno = false;
+
     }
 
-    public void stopTurning(turningState where) {
-        idunno = true;
+    public synchronized void stopTurning(turningState where) {
+
         if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
         if (turning == where) {
             turning = turningState.NOT_TURNING;
@@ -117,7 +116,7 @@ public class Snake {
 
             doLine();
         }
-        idunno = false;
+
     }
 
     private void doArc() {
@@ -166,8 +165,7 @@ public class Snake {
         doNewPart();
     }
 
-    public void step() {
-        if (idunno) return;
+    public synchronized void step() {
 
         makeHoles();
         if (turning == turningState.NOT_TURNING) {
@@ -212,7 +210,7 @@ public class Snake {
 
     public void multiplyTurnRadiusBy(double koef) {
         turnRadius *= koef;
-        angleV /= koef;
+        //angleV /= koef;
         cosV = Math.cos(angleV);
         sinV = Math.sin(angleV);
         if (turning != turningState.NOT_TURNING) {
@@ -234,6 +232,9 @@ public class Snake {
         v *= koef;
         vx *= koef;
         vy *= koef;
+        angleV *= koef;
+        cosV = Math.cos(angleV);
+        sinV = Math.sin(angleV);
         //turnRadius *= koef;
         if (turning != turningState.NOT_TURNING) {
             doArc();
