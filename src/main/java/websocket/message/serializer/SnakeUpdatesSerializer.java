@@ -1,7 +1,7 @@
 package websocket.message.serializer;
 
 import com.google.gson.*;
-import game.MathHelper;
+import utils.MathHelper;
 import model.Snake.Snake;
 import model.Snake.SnakePartArc;
 import model.Snake.SnakePartLine;

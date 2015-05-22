@@ -4,6 +4,7 @@ import main.Main;
 import model.Bonus.Bonus;
 import model.Bonus.Effects.*;
 import model.Snake.Snake;
+import utils.MathHelper;
 import utils.RandomUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
@@ -85,7 +86,7 @@ public class BonusManager {
                 applyTempEffect(new TraverseWallsAllEffect(snakes));
                 break;
             case DEATH_ALL:
-                room.getGameField().killSnake(snakes.get(MathHelper.randInt(0, snakes.size()-1)));
+                room.getGameField().killSnake(snakes.get(MathHelper.randInt(0, snakes.size() - 1)));
                 break;
             case REVERSE_ENEMY:
                 applyTempEffect(new ReverseEnemyEffect(snake, snakes));

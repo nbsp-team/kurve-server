@@ -1,13 +1,9 @@
 package model.Snake;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import game.MathHelper;
+import utils.MathHelper;
 import game.Room;
 import main.Main;
 import websocket.SnakeUpdatesManager;
-import websocket.message.SnakeUpdateMessage;
 
 import java.util.ArrayList;
 import java.util.List;

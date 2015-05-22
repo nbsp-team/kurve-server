@@ -1,6 +1,6 @@
 package model.Snake;
 
-import game.MathHelper;
+import utils.MathHelper;
 
 /**
  * Created by egor on 12.04.15.

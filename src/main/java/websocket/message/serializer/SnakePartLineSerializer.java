@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import game.MathHelper;
+import utils.MathHelper;
 import model.Snake.SnakePartLine;
 
 import java.lang.reflect.Type;
