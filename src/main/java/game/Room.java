@@ -24,9 +24,7 @@ public class Room {
     private SnakeUpdatesManager updatesManager;
 
     private int getPointsByDeathId(int deathId) {
-        int[] deathPoints = {1, 2, 3, 4, 5};
-        if (deathId >= 0 && deathId < 5) return deathPoints[deathId];
-        return 0;
+        return deathId + 1;
     }
 
     public void onPlayerDeath(int playerId, int deathId) {
