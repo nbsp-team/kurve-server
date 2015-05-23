@@ -1,5 +1,6 @@
 package model.Bonus;
 
+import main.Main;
 import utils.MathHelper;
 import model.Snake.Snake;
 
@@ -8,7 +9,9 @@ import model.Snake.Snake;
  */
 public class Bonus {
     private static int next_id = 0;
+
     private int id;
+
 
     public enum Kind {
         SPEED_SELF,
@@ -29,7 +32,7 @@ public class Bonus {
 
     private Kind kind;
     private double x, y;
-    private static final int radius = 48 / 2;
+    private static final int radius = Integer.valueOf(Main.mechanicsConfig.bonusRadius);
 
     public Bonus(int x, int y, Kind kind) {
         this.x = x;
@@ -59,4 +62,6 @@ public class Bonus {
         return radius + snake.getRadius() > MathHelper.distance(snake.getX(),
                 snake.getY(), x + radius, y + radius);
     }
+
+
 }

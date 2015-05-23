@@ -59,4 +59,7 @@ public class GameMechanicsConfig {
     @ElementGroup(name = "Snake")
     @FieldElement(name = "holeLength")
     public String snakeHoleLength;
+
+    @FieldElement(name = "bonusRadius")
+    public String bonusRadius;
 }

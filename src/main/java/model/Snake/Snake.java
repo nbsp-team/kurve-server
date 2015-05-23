@@ -206,7 +206,7 @@ public class Snake {
 
     public void multiplyTurnRadiusBy(double koef) {
         turnRadius *= koef;
-        //angleV /= koef;
+        angleV /= koef;
         cosV = Math.cos(angleV);
         sinV = Math.sin(angleV);
         if (turning != turningState.NOT_TURNING) {
