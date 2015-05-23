@@ -39,7 +39,8 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         CODE_ROOM_START_RESPONSE,
         CODE_SNAKE_ARC_RESPONSE,
         CODE_SNAKE_PATCH_REQUEST,//15
-        CODE_SNAKE_PATCH_RESPONSE
+        CODE_SNAKE_PATCH_RESPONSE,
+        CODE_START_ROUND_RESPONSE
     }
 
     private WebSocketMessageListener messageListener;

@@ -33,7 +33,6 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-
     public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection) {
         LOG.debug("New WebSocket connection: " + handler.getUserProfile());
 
@@ -43,6 +42,10 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         }
 
         for (Room room : rooms) {
+            if (room.getRoomState() == Room.RoomState.GAME) {
+                continue;
+            }
+
             Player player = room.getPlayerByUser(handler.getUserProfile());
 
             if (player != null) {
@@ -59,7 +62,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
             }
         }
 
-        Room newRoom = new Room();
+        Room newRoom = new Room(this);
         connectUserToRoom(connection, handler, newRoom);
         rooms.add(newRoom);
         return newRoom;
@@ -78,7 +81,7 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
 
         if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM
                 && readyCount == room.getPlayerCount() && room.getRoomState() == Room.RoomState.WAITING) {
-            room.startGame(this);
+            room.startGame();
         }
     }
 

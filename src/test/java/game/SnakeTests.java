@@ -13,7 +13,7 @@ public class SnakeTests {
     private Room room;
     @Before
     public void before(){
-        this.room = new Room();
+        this.room = new Room(new GameManager());
     }
     @Test
     public void testTurning(){

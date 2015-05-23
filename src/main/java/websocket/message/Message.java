@@ -32,6 +32,7 @@ public abstract class Message {
             .registerTypeAdapter(Bonus.class, new BonusSerializer())
 	        .registerTypeAdapter(SnakePatchMessage.class, new SnakePatchMessageSerializer())
             .registerTypeAdapter(Snake.class, new SnakeUpdatesSerializer())
+            .registerTypeAdapter(StartRoundMessage.class, new StartRoundMessageSerializer())
             .serializeNulls()
             .create();
 

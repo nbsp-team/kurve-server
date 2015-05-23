@@ -13,15 +13,20 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 public class Room {
+    public static final int ROUND_NUMBER = 6;
+
     enum RoomState {
         WAITING,
-        GAME
+        GAME;
     }
-
     private List<Player> players;
+
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
     private SnakeUpdatesManager updatesManager;
+    private final GameManager gameManager;
+
+    private int currentRound = 0;
 
     private int getPointsByDeathId(int deathId) {
         return deathId + 1;
@@ -32,14 +37,14 @@ public class Room {
         players.get(playerId).setPoints(getPointsByDeathId(deathId));
     }
 
-    public Room() {
+    public Room(GameManager gameManager) {
         players = new ArrayList<>();
         updatesManager = new SnakeUpdatesManager(this);
+        this.gameManager = gameManager;
     }
 
     public void onNewPlayer(Player player) {
-
-        //if (roomState != RoomState.WAITING) return;
+        if (roomState != RoomState.WAITING) return;
 
         players.add(player);
         player.sendMessage(new RoomPlayersMessage(this));
@@ -76,12 +81,30 @@ public class Room {
 
     }
 
+    public void startRound() {
+        if (currentRound < ROUND_NUMBER) {
+            currentRound++;
+
+            for (int i = 0; i < players.size(); i++) {
+                players.get(i).sendMessage(new StartRoundMessage(this, i));
+            }
+
+            roomState = RoomState.GAME;
+            gameField = new GameFieldImpl(this, gameManager);
+            gameField.play();
+        } else {
+            endGame();
+            gameManager.destroyRoom(this);
+        }
+    }
+
     public void endGame() {
         broadcastMessage(new GameOverMessage(this));
     }
 
-    public void startGame(GameManager gameManager) {
-        //if (roomState != RoomState.WAITING) return;
+    public void startGame() {
+        if (roomState != RoomState.WAITING) return;
+
         roomState = RoomState.GAME;
 
         for (int i = 0; i < players.size(); i++) {

@@ -5,7 +5,6 @@ import main.Main;
 import model.Snake.Snake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,12 +125,18 @@ public class GameFieldImpl implements GameField {
         }
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
-        if (dead == numPlayers) {
+
+        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead == numPlayers - 1)) {
             LOG.debug("Round over");
             playing = false;
-            room.endGame();
-            gameManager.destroyRoom(room);
+            room.startRound();
         }
+
+//        if (dead == numPlayers) {
+//            playing = false;
+//            room.endGame();
+//            gameManager.destroyRoom(room);
+//        }
 
     }
 
