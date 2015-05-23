@@ -60,7 +60,7 @@ public class Bonus {
 
     public boolean isReachableBy(Snake snake) {
         return radius + snake.getRadius() > MathHelper.distance(snake.getX(),
-                snake.getY(), x + radius, y + radius);
+                snake.getY(), x, y);
     }
 
 

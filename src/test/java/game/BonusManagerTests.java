@@ -1,5 +1,6 @@
 package game;
 
+import main.Main;
 import model.Bonus.Bonus;
 import model.Snake.Snake;
 import org.junit.Before;
@@ -15,16 +16,14 @@ import static org.mockito.Mockito.mock;
  * Created by egor on 07.05.15.
  */
 public class BonusManagerTests {
-    private Room room;
     private Snake snake;
     private BonusManager bonusManager;
-    private List<Snake> snakes;
+
     @Before
     public void before(){
-
-        this.room = new Room();
+        Room room = new Room();
         this.snake = new Snake(0, 0, 0, room, 0);
-        snakes = new ArrayList<>();
+        List<Snake> snakes = new ArrayList<>();
         snakes.add(snake);
         this.bonusManager = new BonusManager(snakes, room);
     }
