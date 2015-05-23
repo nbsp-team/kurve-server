@@ -32,6 +32,7 @@ public class BonusManager {
         this.room = room;
         this.snakes = snakes;
         this.random = new Random();
+        addBonus(new Bonus(100,100, Bonus.Kind.SHARP_CORNERS_SELF));
     }
 
     public void addBonus(Bonus bonus) {

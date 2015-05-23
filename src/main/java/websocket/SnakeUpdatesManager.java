@@ -21,12 +21,11 @@ public class SnakeUpdatesManager {
         messages = new ArrayList<>();
     }
 
-    public void broadcast(Snake snake){
+    public synchronized void broadcast(Snake snake){
         SnakeUpdateMessage msg = new SnakeUpdateMessage(snake, id);
         messages.add(id, msg);
         id++;
         room.broadcastMessage(msg);
-
     }
 
     public SnakeUpdateMessage getMessageById(int id){
