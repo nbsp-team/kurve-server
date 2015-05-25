@@ -3,6 +3,7 @@ package game;
 import model.Snake.Snake;
 import org.junit.Before;
 import org.junit.Test;
+import websocket.SnakeUpdatesManager;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertTrue;
@@ -10,15 +11,18 @@ import static org.junit.Assert.assertTrue;
  * Created by egor on 07.05.15.
  */
 public class SnakeTests {
-    private Room room;
+
+    private Snake snake;
+
     @Before
-    public void before(){
-        this.room = new Room(new GameManager());
+    public void before() {
+        Room room = new Room(new GameManager());
+        SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
+
+        this.snake = new Snake(0, 0, 0, manager, 0);
     }
     @Test
     public void testTurning(){
-
-        Snake snake = null; //= new Snake(0, 0, 0, room, 0);
         assertTrue(!snake.isTurning());
         snake.stopTurning(Snake.turningState.TURNING_LEFT);
         assertTrue(!snake.isTurning());
@@ -34,7 +38,6 @@ public class SnakeTests {
 
     @Test
     public void testParts(){
-        Snake snake = null; //new Snake(0, 0, 0, room, 0);
         assertTrue(snake.getSnakeArcs().size() == 0);
         assertTrue(snake.getSnakeLines().size() == 1);
         snake.startTurning(Snake.turningState.TURNING_LEFT);
