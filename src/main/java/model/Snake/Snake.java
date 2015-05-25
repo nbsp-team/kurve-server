@@ -57,11 +57,11 @@ public class Snake {
         NOT_TURNING
     }
 
-    public Snake(double x, double y, double angle, Room room, int id) {
+    public Snake(double x, double y, double angle, SnakeUpdatesManager updatesManager, int id) {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
-	    this.updatesManager = room.getUpdatesManager();
+	    this.updatesManager = updatesManager;
 
 
         v = (double) defaultSpeed / FPS;
@@ -143,7 +143,6 @@ public class Snake {
     }
     public void sendUpdates() {
 	    updatesManager.broadcast(this);
-
     }
 
     private void doLine() {

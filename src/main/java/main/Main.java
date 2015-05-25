@@ -70,8 +70,12 @@ public class Main {
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
-
-        AccountService accountService = new MongoAccountService(db);
+        AccountService accountService;
+        if(Boolean.valueOf(dbConfig.inMemory)) {
+            accountService = new AccountServiceInMemory();
+        } else {
+            accountService = new MongoAccountService(db);
+        }
         Servlet signIn = new SignInServlet(accountService);
         Servlet signUp = new SignUpServlet(accountService);
         Servlet signOut = new SignOutServlet(accountService);

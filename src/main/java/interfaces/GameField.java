@@ -1,6 +1,7 @@
 package interfaces;
 
 import model.Snake.Snake;
+import websocket.SnakeUpdatesManager;
 
 /**
  * Created by egor on 20.04.15.
