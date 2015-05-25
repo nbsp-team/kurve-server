@@ -210,7 +210,8 @@ public class Snake {
         sinV = Math.sin(angleV);
         if (turning != turningState.NOT_TURNING) {
             doArc();
-        } else sendUpdates();
+        } else
+            sendUpdates();
     }
 
     public void reverse(){
@@ -336,5 +337,13 @@ public class Snake {
 
     public int getPartStopper() {
         return partStopper;
+    }
+
+    public boolean isReversed() {
+        return reversed;
+    }
+
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
     }
 }
