@@ -23,7 +23,7 @@ public class SelfBonusesTests {
     @Before
     public void before(){
         Room room = new Room(new GameManager());
-        this.snake = new Snake(0, 0, 0, room, 0);
+        //this.snake = new Snake(0, 0, 0, room, 0);
         List<Snake> snakes = new ArrayList<>();
         snakes.add(snake);
         this.bonusManager = new BonusManager(snakes, room);

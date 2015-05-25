@@ -26,9 +26,8 @@ public class EnemyBonusesTests {
     @Before
     public void before(){
         Room room = new Room(new GameManager());
-
-        this.mainSnake = new Snake(0, 0, 0, room, 0);
-        this.otherSnake = new Snake(100, 100, 0, room, 1);
+        //this.mainSnake = new Snake(0, 0, 0, room, 0);
+        //this.otherSnake = new Snake(100, 100, 0, room, 1);
 
         List<Snake> snakes = new ArrayList<>();
         snakes.add(this.mainSnake);

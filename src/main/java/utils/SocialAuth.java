@@ -7,6 +7,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import interfaces.SocialAccountService;
 import model.UserProfile;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * nickolay, 24.05.15.
@@ -21,6 +26,7 @@ public class SocialAuth {
     }
 
     public static final String VK_ACCESS_TOKEN_URL = "https://oauth.vk.com/access_token";
+    public static final String FB_ACCESS_TOKEN_URL = "https://graph.facebook.com/oauth/access_token";
 
     public static UserProfile auth(AuthProvider authProvider, String code) {
         UserProfile user = null;
@@ -77,7 +83,65 @@ public class SocialAuth {
         }
     }
 
-    private static UserProfile getFbUser(String sessionData) {
-        return null;
+    private static UserProfile getFbUser(String code) {
+        try {
+            HttpResponse<String> accessTokenResponse = Unirest.post(FB_ACCESS_TOKEN_URL)
+                    .field("client_id", "925250904206070")
+                    .field("client_secret", "1710860008ea04bce6214ef5fb893170")
+                    .field("code", code)
+                    .field("redirect_uri", "http://kurve.ml/api/v1/auth/social?type=1")
+                    .asString();
+
+            String accessTokenResponseString = accessTokenResponse.getBody();
+
+            String accessToken = null;
+            List<NameValuePair> params = URLEncodedUtils.parse(accessTokenResponseString, Charset.defaultCharset());
+            for(NameValuePair pair : params) {
+                if (pair.getName().equals("access_token")) {
+                    accessToken = pair.getValue();
+                    break;
+                }
+            }
+
+            if (accessToken == null) {
+                return null;
+            }
+
+            HttpResponse<String> userInfoResponse = Unirest.get("https://graph.facebook.com/v2.3/me")
+                    .queryString("access_token", accessToken)
+                    .asString();
+
+            String userInfoResponseString = userInfoResponse.getBody();
+
+            JsonObject userInfo = new JsonParser()
+                    .parse(userInfoResponseString)
+                    .getAsJsonObject();
+
+            HttpResponse<String> avatarResponse = Unirest.get("https://graph.facebook.com/v2.3/me/picture")
+                    .queryString("access_token", accessToken)
+                    .queryString("width", 100)
+                    .queryString("height", 100)
+                    .queryString("redirect", "false")
+                    .asString();
+
+            String avatarResponseString = avatarResponse.getBody();
+            String avatar = new JsonParser()
+                    .parse(avatarResponseString)
+                    .getAsJsonObject()
+                    .getAsJsonObject("data")
+                    .getAsJsonPrimitive("url")
+                    .getAsString();
+
+            return new UserProfile(
+                    "",
+                    userInfo.getAsJsonPrimitive("first_name").getAsString(),
+                    userInfo.getAsJsonPrimitive("last_name").getAsString(),
+                    avatar,
+                    AuthProvider.AUTH_PROVIDER_VK.ordinal(),
+                    userInfo.getAsJsonPrimitive("id").getAsString()
+            );
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

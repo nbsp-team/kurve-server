@@ -51,7 +51,11 @@ public class GameWebSocketCreator implements WebSocketCreator {
 
         if (session.isPresent()) {
             String userId = (String) session.get().getAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE);
-            return socialAccountService.getUserById(userId);
+            if (userId != null) {
+                return socialAccountService.getUserById(userId);
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

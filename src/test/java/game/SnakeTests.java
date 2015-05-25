@@ -18,7 +18,7 @@ public class SnakeTests {
     @Test
     public void testTurning(){
 
-        Snake snake = new Snake(0, 0, 0, room, 0);
+        Snake snake = null; //= new Snake(0, 0, 0, room, 0);
         assertTrue(!snake.isTurning());
         snake.stopTurning(Snake.turningState.TURNING_LEFT);
         assertTrue(!snake.isTurning());
@@ -34,7 +34,7 @@ public class SnakeTests {
 
     @Test
     public void testParts(){
-        Snake snake = new Snake(0, 0, 0, room, 0);
+        Snake snake = null; //new Snake(0, 0, 0, room, 0);
         assertTrue(snake.getSnakeArcs().size() == 0);
         assertTrue(snake.getSnakeLines().size() == 1);
         snake.startTurning(Snake.turningState.TURNING_LEFT);
