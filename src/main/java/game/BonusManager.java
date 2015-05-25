@@ -32,7 +32,6 @@ public class BonusManager {
         this.room = room;
         this.snakes = snakes;
         this.random = new Random();
-        addBonus(new Bonus(100,100, Bonus.Kind.SHARP_CORNERS_SELF));
     }
 
     public void addBonus(Bonus bonus) {
@@ -110,7 +109,6 @@ public class BonusManager {
             for (Iterator<Bonus> bonusIter = bonuses.iterator(); bonusIter.hasNext(); ) {
                 Bonus bonus = bonusIter.next();
                 if (bonus.isReachableBy(snake)) {
-
                     applyBonus(bonus, snake);
                     room.broadcastMessage(new EatBonusMessage(bonus.getId(), snake));
                     bonusIter.remove();

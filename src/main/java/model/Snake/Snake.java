@@ -57,11 +57,11 @@ public class Snake {
         NOT_TURNING
     }
 
-    public Snake(double x, double y, double angle, Room room, int id) {
+    public Snake(double x, double y, double angle, SnakeUpdatesManager updatesManager, int id) {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
-	    this.updatesManager = room.getUpdatesManager();
+	    this.updatesManager = updatesManager;
 
 
         v = (double) defaultSpeed / FPS;
@@ -143,7 +143,6 @@ public class Snake {
     }
     public void sendUpdates() {
 	    updatesManager.broadcast(this);
-
     }
 
     private void doLine() {
@@ -211,7 +210,8 @@ public class Snake {
         sinV = Math.sin(angleV);
         if (turning != turningState.NOT_TURNING) {
             doArc();
-        } else sendUpdates();
+        } else
+            sendUpdates();
     }
 
     public void reverse(){
@@ -337,5 +337,13 @@ public class Snake {
 
     public int getPartStopper() {
         return partStopper;
+    }
+
+    public boolean isReversed() {
+        return reversed;
+    }
+
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
     }
 }

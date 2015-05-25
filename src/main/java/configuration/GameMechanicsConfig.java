@@ -62,4 +62,7 @@ public class GameMechanicsConfig {
 
     @FieldElement(name = "bonusRadius")
     public String bonusRadius;
+
+    @FieldElement(name = "gameStartCountdown")
+    public String gameStartCountdown;
 }

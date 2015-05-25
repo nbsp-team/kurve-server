@@ -1,10 +1,12 @@
 package game;
 
+import frontend.servlet.ShutdownServlet;
 import interfaces.GameField;
 import main.Main;
 import model.Snake.Snake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class GameFieldImpl implements GameField {
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
     private final GameManager gameManager;
+    private final SnakeUpdatesManager updatesManager;
 
     private boolean playing;
     private int numPlayers, dead;
@@ -33,6 +36,7 @@ public class GameFieldImpl implements GameField {
     private Room room;
 
     public GameFieldImpl(Room room, GameManager gameManager) {
+        updatesManager = new SnakeUpdatesManager(room);
         this.room = room;
         this.gameManager = gameManager;
 
@@ -47,13 +51,14 @@ public class GameFieldImpl implements GameField {
             double x = width / 2 + mindim * 0.25 * Math.cos(angle);
             double y = height / 2 + mindim * 0.25 * Math.sin(angle);
 
-            Snake snake = new Snake(x, y, angle + Math.PI / 2, room, i);
+            Snake snake = new Snake(x, y, angle + Math.PI / 2, updatesManager, i);
             snakes.add(snake);
         }
 
         dead = 0;
         bonusManager = new BonusManager(snakes, room);
         snakeCollisionChecker = new SnakeCollisionChecker(snakes, this);
+
     }
 
     @Override
@@ -79,7 +84,16 @@ public class GameFieldImpl implements GameField {
     @Override
     public void play() {
         playing = true;
-        run();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(Integer.valueOf(Main.mechanicsConfig.gameStartCountdown)*1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            run();
+        }).start();
     }
 
     @Override
@@ -145,6 +159,7 @@ public class GameFieldImpl implements GameField {
             long now, dt = 0;
             long last = System.nanoTime();
             long stepTime = STEP_TIME;
+            System.out.println("run()");
             while (playing) {
                 now = System.nanoTime();
                 dt += Math.min(1000000000, (now - last));
@@ -163,4 +178,5 @@ public class GameFieldImpl implements GameField {
         Thread loopThread = new Thread(gameLoop);
         loopThread.start();
     }
+
 }

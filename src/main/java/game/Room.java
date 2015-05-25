@@ -39,7 +39,7 @@ public class Room {
 
     public Room(GameManager gameManager) {
         players = new ArrayList<>();
-        updatesManager = new SnakeUpdatesManager(this);
+
         this.gameManager = gameManager;
     }
 
@@ -111,6 +111,7 @@ public class Room {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
         gameField = new GameFieldImpl(this, gameManager);
+
         gameField.play();
     }
 

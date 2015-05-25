@@ -24,4 +24,7 @@ public class DatabaseConfig {
 
     @FieldElement(name = "password")
     public String password;
+
+    @FieldElement(name="inMemory")
+    public String inMemory;
 }
