@@ -5,7 +5,7 @@ import frontend.annotation.AuthenticationRequired;
 import frontend.response.ErrorResponse;
 import frontend.response.PermissionDeniedErrorResponse;
 import frontend.response.Response;
-import interfaces.AccountService;
+import interfaces.SocialAccountService;
 import model.UserProfile;
 
 import javax.servlet.ServletException;
@@ -19,10 +19,11 @@ import java.io.IOException;
  */
 
 public abstract class AbstractServlet extends HttpServlet {
-    protected AccountService accountService;
+    public static final String USER_ID_SESSION_ATTRIBUTE = "user_id";
+    protected SocialAccountService socialAccountService;
 
-    public AbstractServlet(AccountService accountService) {
-        this.accountService = accountService;
+    public AbstractServlet(SocialAccountService socialAccountService) {
+        this.socialAccountService = socialAccountService;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -103,7 +104,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
 
     private boolean isAuthenticated(HttpServletRequest request) {
-        return request.getSession().getAttribute("username") != null;
+        return request.getSession().getAttribute(USER_ID_SESSION_ATTRIBUTE) != null;
     }
 
     private void writeResponse(HttpServletResponse response, Response apiResponse) {
@@ -127,15 +128,15 @@ public abstract class AbstractServlet extends HttpServlet {
     /* Authenticated required */
 
     protected UserProfile getUser(HttpServletRequest request) {
-        String username = (String) request.getSession().getAttribute("username");
-        return accountService.getUser(username);
+        String userId = (String) request.getSession().getAttribute(USER_ID_SESSION_ATTRIBUTE);
+        return socialAccountService.getUserById(userId);
     }
 
     protected void signInUser(HttpServletRequest request, UserProfile user) {
-        request.getSession().setAttribute("username", user.getLogin());
+        request.getSession().setAttribute(USER_ID_SESSION_ATTRIBUTE, user.getId());
     }
 
     protected void signOutUser(HttpServletRequest request) {
-        request.getSession().removeAttribute("username");
+        request.getSession().removeAttribute(USER_ID_SESSION_ATTRIBUTE);
     }
 }

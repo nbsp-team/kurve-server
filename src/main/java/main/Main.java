@@ -11,7 +11,7 @@ import configuration.XmlLoader;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameManager;
-import interfaces.AccountService;
+import interfaces.SocialAccountService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
@@ -71,18 +71,17 @@ public class Main {
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        AccountService accountService = new MongoAccountService(db);
-        Servlet signIn = new SignInServlet(accountService);
-        Servlet signUp = new SignUpServlet(accountService);
-        Servlet signOut = new SignOutServlet(accountService);
-        Servlet user = new UserServlet(accountService);
-        Servlet rating = new RatingServlet(accountService);
-        Servlet serverStatus = new ServerStatusServlet(accountService, sessionManager);
-        Servlet serverShutdown = new ShutdownServlet(accountService);
+        SocialAccountService socialAccountService = new MongoAccountService(db);
+        Servlet socialSignIn = new SocialSignInServlet(socialAccountService);
+        Servlet signOut = new SignOutServlet(socialAccountService);
+
+        Servlet user = new UserServlet(socialAccountService);
+        Servlet rating = new RatingServlet(socialAccountService);
+        Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager);
+        Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(signIn), "/api/v" + API_VERSION + "/auth/signin");
-        context.addServlet(new ServletHolder(signUp), "/api/v" + API_VERSION + "/auth/signup");
+        context.addServlet(new ServletHolder(socialSignIn), "/api/v" + API_VERSION + "/auth/social");
         context.addServlet(new ServletHolder(signOut), "/api/v" + API_VERSION + "/auth/signout");
         context.addServlet(new ServletHolder(user), "/api/v" + API_VERSION + "/user/");
         context.addServlet(new ServletHolder(rating), "/api/v" + API_VERSION + "/rating/");
@@ -100,7 +99,7 @@ public class Main {
             public void configure(WebSocketServletFactory factory) {
                 factory.setCreator(new GameWebSocketCreator(
                         sessionManager,
-                        accountService,
+                        socialAccountService,
                         gameManager
                 ));
             }

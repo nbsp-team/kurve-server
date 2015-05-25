@@ -94,7 +94,10 @@ public class Player {
         public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("username", src.getUserProfile().getLogin());
+            jsonObject.addProperty("user_id", src.getUserProfile().getId());
+            jsonObject.addProperty("first_name", src.getUserProfile().getFirstName());
+            jsonObject.addProperty("last_name", src.getUserProfile().getLastName());
+            jsonObject.addProperty("avatar", src.getUserProfile().getAvatarUrl());
             jsonObject.addProperty("player_id", src.getId());
             jsonObject.addProperty("global_rating", 0);
             jsonObject.addProperty("is_ready", src.isReady());

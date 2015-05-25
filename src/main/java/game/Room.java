@@ -130,8 +130,8 @@ public class Room {
 
     public void broadcastMessageExceptUser(Message message, UserProfile user) {
         for (Player player : players) {
-            String roomUserLogin = player.getUserProfile().getLogin();
-            if (!roomUserLogin.equals(user.getLogin())) {
+            String roomUserId = player.getUserProfile().getId();
+            if (!roomUserId.equals(user.getId())) {
                 player.sendMessage(message);
             }
         }
@@ -145,7 +145,7 @@ public class Room {
 
     public Player getPlayerByUser(UserProfile userProfile) {
         for (Player player : players) {
-            if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
+            if (player.getUserProfile().getId().equals(userProfile.getId())) {
                 return player;
             }
         }
@@ -155,7 +155,7 @@ public class Room {
     public int getPlayerIdByUser(UserProfile userProfile) {
         int index = 0;
         for (Player player : players) {
-            if (player.getUserProfile().getLogin().equals(userProfile.getLogin())) {
+            if (player.getUserProfile().getId().equals(userProfile.getId())) {
                 return index;
             }
             index++;

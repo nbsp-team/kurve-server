@@ -2,6 +2,7 @@ package dao;
 
 import com.mongodb.*;
 import model.UserProfile;
+import org.bson.types.ObjectId;
 
 /**
  * nickolay, 05.05.15.
@@ -9,9 +10,12 @@ import model.UserProfile;
 public class UsersDao {
     private static final String USERS_COLLECTION = "users";
 
-    private static final String LOGIN_FIELD_NAME = "login";
-    private static final String PASSWORD_FIELD_NAME = "password";
-    private static final String EMAIL_FIELD_NAME = "email";
+    private static final String ID_FIELD_NAME = "_id";
+    private static final String FIRST_NAME_FIELD_NAME = "first_name";
+    private static final String LAST_NAME_FIELD_NAME = "last_name";
+    private static final String AVATAR_URL_FIELD_NAME = "avatar";
+    private static final String AUTH_PROVIDER_FIELD_NAME = "auth_provider";
+    private static final String SOCIAL_ID_FIELD_NAME = "social_id";
 
     private DB db;
 
@@ -19,30 +23,38 @@ public class UsersDao {
         this.db = db;
     }
 
-    public boolean insertUser(UserProfile user) {
+    public UserProfile insertUser(UserProfile user) {
         DBCollection users = db.getCollection(USERS_COLLECTION);
 
         BasicDBObject userObject = new BasicDBObject();
-        userObject.append(LOGIN_FIELD_NAME, user.getLogin());
-        userObject.append(EMAIL_FIELD_NAME, user.getEmail());
-        userObject.append(PASSWORD_FIELD_NAME, user.getPassword());
+        userObject.append(FIRST_NAME_FIELD_NAME, user.getFirstName());
+        userObject.append(LAST_NAME_FIELD_NAME, user.getLastName());
+        userObject.append(AVATAR_URL_FIELD_NAME, user.getAvatarUrl());
+        userObject.append(AUTH_PROVIDER_FIELD_NAME, user.getAuthProvider());
+        userObject.append(SOCIAL_ID_FIELD_NAME, user.getSocialID());
 
-        CommandResult result = users.insert(userObject).getLastError();
-        return result.getBoolean("ok");
+        users.insert(userObject);
+
+        String id = userObject.get("_id").toString();
+        user.setId(id);
+
+        return user;
     }
 
-    public UserProfile getUser(String userName) {
+    public UserProfile getUserById(String id) {
         DBCollection users = db.getCollection(USERS_COLLECTION);
 
-        BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put(LOGIN_FIELD_NAME, userName);
+        BasicDBObject searchQuery = new BasicDBObject("_id", new ObjectId(id));
         DBObject userObject = users.findOne(searchQuery);
 
         if (userObject != null) {
             return new UserProfile(
-                    userObject.get(LOGIN_FIELD_NAME).toString(),
-                    userObject.get(PASSWORD_FIELD_NAME).toString(),
-                    userObject.get(EMAIL_FIELD_NAME).toString()
+                    userObject.get(ID_FIELD_NAME).toString(),
+                    userObject.get(FIRST_NAME_FIELD_NAME).toString(),
+                    userObject.get(LAST_NAME_FIELD_NAME).toString(),
+                    userObject.get(AVATAR_URL_FIELD_NAME).toString(),
+                    Integer.valueOf(userObject.get(AUTH_PROVIDER_FIELD_NAME).toString()),
+                    userObject.get(SOCIAL_ID_FIELD_NAME).toString()
             );
         } else {
             return null;

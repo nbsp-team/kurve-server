@@ -1,18 +1,10 @@
 package frontend;
 
 import frontend.servlet.SignOutServlet;
-import interfaces.AccountService;
-import main.AccountServiceInMemory;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -23,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class SignOutServletTests extends ServletTests {
     @Test
     public void testNotAuth() throws ServletException, IOException {
-        AbstractServlet signOutServlet = new SignOutServlet(accountService);
+        AbstractServlet signOutServlet = new SignOutServlet(socialAccountService);
 
         when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
@@ -40,7 +32,7 @@ public class SignOutServletTests extends ServletTests {
 
     @Test
     public void testOk() throws ServletException, IOException {
-        AbstractServlet signOutServlet = new SignOutServlet(accountService);
+        AbstractServlet signOutServlet = new SignOutServlet(socialAccountService);
 
         when(httpSession.getAttribute("username")).thenReturn("abc");
         when(testRequest.getSession()).thenReturn(httpSession);

@@ -19,7 +19,12 @@ public class GameOverMessageSerializer implements JsonSerializer<GameOverMessage
         for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
             Player player = src.getRoom().getPlayers().get(i);
             JsonObject playerObject = new JsonObject();
-            playerObject.addProperty("username", player.getUserProfile().getLogin());
+
+            playerObject.addProperty("user_id", player.getUserProfile().getId());
+            playerObject.addProperty("first_name", player.getUserProfile().getFirstName());
+            playerObject.addProperty("last_name", player.getUserProfile().getLastName());
+            playerObject.addProperty("avatar", player.getUserProfile().getAvatarUrl());
+
             playerObject.addProperty("points", player.getPoints());
             playerObject.addProperty("color", player.getColor());
             playersArray.add(playerObject);

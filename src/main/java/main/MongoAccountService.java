@@ -2,7 +2,7 @@ package main;
 
 import com.mongodb.DB;
 import dao.UsersDao;
-import interfaces.AccountService;
+import interfaces.SocialAccountService;
 import model.UserProfile;
 
 import java.net.UnknownHostException;
@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 /**
  * Created by Dimorinny on 29.04.15.
  */
-public class MongoAccountService implements AccountService {
+public class MongoAccountService implements SocialAccountService {
     private DB db;
     private UsersDao usersDao;
 
@@ -21,13 +21,13 @@ public class MongoAccountService implements AccountService {
     }
 
     @Override
-    public boolean addUser(UserProfile userProfile) {
+    public UserProfile addUser(UserProfile userProfile) {
         return usersDao.insertUser(userProfile);
     }
 
     @Override
-    public UserProfile getUser(String userName) {
-        return usersDao.getUser(userName);
+    public UserProfile getUserById(String userName) {
+        return usersDao.getUserById(userName);
     }
 
     @Override

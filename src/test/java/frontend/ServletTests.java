@@ -2,8 +2,7 @@ package frontend;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import interfaces.AccountService;
-import main.AccountServiceInMemory;
+import interfaces.SocialAccountService;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.mock;
  * nickolay, 18.04.15.
  */
 public class ServletTests {
-    protected AccountService accountService;
+    protected SocialAccountService socialAccountService;
     protected HttpServletRequest testRequest;
     protected HttpServletResponse testResponse;
     protected PrintWriter responsePrintWriter;
@@ -28,7 +27,7 @@ public class ServletTests {
 
     @Before
     public void setUp() {
-        accountService = new AccountServiceInMemory();
+        socialAccountService = mock(SocialAccountService.class);
         testRequest = mock(HttpServletRequest.class);
         testResponse = mock(HttpServletResponse.class);
         responsePrintWriter = mock(PrintWriter.class);

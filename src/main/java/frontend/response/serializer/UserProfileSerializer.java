@@ -15,8 +15,10 @@ public class UserProfileSerializer implements JsonSerializer<UserProfile> {
     public JsonElement serialize(UserProfile src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
 
-        jsonObject.addProperty("username", src.getLogin());
-        jsonObject.addProperty("email", src.getEmail());
+        jsonObject.addProperty("user_id", src.getId());
+        jsonObject.addProperty("first_name", src.getFirstName());
+        jsonObject.addProperty("last_name", src.getLastName());
+        jsonObject.addProperty("avatar", src.getAvatarUrl());
         jsonObject.addProperty("global_rating", 0);
 
         if (src.isAdmin()) {

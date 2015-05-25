@@ -1,7 +1,8 @@
 package websocket;
 
+import frontend.AbstractServlet;
 import frontend.SessionManager;
-import interfaces.AccountService;
+import interfaces.SocialAccountService;
 import model.UserProfile;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
@@ -17,12 +18,12 @@ import java.util.Optional;
  */
 
 public class GameWebSocketCreator implements WebSocketCreator {
-    private AccountService accountService;
+    private SocialAccountService socialAccountService;
     private SessionManager sessionManager;
     private GameWebSocketHandler.WebSocketMessageListener messageListener;
 
-    public GameWebSocketCreator(SessionManager sessionManager, AccountService accountService, GameWebSocketHandler.WebSocketMessageListener messageListener) {
-        this.accountService = accountService;
+    public GameWebSocketCreator(SessionManager sessionManager, SocialAccountService socialAccountService, GameWebSocketHandler.WebSocketMessageListener messageListener) {
+        this.socialAccountService = socialAccountService;
         this.sessionManager = sessionManager;
         this.messageListener = messageListener;
     }
@@ -49,8 +50,8 @@ public class GameWebSocketCreator implements WebSocketCreator {
         Optional<HttpSession> session = sessionManager.getSessionById(sessionId);
 
         if (session.isPresent()) {
-            String username = (String) session.get().getAttribute("username");
-            return accountService.getUser(username);
+            String userId = (String) session.get().getAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE);
+            return socialAccountService.getUserById(userId);
         } else {
             return null;
         }
