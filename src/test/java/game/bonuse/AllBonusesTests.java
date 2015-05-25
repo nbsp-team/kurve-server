@@ -7,6 +7,7 @@ import model.Bonus.Bonus;
 import model.Snake.Snake;
 import org.junit.Before;
 import org.junit.Test;
+import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,10 @@ public class AllBonusesTests {
     @Before
     public void before(){
         Room room = new Room(new GameManager());
+        SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 
-        this.mainSnake = new Snake(0, 0, 0, room, 0);
-        this.otherSnake = new Snake(100, 100, 0, room, 1);
+        this.mainSnake = new Snake(0, 0, 0, manager, 0);
+        this.otherSnake = new Snake(100, 100, 0, manager, 1);
 
         List<Snake> snakes = new ArrayList<>();
         snakes.add(this.mainSnake);
