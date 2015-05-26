@@ -31,14 +31,14 @@ public class SocialAuthHelper {
     public static final String GET_FB_USER_API_URL = "https://graph.facebook.com/v2.3/me";
     public static final String GET_FB_USER_PHOTO_API_URL = "https://graph.facebook.com/v2.3/me/picture";
 
+    public static final String GET_VK_ACCESS_TOKEN_API_URL = "https://oauth.vk.com/access_token";
+    public static final String GET_FB_ACCESS_TOKEN_API_URL = "https://graph.facebook.com/oauth/access_token";
+
     public enum AuthProvider {
         AUTH_PROVIDER_VK,
         AUTH_PROVIDER_FB,
         AUTH_PROVIDER_GUEST
     }
-
-    public static final String VK_ACCESS_TOKEN_URL = "https://oauth.vk.com/access_token";
-    public static final String FB_ACCESS_TOKEN_URL = "https://graph.facebook.com/oauth/access_token";
 
     public static UserProfile auth(AuthProvider authProvider, String code) {
         UserProfile user = null;
@@ -66,7 +66,7 @@ public class SocialAuthHelper {
                     AuthProvider.AUTH_PROVIDER_VK.ordinal()
             );
 
-            HttpResponse<String> accessTokenResponse = Unirest.post(VK_ACCESS_TOKEN_URL)
+            HttpResponse<String> accessTokenResponse = Unirest.post(GET_VK_ACCESS_TOKEN_API_URL)
                     .field("client_id", VK_APP_ID)
                     .field("client_secret", VK_SECRET)
                     .field("code", code)
@@ -111,7 +111,7 @@ public class SocialAuthHelper {
                     AuthProvider.AUTH_PROVIDER_FB.ordinal()
             );
 
-            HttpResponse<String> accessTokenResponse = Unirest.post(FB_ACCESS_TOKEN_URL)
+            HttpResponse<String> accessTokenResponse = Unirest.post(GET_FB_ACCESS_TOKEN_API_URL)
                     .field("client_id", FB_APP_ID)
                     .field("client_secret", FB_SECRET)
                     .field("code", code)
