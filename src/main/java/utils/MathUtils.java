@@ -16,10 +16,6 @@ public class MathUtils {
         return squareSqrt(dx, dy);
     }
 
-    public static boolean isBetween(double x, double lim1, double lim2) {
-        return ((x < lim1) != (x < lim2));
-    }
-
     public static boolean isAngleBetween(double alpha, double lim1, double lim2) {
         return (lim2 >= lim1) == ((alpha > lim1) != (alpha > lim2));
     }
@@ -32,7 +28,6 @@ public class MathUtils {
 
     public static double shortDouble(double a) {
         return Math.floor(16 * a) / 16;
-
     }
 
     public static int randInt(int min, int max) {

@@ -82,6 +82,11 @@ public class Snake {
         doLine();
     }
 
+    public Snake(double x, double y, double angle, SnakeUpdatesManager updatesManager, int id, int partStopper) {
+        this(x, y, angle, updatesManager, id);
+        this.partStopper = partStopper;
+    }
+
     public void kill() {
         alive = false;
         sendUpdates();

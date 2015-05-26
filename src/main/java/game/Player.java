@@ -9,6 +9,7 @@ import model.UserProfile;
 import websocket.WebSocketConnection;
 import websocket.message.Message;
 
+import javax.jws.soap.SOAPBinding;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +34,11 @@ public class Player {
         this.connections = new HashSet<>();
         this.color = color;
         this.userProfile = userProfile;
+    }
+
+    public Player(String id, String color, UserProfile userProfile) {
+        this(color, userProfile);
+        this.id = id;
     }
 
     public void addConnection(WebSocketConnection connection) {

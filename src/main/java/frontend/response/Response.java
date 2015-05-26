@@ -16,8 +16,6 @@ public class Response {
             .registerTypeAdapter(GetUserResponse.class, new GetUserResponseSerializer())
             .registerTypeAdapter(RatingResponse.class, new RatingResponseSerializer())
             .registerTypeAdapter(ServerStatusResponse.class, new ServerStatusResponseSerializer())
-            .registerTypeAdapter(SignInResponse.class, new SignInResponseSerializer())
-            .registerTypeAdapter(SignUpResponse.class, new SingUpResponseSerializer())
             .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
 
             .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
