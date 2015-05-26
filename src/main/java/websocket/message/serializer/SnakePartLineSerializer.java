@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import utils.MathHelper;
+import utils.MathUtils;
 import model.Snake.SnakePartLine;
 
 import java.lang.reflect.Type;
@@ -17,10 +17,10 @@ public class SnakePartLineSerializer implements JsonSerializer<SnakePartLine> {
         JsonObject jsonObject = new JsonObject();
 
         jsonObject.addProperty("id", src.getId());
-        jsonObject.addProperty("x1", MathHelper.shortDouble(src.getX1()));
-        jsonObject.addProperty("y1", MathHelper.shortDouble(src.getY1()));
-        jsonObject.addProperty("x2", MathHelper.shortDouble(src.getX2()));
-        jsonObject.addProperty("y2", MathHelper.shortDouble(src.getY2()));
+        jsonObject.addProperty("x1", MathUtils.shortDouble(src.getX1()));
+        jsonObject.addProperty("y1", MathUtils.shortDouble(src.getY1()));
+        jsonObject.addProperty("x2", MathUtils.shortDouble(src.getX2()));
+        jsonObject.addProperty("y2", MathUtils.shortDouble(src.getY2()));
         jsonObject.addProperty("lineRadius", src.getlineRadius());
 
         return jsonObject;

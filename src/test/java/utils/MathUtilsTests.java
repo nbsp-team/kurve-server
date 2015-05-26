@@ -11,28 +11,27 @@ import static org.junit.Assert.assertTrue;
 /**
  * nickolay, 22.05.15.
  */
-public class RandomUtilsTests {
+public class MathUtilsTests {
     private static final long SEED = 0;
-    private Random random;
 
     @Before
     public void before() {
-        random = new Random(SEED);
+        MathUtils.rand = new Random(SEED);
     }
 
     @Test
     public void testMaxLimit(){
         for(int i = 0; i < 10; ++i) {
-            assertTrue(RandomUtils.randInt(random, 0, 100) < 101);
-            assertTrue(RandomUtils.randInt(random, 0, 5) < 6);
+            assertTrue(MathUtils.randInt(0, 100) < 101);
+            assertTrue(MathUtils.randInt(0, 5) < 6);
         }
     }
 
     @Test
     public void testMinLimit(){
         for(int i = 0; i < 10; ++i) {
-            assertTrue(RandomUtils.randInt(random, 0, 100) >= 0);
-            assertTrue(RandomUtils.randInt(random, 10, 100) >= 10);
+            assertTrue(MathUtils.randInt(0, 100) >= 0);
+            assertTrue(MathUtils.randInt(10, 100) >= 10);
         }
     }
 }

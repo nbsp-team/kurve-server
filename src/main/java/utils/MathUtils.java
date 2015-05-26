@@ -5,8 +5,8 @@ import java.util.Random;
 /**
  * Created by egor on 19.04.15.
  */
-public class MathHelper {
-    private static Random rand = new Random();
+public class MathUtils {
+    public static Random rand = new Random();
 
     public static double distance(double x1, double y1, double x2, double y2) {
         return length(x2 - x1, y2 - y1);

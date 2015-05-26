@@ -1,6 +1,6 @@
 package model.Snake;
 
-import utils.MathHelper;
+import utils.MathUtils;
 
 /**
  * Created by egor on 12.04.15.
@@ -27,18 +27,18 @@ public class SnakePartArc {
 
     public void updateHead(double angleV) {
         angle2 += angleV;
-        angle2 = MathHelper.normAngle(angle2);
+        angle2 = MathUtils.normAngle(angle2);
     }
 
     public boolean isInside(double x, double y, int lineRadius) {
-        double d = MathHelper.distance(this.x, this.y, x, y);
+        double d = MathUtils.distance(this.x, this.y, x, y);
         if (Math.abs(d - r) > lineRadius + this.lineRadius) return false;
-        double alpha = MathHelper.normAngle(Math.atan2((y - this.y), (x - this.x)));
+        double alpha = MathUtils.normAngle(Math.atan2((y - this.y), (x - this.x)));
 
         if (clockwise) {
-            return MathHelper.isAngleBetween(alpha, angle2, angle);
+            return MathUtils.isAngleBetween(alpha, angle2, angle);
         } else {
-            return MathHelper.isAngleBetween(alpha, angle, angle2);
+            return MathUtils.isAngleBetween(alpha, angle, angle2);
         }
     }
 

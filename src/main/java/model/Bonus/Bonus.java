@@ -1,7 +1,7 @@
 package model.Bonus;
 
 import main.Main;
-import utils.MathHelper;
+import utils.MathUtils;
 import model.Snake.Snake;
 
 /**
@@ -59,7 +59,7 @@ public class Bonus {
     }
 
     public boolean isReachableBy(Snake snake) {
-        return radius + snake.getRadius() > MathHelper.distance(snake.getX(),
+        return radius + snake.getRadius() > MathUtils.distance(snake.getX(),
                 snake.getY(), x, y);
     }
 

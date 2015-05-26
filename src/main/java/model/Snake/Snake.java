@@ -1,7 +1,6 @@
 package model.Snake;
 
-import utils.MathHelper;
-import game.Room;
+import utils.MathUtils;
 import main.Main;
 import websocket.SnakeUpdatesManager;
 
@@ -72,7 +71,7 @@ public class Snake {
         turnRadius = defaultTurnRadius;
 
 
-        partStopper = MathHelper.randInt(minPartLength, maxPartLength);
+        partStopper = MathUtils.randInt(minPartLength, maxPartLength);
         holeStopper = partStopper + holeLength;
 
         this.x = x;
@@ -106,7 +105,7 @@ public class Snake {
         if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
         if (turning == where) {
             turning = turningState.NOT_TURNING;
-            angle = MathHelper.normAngle(angle);
+            angle = MathUtils.normAngle(angle);
             vx = v * Math.cos(angle);
             vy = v * Math.sin(angle);
 
@@ -122,12 +121,12 @@ public class Snake {
         boolean clockwise;
         double arcStartAngle;
         if (turning == turningState.TURNING_LEFT) {
-            arcStartAngle = MathHelper.normAngle(angle + Math.PI / 2);
+            arcStartAngle = MathUtils.normAngle(angle + Math.PI / 2);
             arcCenterX = x + turnRadius * Math.sin(angle);
             arcCenterY = y - turnRadius * Math.cos(angle);
             clockwise = true;
         } else {
-            arcStartAngle = MathHelper.normAngle(angle - Math.PI / 2);
+            arcStartAngle = MathUtils.normAngle(angle - Math.PI / 2);
             arcCenterX = x - turnRadius * Math.sin(angle);
             arcCenterY = y + turnRadius * Math.cos(angle);
             clockwise = false;
@@ -186,7 +185,7 @@ public class Snake {
 
             if (travSinceLastHole >= holeStopper) {
                 travSinceLastHole = 0;
-                partStopper = MathHelper.randInt(minPartLength, maxPartLength);
+                partStopper = MathUtils.randInt(minPartLength, maxPartLength);
                 holeStopper = partStopper + holeLength;
                 drawing = true;
                 doNewPart();

@@ -1,6 +1,6 @@
 package model.Snake;
 
-import utils.MathHelper;
+import utils.MathUtils;
 
 /**
  * Created by egor on 12.04.15.
@@ -16,7 +16,7 @@ public class SnakePartLine {
         x2 = x1;
         y2 = y1;
 
-        d = MathHelper.length(vx, vy);
+        d = MathUtils.length(vx, vy);
         A = -vy / d;
         B = vx / d;
         d = 0;
@@ -30,7 +30,7 @@ public class SnakePartLine {
         x2 = newX;
         y2 = newY;
         d += v;
-        if (MathHelper.distance(x2, y2, newX, newY) > 10) {
+        if (MathUtils.distance(x2, y2, newX, newY) > 10) {
             System.out.println("breach");
         }
     }

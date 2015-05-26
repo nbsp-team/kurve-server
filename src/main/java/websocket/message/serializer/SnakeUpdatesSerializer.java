@@ -1,7 +1,7 @@
 package websocket.message.serializer;
 
 import com.google.gson.*;
-import utils.MathHelper;
+import utils.MathUtils;
 import model.Snake.Snake;
 import model.Snake.SnakePartArc;
 import model.Snake.SnakePartLine;
@@ -42,7 +42,7 @@ public class SnakeUpdatesSerializer implements JsonSerializer<Snake> {
         jsonObject.addProperty("radius", src.getRadius());
         jsonObject.addProperty("distance", src.getTravSinceLastHole());
         jsonObject.addProperty("alive", src.isAlive());
-        jsonObject.addProperty("turnRadius", MathHelper.shortDouble(src.getTurnRadius()));
+        jsonObject.addProperty("turnRadius", MathUtils.shortDouble(src.getTurnRadius()));
         jsonObject.addProperty("partStopper", src.getPartStopper());
         if (!src.isTurning()) {
             src.setArcsSent(Math.max(0, snakeArcs.size() - 1));

@@ -4,8 +4,7 @@ import main.Main;
 import model.Bonus.Bonus;
 import model.Bonus.Effects.*;
 import model.Snake.Snake;
-import utils.MathHelper;
-import utils.RandomUtils;
+import utils.MathUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
@@ -26,12 +25,10 @@ public class BonusManager {
     List<Snake> snakes;
     List<Bonus> bonuses = new LinkedList<>();
     Room room;
-    private final Random random;
 
     public BonusManager(List<Snake> snakes, Room room) {
         this.room = room;
         this.snakes = snakes;
-        this.random = new Random();
     }
 
     public void addBonus(Bonus bonus) {
@@ -87,7 +84,7 @@ public class BonusManager {
                 applyTempEffect(new TraverseWallsAllEffect(snakes));
                 break;
             case DEATH_ALL:
-                room.getGameField().killSnake(snakes.get(MathHelper.randInt(0, snakes.size() - 1)));
+                room.getGameField().killSnake(snakes.get(MathUtils.randInt(0, snakes.size() - 1)));
                 break;
             case REVERSE_ENEMY:
                 applyTempEffect(new ReverseEnemyEffect(snake, snakes));
@@ -117,11 +114,11 @@ public class BonusManager {
         }
 
         c++;
-        if (c % RandomUtils.randInt(random, DEFAULT_BONUS_MIN_TIME, DEFAULT_BONUS_MAX_TIME) == 0) {
-            Bonus.Kind bonusKind = Bonus.Kind.values()[random.nextInt(Bonus.Kind.values().length)];
+        if (c % MathUtils.randInt(DEFAULT_BONUS_MIN_TIME, DEFAULT_BONUS_MAX_TIME) == 0) {
+            Bonus.Kind bonusKind = Bonus.Kind.values()[MathUtils.rand.nextInt(Bonus.Kind.values().length)];
 
-            int x = RandomUtils.randInt(random, BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
-            int y = RandomUtils.randInt(random, BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
+            int x = MathUtils.randInt(BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
+            int y = MathUtils.randInt(BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
 
             addBonus(new Bonus(x, y, bonusKind));
         }
