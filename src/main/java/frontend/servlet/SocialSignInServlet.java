@@ -9,6 +9,7 @@ import frontend.response.SignInResponse;
 import interfaces.SocialAccountService;
 import jdk.nashorn.internal.parser.JSONParser;
 import model.UserProfile;
+import utils.PageGenerator;
 import utils.SocialAuth;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SocialSignInServlet extends HttpServlet {
     SocialAccountService socialAccountService;
@@ -40,29 +43,13 @@ public class SocialSignInServlet extends HttpServlet {
 
         socialAccountService.addUser(user);
 
+        Map<String, Object> pageVariables = new HashMap<>();
+        pageVariables.put("authSuccess", user != null ? "true" : "false");
+
         if (user != null) {
             req.getSession().setAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE, user.getId());
-            resp.getWriter().write("<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    "<script>\n" +
-                    "\twindow.opener.onSocialAuth(true);\n" +
-                    "\twindow.close();\n" +
-                    "</script>\n" +
-                    "</head>\n" +
-                    "<body></body>\n" +
-                    "</html>");
-        } else {
-            resp.getWriter().write("<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    "<script>\n" +
-                    "\twindow.opener.onSocialAuth(false);\n" +
-                    "\twindow.close();\n" +
-                    "</script>\n" +
-                    "</head>\n" +
-                    "<body></body>\n" +
-                    "</html>");
         }
+
+        resp.getWriter().write(PageGenerator.getPage("social_signin_popup.html", pageVariables));
     }
 }

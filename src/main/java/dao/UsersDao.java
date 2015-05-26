@@ -4,6 +4,9 @@ import com.mongodb.*;
 import model.UserProfile;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * nickolay, 05.05.15.
  */
@@ -26,6 +29,14 @@ public class UsersDao {
     public UserProfile insertUser(UserProfile user) {
         DBCollection users = db.getCollection(USERS_COLLECTION);
 
+        BasicDBObject userQuery = new BasicDBObject();
+        List<BasicDBObject> obj = new ArrayList<>();
+        obj.add(new BasicDBObject(SOCIAL_ID_FIELD_NAME, user.getSocialID()));
+        obj.add(new BasicDBObject(AUTH_PROVIDER_FIELD_NAME, user.getAuthProvider()));
+        userQuery.put("$and", obj);
+
+        DBObject oldUser = users.findOne(userQuery);
+
         BasicDBObject userObject = new BasicDBObject();
         userObject.append(FIRST_NAME_FIELD_NAME, user.getFirstName());
         userObject.append(LAST_NAME_FIELD_NAME, user.getLastName());
@@ -33,11 +44,17 @@ public class UsersDao {
         userObject.append(AUTH_PROVIDER_FIELD_NAME, user.getAuthProvider());
         userObject.append(SOCIAL_ID_FIELD_NAME, user.getSocialID());
 
-        users.insert(userObject);
+        String id;
+        if (oldUser != null) {
+            users.update(userQuery, userObject);
+            id = oldUser.get("_id").toString();
 
-        String id = userObject.get("_id").toString();
+        } else {
+            users.insert(userObject);
+            id = userObject.get("_id").toString();
+        }
+
         user.setId(id);
-
         return user;
     }
 
