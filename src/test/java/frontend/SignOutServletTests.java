@@ -34,7 +34,7 @@ public class SignOutServletTests extends ServletTests {
     public void testOk() throws ServletException, IOException {
         AbstractServlet signOutServlet = new SignOutServlet(socialAccountService);
 
-        when(httpSession.getAttribute("username")).thenReturn("abc");
+        when(httpSession.getAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE)).thenReturn("abc");
         when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
 
@@ -45,7 +45,7 @@ public class SignOutServletTests extends ServletTests {
         String servletResponse = servletResponseCaptor.getValue();
         String expectedResponse = "{\"error\":null,\"response\":{}}";
 
-        verify(httpSession, times(1)).removeAttribute("username");
+        verify(httpSession, times(1)).removeAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE);
         assertEqualsJSON(servletResponse, expectedResponse);
     }
 }
