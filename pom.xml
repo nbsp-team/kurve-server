@@ -153,5 +153,11 @@
             <version>1.4.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.mirreck</groupId>
+            <artifactId>java-fake-factory</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
     </dependencies>
 </project>

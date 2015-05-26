@@ -23,6 +23,14 @@ public class UserProfile {
         this.socialID = socialID;
     }
 
+    public UserProfile(String firstName, String lastName, String avatarUrl, int authProvider, String socialID) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.avatarUrl = avatarUrl;
+        this.authProvider = authProvider;
+        this.socialID = socialID;
+    }
+
     public String getId() {
         return id;
     }

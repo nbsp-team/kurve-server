@@ -1,28 +1,35 @@
 package utils;
 
+import com.github.mirreck.FakeFactory;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import interfaces.SocialAccountService;
 import model.UserProfile;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * nickolay, 24.05.15.
  */
 public class SocialAuth {
 
+    public static final String GUEST_AVATAR_URL = "https://lh3.googleusercontent.com/-Zup5rbe0aCU/UCR5yUB5tsI/AAAAAAAAy8w/cEM_AU9bJlo/s506/chrome_app_theme_default_200_percent_login_guest.png";
+
+    public static final String VK_APP_ID = "4930885";
+    public static final String FB_APP_ID = "925250904206070";
+
     public static final String VK_SECRET = "5aBqPx1rZivFZnBw4McT";
+    public static final String FB_SECRET = "1710860008ea04bce6214ef5fb893170";
 
     public enum AuthProvider {
         AUTH_PROVIDER_VK,
-        AUTH_PROVIDER_FB
+        AUTH_PROVIDER_FB,
+        AUTH_PROVIDER_GUEST
     }
 
     public static final String VK_ACCESS_TOKEN_URL = "https://oauth.vk.com/access_token";
@@ -38,6 +45,9 @@ public class SocialAuth {
             case AUTH_PROVIDER_FB:
                 user = getFbUser(code);
                 break;
+            case AUTH_PROVIDER_GUEST:
+                user = getGuestUser(code);
+                break;
         }
 
         return user;
@@ -46,8 +56,8 @@ public class SocialAuth {
     private static UserProfile getVkUser(String code) {
         try {
             HttpResponse<String> accessTokenResponse = Unirest.post(VK_ACCESS_TOKEN_URL)
-                    .field("client_id", "4930885")
-                    .field("client_secret", "5aBqPx1rZivFZnBw4McT")
+                    .field("client_id", VK_APP_ID)
+                    .field("client_secret", VK_SECRET)
                     .field("code", code)
                     .field("redirect_uri", "http://kurve.ml/api/v1/auth/social?type=0")
                     .asString();
@@ -71,7 +81,6 @@ public class SocialAuth {
                     .getAsJsonObject();
 
             return new UserProfile(
-                    "",
                     userInfo.getAsJsonPrimitive("first_name").getAsString(),
                     userInfo.getAsJsonPrimitive("last_name").getAsString(),
                     userInfo.getAsJsonPrimitive("photo_100").getAsString(),
@@ -86,8 +95,8 @@ public class SocialAuth {
     private static UserProfile getFbUser(String code) {
         try {
             HttpResponse<String> accessTokenResponse = Unirest.post(FB_ACCESS_TOKEN_URL)
-                    .field("client_id", "925250904206070")
-                    .field("client_secret", "1710860008ea04bce6214ef5fb893170")
+                    .field("client_id", FB_APP_ID)
+                    .field("client_secret", FB_SECRET)
                     .field("code", code)
                     .field("redirect_uri", "http://kurve.ml/api/v1/auth/social?type=1")
                     .asString();
@@ -133,7 +142,6 @@ public class SocialAuth {
                     .getAsString();
 
             return new UserProfile(
-                    "",
                     userInfo.getAsJsonPrimitive("first_name").getAsString(),
                     userInfo.getAsJsonPrimitive("last_name").getAsString(),
                     avatar,
@@ -143,5 +151,17 @@ public class SocialAuth {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private static UserProfile getGuestUser(String code) {
+        FakeFactory factory = new FakeFactory();
+
+        return new UserProfile(
+                factory.firstName(),
+                factory.lastName(),
+                GUEST_AVATAR_URL,
+                AuthProvider.AUTH_PROVIDER_GUEST.ordinal(),
+                UUID.randomUUID().toString()
+        );
     }
 }
