@@ -15,4 +15,7 @@ public class NetworkConfig {
 
     @FieldElement(name = "host")
     public String host;
+
+    @FieldElement(name = "domain")
+    public String domain;
 }

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import main.Main;
 import model.UserProfile;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -16,15 +17,19 @@ import java.util.UUID;
 /**
  * nickolay, 24.05.15.
  */
-public class SocialAuth {
+public class SocialAuthHelper {
 
     public static final String GUEST_AVATAR_URL = "https://lh3.googleusercontent.com/-Zup5rbe0aCU/UCR5yUB5tsI/AAAAAAAAy8w/cEM_AU9bJlo/s506/chrome_app_theme_default_200_percent_login_guest.png";
+    public static final String OAUTH_REDIRECT_URL = "http://%s/api/v1/auth/social?type=%d";
 
     public static final String VK_APP_ID = "4930885";
     public static final String FB_APP_ID = "925250904206070";
-
     public static final String VK_SECRET = "5aBqPx1rZivFZnBw4McT";
     public static final String FB_SECRET = "1710860008ea04bce6214ef5fb893170";
+
+    public static final String GET_VK_USER_API_URL = "https://api.vk.com/method/users.get";
+    public static final String GET_FB_USER_API_URL = "https://graph.facebook.com/v2.3/me";
+    public static final String GET_FB_USER_PHOTO_API_URL = "https://graph.facebook.com/v2.3/me/picture";
 
     public enum AuthProvider {
         AUTH_PROVIDER_VK,
@@ -55,18 +60,24 @@ public class SocialAuth {
 
     private static UserProfile getVkUser(String code) {
         try {
+            String redirectUri = String.format(
+                    OAUTH_REDIRECT_URL,
+                    Main.networkConfig.domain,
+                    AuthProvider.AUTH_PROVIDER_VK.ordinal()
+            );
+
             HttpResponse<String> accessTokenResponse = Unirest.post(VK_ACCESS_TOKEN_URL)
                     .field("client_id", VK_APP_ID)
                     .field("client_secret", VK_SECRET)
                     .field("code", code)
-                    .field("redirect_uri", "http://kurve.ml/api/v1/auth/social?type=0")
+                    .field("redirect_uri", redirectUri)
                     .asString();
 
             String accessTokenResponseString = accessTokenResponse.getBody();
             JsonObject accessTokenJson = new JsonParser().parse(accessTokenResponseString).getAsJsonObject();
             String accessToken = accessTokenJson.getAsJsonPrimitive("access_token").getAsString();
 
-            HttpResponse<String> userInfoResponse = Unirest.post("https://api.vk.com/method/users.get")
+            HttpResponse<String> userInfoResponse = Unirest.post(GET_VK_USER_API_URL)
                     .field("fields", "photo_100")
                     .field("access_token", accessToken)
                     .asString();
@@ -94,11 +105,17 @@ public class SocialAuth {
 
     private static UserProfile getFbUser(String code) {
         try {
+            String redirectUri = String.format(
+                    OAUTH_REDIRECT_URL,
+                    Main.networkConfig.domain,
+                    AuthProvider.AUTH_PROVIDER_FB.ordinal()
+            );
+
             HttpResponse<String> accessTokenResponse = Unirest.post(FB_ACCESS_TOKEN_URL)
                     .field("client_id", FB_APP_ID)
                     .field("client_secret", FB_SECRET)
                     .field("code", code)
-                    .field("redirect_uri", "http://kurve.ml/api/v1/auth/social?type=1")
+                    .field("redirect_uri", redirectUri)
                     .asString();
 
             String accessTokenResponseString = accessTokenResponse.getBody();
@@ -116,7 +133,7 @@ public class SocialAuth {
                 return null;
             }
 
-            HttpResponse<String> userInfoResponse = Unirest.get("https://graph.facebook.com/v2.3/me")
+            HttpResponse<String> userInfoResponse = Unirest.get(GET_FB_USER_API_URL)
                     .queryString("access_token", accessToken)
                     .asString();
 
@@ -126,7 +143,7 @@ public class SocialAuth {
                     .parse(userInfoResponseString)
                     .getAsJsonObject();
 
-            HttpResponse<String> avatarResponse = Unirest.get("https://graph.facebook.com/v2.3/me/picture")
+            HttpResponse<String> avatarResponse = Unirest.get(GET_FB_USER_PHOTO_API_URL)
                     .queryString("access_token", accessToken)
                     .queryString("width", 100)
                     .queryString("height", 100)
@@ -145,7 +162,7 @@ public class SocialAuth {
                     userInfo.getAsJsonPrimitive("first_name").getAsString(),
                     userInfo.getAsJsonPrimitive("last_name").getAsString(),
                     avatar,
-                    AuthProvider.AUTH_PROVIDER_VK.ordinal(),
+                    AuthProvider.AUTH_PROVIDER_FB.ordinal(),
                     userInfo.getAsJsonPrimitive("id").getAsString()
             );
         } catch (Exception e) {

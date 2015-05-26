@@ -1,16 +1,10 @@
 package frontend.servlet;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import frontend.AbstractServlet;
-import frontend.response.AuthErrorResponse;
-import frontend.response.Response;
-import frontend.response.SignInResponse;
 import interfaces.SocialAccountService;
-import jdk.nashorn.internal.parser.JSONParser;
 import model.UserProfile;
 import utils.PageGenerator;
-import utils.SocialAuth;
+import utils.SocialAuthHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +26,12 @@ public class SocialSignInServlet extends HttpServlet {
         int authProviderIndex = Integer.valueOf(req.getParameter("type"));
         String code = req.getParameter("code");
 
-        if (authProviderIndex < 0 | authProviderIndex >= SocialAuth.AuthProvider.values().length) {
+        if (authProviderIndex < 0 | authProviderIndex >= SocialAuthHelper.AuthProvider.values().length) {
             resp.sendRedirect("/#login");
         }
 
-        UserProfile user = SocialAuth.auth(
-                SocialAuth.AuthProvider.values()[authProviderIndex],
+        UserProfile user = SocialAuthHelper.auth(
+                SocialAuthHelper.AuthProvider.values()[authProviderIndex],
                 code
         );
 
