@@ -23,7 +23,6 @@ public class Room {
 
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
-    private SnakeUpdatesManager updatesManager;
     private final GameManager gameManager;
 
     private int currentRound = 0;
@@ -188,15 +187,11 @@ public class Room {
     }
 
     public void sendPatchToUser(UserProfile user, List<Integer> lostIds){
-        getPlayerByUser(user).sendMessage(new SnakePatchMessage(updatesManager.getListByIds(lostIds)));
+        getPlayerByUser(user).sendMessage(new SnakePatchMessage(gameField.getUpdatesManager().getListByIds(lostIds)));
     }
 
     public List<Player> getPlayers() {
         return players;
-    }
-
-    public SnakeUpdatesManager getUpdatesManager() {
-        return updatesManager;
     }
 
     public RoomState getRoomState() {

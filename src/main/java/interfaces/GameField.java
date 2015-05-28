@@ -20,7 +20,8 @@ public interface GameField {
     public void doRightDown(int sender);
 
     public void doRightUp(int sender);
-
     
     public void killSnake(Snake snake);
+
+    public SnakeUpdatesManager getUpdatesManager();
 }

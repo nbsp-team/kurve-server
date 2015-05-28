@@ -116,6 +116,11 @@ public class GameFieldImpl implements GameField {
         dead++;
     }
 
+    @Override
+    public SnakeUpdatesManager getUpdatesManager() {
+        return updatesManager;
+    }
+
     private void step() {
         for (Snake snake : snakes) {
             if (snake.isAlive()) {

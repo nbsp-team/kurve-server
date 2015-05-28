@@ -55,23 +55,28 @@ public class Main {
     public static void main(String[] args) throws Exception {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
 
-        ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
-        MongoCredential credential = MongoCredential.createCredential(
-                dbConfig.username,
-                dbConfig.name,
-                dbConfig.password.toCharArray()
-        );
+        SocialAccountService socialAccountService;
+        if (Boolean.valueOf(dbConfig.offline)) {
+            socialAccountService = new AccountServiceInMemory();
+        } else {
+            ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
+            MongoCredential credential = MongoCredential.createCredential(
+                    dbConfig.username,
+                    dbConfig.name,
+                    dbConfig.password.toCharArray()
+            );
 
-        MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
-            add(credential);
-        }});
-        DB db = mongoClient.getDB(dbConfig.name);
+            MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
+                add(credential);
+            }});
+            DB db = mongoClient.getDB(dbConfig.name);
+            socialAccountService = new MongoAccountService(db);
+        }
 
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        SocialAccountService socialAccountService = new MongoAccountService(db);
         Servlet socialSignIn = new SocialSignInServlet(socialAccountService);
         Servlet signOut = new SignOutServlet(socialAccountService);
 
