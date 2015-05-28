@@ -3,6 +3,8 @@ package game;
 import main.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.Address;
+import service.Service;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
 import websocket.message.ConnectedPlayerMessage;
@@ -10,22 +12,22 @@ import websocket.message.ControlMessage;
 import websocket.message.RoomPlayersMessage;
 import websocket.message.StartGameMessage;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * nickolay, 21.02.15.
  */
-public class GameManager implements GameWebSocketHandler.WebSocketMessageListener {
-    public static final Logger LOG = LogManager.getLogger(GameManager.class);
+public class GameService extends Service implements GameWebSocketHandler.WebSocketMessageListener {
+    private final Address address = new Address();
+    public static final Logger LOG = LogManager.getLogger(GameService.class);
 
     private final int MIN_PLAYER_IN_ROOM;
     private final int MAX_PLAYER_IN_ROOM;
 
     private List<Room> rooms;
 
-    public GameManager() {
+    public GameService() {
         MIN_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.minPlayerNumber);
         MAX_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.maxPlayerNumber);
 
@@ -147,4 +149,8 @@ public class GameManager implements GameWebSocketHandler.WebSocketMessageListene
         return "#000000";
     }
 
+    @Override
+    public Address getAddress() {
+        return  address;
+    }
 }

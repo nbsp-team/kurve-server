@@ -4,6 +4,9 @@ import com.mongodb.DB;
 import dao.UsersDao;
 import interfaces.SocialAccountService;
 import model.UserProfile;
+import service.Address;
+import service.Service;
+import service.ServiceManager;
 
 import java.net.UnknownHostException;
 
@@ -11,12 +14,12 @@ import java.net.UnknownHostException;
 /**
  * Created by Dimorinny on 29.04.15.
  */
-public class MongoAccountService implements SocialAccountService {
-    private DB db;
+public class MongoAccountService extends Service implements SocialAccountService {
+    private final Address address = new Address();
+
     private UsersDao usersDao;
 
     public MongoAccountService(DB db) throws UnknownHostException {
-        this.db = db;
         this.usersDao = new UsersDao(db);
     }
 
@@ -43,5 +46,10 @@ public class MongoAccountService implements SocialAccountService {
     @Override
     public void clear() {
         usersDao.clear();
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
     }
 }

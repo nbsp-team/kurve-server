@@ -1,7 +1,7 @@
 package game.bonus;
 
 import game.BonusManager;
-import game.GameManager;
+import game.GameService;
 import game.Room;
 import model.Bonus.Bonus;
 import model.Snake.Snake;
@@ -23,7 +23,7 @@ public class SelfBonusesTests {
 
     @Before
     public void before(){
-        Room room = new Room(new GameManager());
+        Room room = new Room(new GameService());
         SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 
         this.snake = new Snake(0, 0, 0, manager, 0);

@@ -1,6 +1,6 @@
 package websocket;
 
-import game.GameManager;
+import game.GameService;
 import game.Player;
 import game.Room;
 import model.Bonus.Bonus;
@@ -9,13 +9,11 @@ import model.UserProfile;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import websocket.message.*;
-import websocket.message.serializer.ControlMessageSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import static utils.TestUtils.assertEqualsJSON;
 
@@ -38,7 +36,7 @@ public class WebsocketMessageTests {
                         "123123"
                 ));
 
-        room = new Room(mock(GameManager.class));
+        room = new Room(mock(GameService.class));
         room.onNewPlayer(player);
         room.onNewPlayer(player);
         room.onNewPlayer(player);

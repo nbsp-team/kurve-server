@@ -10,7 +10,7 @@ import configuration.NetworkConfig;
 import configuration.XmlLoader;
 import frontend.SessionManager;
 import frontend.servlet.*;
-import game.GameManager;
+import game.GameService;
 import interfaces.SocialAccountService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +97,7 @@ public class Main {
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
-        GameManager gameManager = new GameManager();
+        GameService gameService = new GameService();
 
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
@@ -105,7 +105,7 @@ public class Main {
                 factory.setCreator(new GameWebSocketCreator(
                         sessionManager,
                         socialAccountService,
-                        gameManager
+                        gameService
                 ));
             }
         };

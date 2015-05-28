@@ -16,7 +16,7 @@ public class SnakeTests {
 
     @Before
     public void before() {
-        Room room = new Room(new GameManager());
+        Room room = new Room(new GameService());
         SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 
         this.snake = new Snake(0, 0, 0, manager, 0);

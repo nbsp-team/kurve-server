@@ -1,6 +1,5 @@
 package game;
 
-import frontend.servlet.ShutdownServlet;
 import interfaces.GameField;
 import main.Main;
 import model.Snake.Snake;
@@ -17,14 +16,14 @@ import java.util.List;
 
 
 public class GameFieldImpl implements GameField {
-    public static final Logger LOG = LogManager.getLogger(GameManager.class);
+    public static final Logger LOG = LogManager.getLogger(GameService.class);
 
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
     public static final int STEP_TIME = 1000000000 / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
-    private final GameManager gameManager;
+    private final GameService gameService;
     private final SnakeUpdatesManager updatesManager;
 
     private boolean playing;
@@ -35,10 +34,10 @@ public class GameFieldImpl implements GameField {
 
     private Room room;
 
-    public GameFieldImpl(Room room, GameManager gameManager) {
+    public GameFieldImpl(Room room, GameService gameService) {
         updatesManager = new SnakeUpdatesManager(room);
         this.room = room;
-        this.gameManager = gameManager;
+        this.gameService = gameService;
 
         playing = false;
         this.numPlayers = room.getPlayerCount();
