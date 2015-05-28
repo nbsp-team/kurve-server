@@ -26,7 +26,7 @@ public class UsersDao {
         this.db = db;
     }
 
-    public UserProfile insertUser(UserProfile user) {
+    public UserProfile insert(UserProfile user) {
         DBCollection users = db.getCollection(USERS_COLLECTION);
 
         BasicDBObject userQuery = new BasicDBObject();
@@ -58,7 +58,17 @@ public class UsersDao {
         return user;
     }
 
-    public UserProfile getUserById(String id) {
+
+    public void remove(String id) {
+        DBCollection users = db.getCollection(USERS_COLLECTION);
+
+        BasicDBObject searchQuery = new BasicDBObject("_id", new ObjectId(id));
+        DBObject userObject = users.findOne(searchQuery);
+
+        users.remove(userObject);
+    }
+
+    public UserProfile getById(String id) {
         DBCollection users = db.getCollection(USERS_COLLECTION);
 
         BasicDBObject searchQuery = new BasicDBObject("_id", new ObjectId(id));

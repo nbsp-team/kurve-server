@@ -10,6 +10,8 @@ public interface SocialAccountService {
 
     UserProfile getUserById(String id);
 
+    void removeUser(String id);
+
     long getUserCount();
 
     void clear();

@@ -22,12 +22,17 @@ public class MongoAccountService implements SocialAccountService {
 
     @Override
     public UserProfile addUser(UserProfile userProfile) {
-        return usersDao.insertUser(userProfile);
+        return usersDao.insert(userProfile);
     }
 
     @Override
     public UserProfile getUserById(String userName) {
-        return usersDao.getUserById(userName);
+        return usersDao.getById(userName);
+    }
+
+    @Override
+    public void removeUser(String id) {
+        usersDao.remove(id);
     }
 
     @Override

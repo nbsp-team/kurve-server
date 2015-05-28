@@ -1,4 +1,4 @@
-package game.bonuse;
+package game.bonus;
 
 import game.BonusManager;
 import game.GameManager;
