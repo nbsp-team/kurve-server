@@ -65,4 +65,12 @@ public class GameMechanicsConfig {
 
     @FieldElement(name = "gameStartCountdown")
     public String gameStartCountdown;
+
+    @FieldElement(name = "bonusSpawnProbability")
+    public String bonusSpawnProbability;
+
+    @ElementGroup(name = "bonusProbabilities")
+    @ArrayElement
+    @FieldElement(name = "probability")
+    public List<String> bonusProbabilities;
 }

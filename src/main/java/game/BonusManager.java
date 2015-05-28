@@ -8,27 +8,36 @@ import utils.MathUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by egor on 22.04.15.
  */
 public class BonusManager {
-    public static final int DEFAULT_BONUS_MIN_TIME = 2 * 60;
-    public static final int DEFAULT_BONUS_MAX_TIME = 8 * 60;
+    public static final int DEFAULT_BONUS_JITTER = 2 * 60;
     public static final int BONUS_SPAWN_PADDING = 60;
 
-    List<TemporaryEffect> activeEffects = new LinkedList<>();
-    List<Snake> snakes;
-    List<Bonus> bonuses = new LinkedList<>();
-    Room room;
+    private List<TemporaryEffect> activeEffects = new LinkedList<>();
+    private List<Snake> snakes;
+    private List<Bonus> bonuses = new LinkedList<>();
+    private Room room;
+    private int bonusProbSum = 0;
+    private int[] bonusProbabilities = new int[Bonus.Kind.values().length];
+
+    private int bonusSpawnProbability;
 
     public BonusManager(List<Snake> snakes, Room room) {
         this.room = room;
         this.snakes = snakes;
+
+        bonusSpawnProbability = Integer.valueOf(Main.mechanicsConfig.bonusSpawnProbability);
+
+        bonusProbSum = 0;
+        for(int i = 0; i < Main.mechanicsConfig.bonusProbabilities.size(); ++i) {
+            int prob = Integer.parseInt(Main.mechanicsConfig.bonusProbabilities.get(i));
+            bonusProbSum += prob;
+            bonusProbabilities[i] = bonusProbSum;
+        }
     }
 
     public void addBonus(Bonus bonus) {
@@ -114,13 +123,32 @@ public class BonusManager {
         }
 
         c++;
-        if (c % MathUtils.randInt(DEFAULT_BONUS_MIN_TIME, DEFAULT_BONUS_MAX_TIME) == 0) {
-            Bonus.Kind bonusKind = Bonus.Kind.values()[MathUtils.rand.nextInt(Bonus.Kind.values().length)];
-
-            int x = MathUtils.randInt(BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
-            int y = MathUtils.randInt(BONUS_SPAWN_PADDING, Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
-
-            addBonus(new Bonus(x, y, bonusKind));
+        if (c % MathUtils.randInt(bonusSpawnProbability, bonusSpawnProbability + DEFAULT_BONUS_JITTER) == 0) {
+            spawnBonus();
         }
+    }
+
+    private void spawnBonus() {
+        int x = MathUtils.randInt(BONUS_SPAWN_PADDING,
+                Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
+
+        int y = MathUtils.randInt(BONUS_SPAWN_PADDING,
+                Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
+
+        addBonus(new Bonus(x, y, getRandomBonusKind()));
+    }
+
+    private Bonus.Kind getRandomBonusKind() {
+        // TODO: probabilities
+//        int random = MathUtils.rand.nextInt(bonusProbSum);
+//        for(int i = 0; i < bonusProbabilities.length; ++i) {
+//            if (random >= bonusProbabilities[i]) {
+//                return Bonus.Kind.values()[i];
+//            }
+//            i++;
+//        }
+//
+//        System.out.println("error: random bonus");
+        return Bonus.Kind.values()[MathUtils.rand.nextInt(Bonus.Kind.values().length)];
     }
 }
