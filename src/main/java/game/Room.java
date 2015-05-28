@@ -17,14 +17,14 @@ public class Room {
 
     enum RoomState {
         WAITING,
-        GAME;
+        GAME
     }
     private List<Player> players;
 
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
     private SnakeUpdatesManager updatesManager;
-    private final GameManager gameManager;
+    private final GameService gameService;
 
     private int currentRound = 0;
 
@@ -37,10 +37,10 @@ public class Room {
         players.get(playerId).setPoints(getPointsByDeathId(deathId));
     }
 
-    public Room(GameManager gameManager) {
+    public Room(GameService gameService) {
         players = new ArrayList<>();
 
-        this.gameManager = gameManager;
+        this.gameService = gameService;
     }
 
     public void onNewPlayer(Player player) {
@@ -90,11 +90,11 @@ public class Room {
             }
 
             roomState = RoomState.GAME;
-            gameField = new GameFieldImpl(this, gameManager);
+            gameField = new GameFieldImpl(this, gameService);
             gameField.play();
         } else {
             endGame();
-            gameManager.destroyRoom(this);
+            gameService.destroyRoom(this);
         }
     }
 
@@ -110,7 +110,7 @@ public class Room {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
-        gameField = new GameFieldImpl(this, gameManager);
+        gameField = new GameFieldImpl(this, gameService);
 
         gameField.play();
     }
