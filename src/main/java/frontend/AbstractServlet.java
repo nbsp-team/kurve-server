@@ -7,8 +7,6 @@ import frontend.response.PermissionDeniedErrorResponse;
 import frontend.response.Response;
 import interfaces.SocialAccountService;
 import model.UserProfile;
-import service.ServiceManager;
-import service.ServiceType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

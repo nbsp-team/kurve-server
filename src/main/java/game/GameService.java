@@ -4,6 +4,8 @@ import main.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.Address;
+import service.Request;
+import service.Response;
 import service.Service;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
@@ -152,5 +154,10 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
     @Override
     public Address getAddress() {
         return  address;
+    }
+
+    @Override
+    protected Response processRequest(Request request) {
+        return null;
     }
 }

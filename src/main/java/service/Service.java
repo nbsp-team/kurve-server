@@ -1,5 +1,7 @@
 package service;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -7,17 +9,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public abstract class Service implements Runnable {
     public abstract Address getAddress();
-    protected ServiceManager serviceManager;
 
-    private ConcurrentLinkedQueue<Task> queue = new ConcurrentLinkedQueue<>();
+    protected MessageSystem messageSystem;
+
+    private ConcurrentLinkedQueue<Request> queue = new ConcurrentLinkedQueue<>();
+    private Map<Request, ResponseListener> listeners = new ConcurrentHashMap<>();
     private Thread serviceThread;
 
-    public void setServiceManager(ServiceManager serviceManager) {
-        this.serviceManager = serviceManager;
+    protected void addResponse(Request request, Response response) {
+        messageSystem.addResponse(request, response);
     }
 
-    public void addTask(Task task) {
-        queue.add(task);
+    public void setMessageSystem(MessageSystem messageSystem) {
+        this.messageSystem = messageSystem;
+    }
+
+    public void addRequest(Request request) {
+        queue.add(request);
     }
 
     public void setServiceThread(Thread serviceThread) {
@@ -26,31 +34,36 @@ public abstract class Service implements Runnable {
 
     @Override
     public void run() {
-        if (serviceManager == null) {
+        if (messageSystem == null) {
             throw new RuntimeException("Service not registered in ServiceManager");
         }
 
         while (true){
-            execTasks();
+            while (!queue.isEmpty()) {
+                Request request = queue.poll();
+                Response response = processRequest(request);
+
+                if (response != null) {
+                    messageSystem.addResponse(request, response);
+                }
+            }
+
+            for(Request request : listeners.keySet()) {
+                Response response = messageSystem.getResponse(request);
+                if (response != null) {
+                    listeners.get(request).onResponse(response);
+                }
+            }
 
             try {
-                Thread.sleep(ServiceManager.SERVICE_SLEEP_TIME);
+                Thread.sleep(MessageSystem.SERVICE_SLEEP_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void execTasks() {
-        while (!queue.isEmpty()) {
-            Task task = queue.poll();
-            try {
-                task.exec(this);
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    protected abstract Response processRequest(Request request);
 
     public void start() {
         if (serviceThread != null) {
@@ -58,5 +71,9 @@ public abstract class Service implements Runnable {
         } else {
             throw new RuntimeException("Service not registered in ServiceManager");
         }
+    }
+
+    public void addListener(Request request, ResponseListener listener) {
+        listeners.put(request, listener);
     }
 }

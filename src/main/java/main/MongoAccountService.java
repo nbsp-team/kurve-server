@@ -5,8 +5,10 @@ import dao.UsersDao;
 import interfaces.SocialAccountService;
 import model.UserProfile;
 import service.Address;
+import service.Request;
+import service.Response;
 import service.Service;
-import service.ServiceManager;
+import utils.Bundle;
 
 import java.net.UnknownHostException;
 
@@ -51,5 +53,27 @@ public class MongoAccountService extends Service implements SocialAccountService
     @Override
     public Address getAddress() {
         return address;
+    }
+
+    @Override
+    protected Response processRequest(Request request) {
+        switch (request.getMethod()) {
+            case "add_user":
+                addUser((UserProfile) request.getArgs().getSerializable("user"));
+                return null;
+            case "get_user":
+                UserProfile userProfile = getUserById(request.getArgs().getString("id"));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", userProfile);
+                return new Response(bundle);
+            case "remove_user":
+                removeUser(request.getArgs().getString("id"));
+                return null;
+            case "clear":
+                clear();
+                return null;
+        }
+
+        return null;
     }
 }

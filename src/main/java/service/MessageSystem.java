@@ -9,8 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * nickolay, 28.05.15.
  */
-public class ServiceManager {
-    public static ServiceManager instance = new ServiceManager();
+public class MessageSystem {
+    public static MessageSystem instance = new MessageSystem();
 
     public static final int SERVICE_SLEEP_TIME = 100;
     private static final Random random = new Random();
@@ -18,18 +18,20 @@ public class ServiceManager {
     private final Map<Address, Service> services = new ConcurrentHashMap<>();
     private final Map<ServiceType, List<Address>> addresses = new ConcurrentHashMap<>();
 
-    private ServiceManager() {
+    private final Map<Request, Response> requests = new ConcurrentHashMap<>();
+
+    private MessageSystem() {
         for(ServiceType type : ServiceType.values()) {
             addresses.put(type, new CopyOnWriteArrayList<>());
         }
     }
 
-    public static ServiceManager getInstance() {
+    public static MessageSystem getInstance() {
         return instance;
     }
 
     public void registerService(Service service, ServiceType serviceType) {
-        service.setServiceManager(this);
+        service.setMessageSystem(this);
 
         services.put(service.getAddress(), service);
         addresses.get(serviceType).add(service.getAddress());
@@ -52,7 +54,44 @@ public class ServiceManager {
         return serviceAddresses.get(random.nextInt(serviceAddresses.size()));
     }
 
-    public void addTask(Task task) {
-        services.get(task.getTo()).addTask(task);
+    public void process(ServiceType type, long session, Request request) {
+        if (request.withResponse()) {
+            requests.put(request, null);
+        }
+
+        Address address = getServiceAddress(type, session);
+        services.get(address).addRequest(request);
+    }
+
+    public void addResponse(Request request, Response response) {
+        requests.put(request, response);
+    }
+
+    public Response getResponse(Request request) {
+        if (!requests.containsKey(request)) {
+            return null;
+        }
+
+        Response response = requests.get(request);
+        if (response == null) {
+            return null;
+        }
+
+        requests.remove(request);
+
+        return response;
+    }
+
+    public Response waitResponse(Request request) {
+        if (!requests.containsKey(request)) {
+            return null;
+        }
+
+        while (true) {
+            Response response = getResponse(request);
+            if (response != null) {
+                return response;
+            }
+        }
     }
 }
