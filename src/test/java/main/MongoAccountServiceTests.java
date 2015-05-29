@@ -1,12 +1,13 @@
 package main;
 
+import auth.MongoAccountService;
+import auth.SocialAccountService;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import configuration.DatabaseConfig;
 import configuration.XmlLoader;
-import interfaces.SocialAccountService;
 import model.UserProfile;
 import org.junit.BeforeClass;
 import org.junit.Test;

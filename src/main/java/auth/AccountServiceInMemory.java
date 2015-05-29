@@ -1,11 +1,8 @@
-package main;
+package auth;
 
-import com.mongodb.DB;
-import dao.UsersDao;
-import interfaces.SocialAccountService;
 import model.UserProfile;
+import service.Address;
 
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -13,7 +10,8 @@ import java.util.UUID;
 /**
  * Created by Dimorinny on 29.04.15.
  */
-public class AccountServiceInMemory implements SocialAccountService {
+public class AccountServiceInMemory extends SocialAccountService {
+    private final Address address = new Address();
     HashMap<String, UserProfile> users;
 
     public AccountServiceInMemory(){
@@ -46,5 +44,10 @@ public class AccountServiceInMemory implements SocialAccountService {
     @Override
     public void clear() {
         users.clear();
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
     }
 }

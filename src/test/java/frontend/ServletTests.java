@@ -1,8 +1,6 @@
 package frontend;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import interfaces.SocialAccountService;
+import auth.SocialAccountService;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 

@@ -1,5 +1,6 @@
 package service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -9,29 +10,28 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * nickolay, 28.05.15.
  */
-public class MessageSystem {
-    public static MessageSystem instance = new MessageSystem();
-
-    public static final int SERVICE_SLEEP_TIME = 100;
+public class ServiceManager {
+    public static final Response MISS_RESPONSE = new Response(-1, null);
+    public static ServiceManager instance = new ServiceManager();
+    public static final int SERVICE_SLEEP_TIME = 40;
     private static final Random random = new Random();
 
-    private final Map<Address, Service> services = new ConcurrentHashMap<>();
-    private final Map<ServiceType, List<Address>> addresses = new ConcurrentHashMap<>();
-
+    private final Map<Address, Service> services = new HashMap<>();
+    private final Map<ServiceType, List<Address>> addresses = new HashMap<>();
     private final Map<Request, Response> requests = new ConcurrentHashMap<>();
 
-    private MessageSystem() {
+    private ServiceManager() {
         for(ServiceType type : ServiceType.values()) {
             addresses.put(type, new CopyOnWriteArrayList<>());
         }
     }
 
-    public static MessageSystem getInstance() {
+    public static ServiceManager getInstance() {
         return instance;
     }
 
     public void registerService(Service service, ServiceType serviceType) {
-        service.setMessageSystem(this);
+        service.setServiceManager(this);
 
         services.put(service.getAddress(), service);
         addresses.get(serviceType).add(service.getAddress());
@@ -56,7 +56,7 @@ public class MessageSystem {
 
     public void process(ServiceType type, long session, Request request) {
         if (request.withResponse()) {
-            requests.put(request, null);
+            requests.put(request, MISS_RESPONSE);
         }
 
         Address address = getServiceAddress(type, session);
@@ -73,7 +73,7 @@ public class MessageSystem {
         }
 
         Response response = requests.get(request);
-        if (response == null) {
+        if (response.equals(MISS_RESPONSE)) {
             return null;
         }
 

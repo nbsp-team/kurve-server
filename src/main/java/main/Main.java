@@ -1,5 +1,8 @@
 package main;
 
+import auth.AccountServiceInMemory;
+import auth.MongoAccountService;
+import auth.SocialAccountService;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -11,7 +14,6 @@ import configuration.XmlLoader;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameService;
-import interfaces.SocialAccountService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
@@ -22,6 +24,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import service.ServiceManager;
+import service.ServiceType;
 import websocket.GameWebSocketCreator;
 
 import javax.servlet.Servlet;
@@ -114,6 +118,9 @@ public class Main {
         handlers.setHandlers(new Handler[]{wsHandler, resourceHandler, context});
 
         server.setHandler(handlers);
+
+        ServiceManager.getInstance().registerService(socialAccountService, ServiceType.ACCOUNT_SERVICE);
+        ServiceManager.getInstance().startAll();
 
         server.start();
         server.join();

@@ -1,8 +1,13 @@
 package frontend.servlet;
 
 import frontend.AbstractServlet;
-import interfaces.SocialAccountService;
+import auth.SocialAccountService;
 import model.UserProfile;
+import service.ServiceManager;
+import service.Request;
+import service.Response;
+import service.ServiceType;
+import utils.Bundle;
 import utils.PageGenerator;
 import utils.SocialAuthHelper;
 
@@ -35,7 +40,17 @@ public class SocialSignInServlet extends HttpServlet {
                 code
         );
 
-        socialAccountService.addUser(user);
+        //socialAccountService.addUser(user);
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        Request request = new Request("add_user", args, true);
+        ServiceManager.getInstance().process(
+                ServiceType.ACCOUNT_SERVICE,
+                req.getSession().getId().hashCode(),
+                request
+        );
+        Response response = ServiceManager.getInstance().waitResponse(request);
+        user = (UserProfile) response.getArgs().getSerializable("user");
 
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("authSuccess", user != null ? "true" : "false");

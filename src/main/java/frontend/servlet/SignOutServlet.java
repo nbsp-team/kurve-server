@@ -4,7 +4,7 @@ import frontend.AbstractServlet;
 import frontend.annotation.AuthenticationRequired;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
-import interfaces.SocialAccountService;
+import auth.SocialAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 

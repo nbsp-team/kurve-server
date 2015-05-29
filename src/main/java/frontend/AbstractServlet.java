@@ -5,8 +5,12 @@ import frontend.annotation.AuthenticationRequired;
 import frontend.response.ErrorResponse;
 import frontend.response.PermissionDeniedErrorResponse;
 import frontend.response.Response;
-import interfaces.SocialAccountService;
+import auth.SocialAccountService;
 import model.UserProfile;
+import service.Request;
+import service.ServiceManager;
+import service.ServiceType;
+import utils.Bundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -129,7 +133,18 @@ public abstract class AbstractServlet extends HttpServlet {
 
     protected UserProfile getUser(HttpServletRequest request) {
         String userId = (String) request.getSession().getAttribute(USER_ID_SESSION_ATTRIBUTE);
-        return socialAccountService.getUserById(userId);
+
+        Bundle args = new Bundle();
+        args.putString("id", userId);
+        Request req = new Request("get_user", args, true);
+        ServiceManager.getInstance().process(
+                ServiceType.ACCOUNT_SERVICE,
+                request.getSession().getId().hashCode(),
+                req
+        );
+
+        service.Response response = ServiceManager.getInstance().waitResponse(req);
+        return (UserProfile) response.getArgs().getSerializable("user");
     }
 
     protected void signInUser(HttpServletRequest request, UserProfile user) {

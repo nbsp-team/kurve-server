@@ -10,18 +10,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class Service implements Runnable {
     public abstract Address getAddress();
 
-    protected MessageSystem messageSystem;
+    protected ServiceManager serviceManager;
 
     private ConcurrentLinkedQueue<Request> queue = new ConcurrentLinkedQueue<>();
     private Map<Request, ResponseListener> listeners = new ConcurrentHashMap<>();
     private Thread serviceThread;
 
     protected void addResponse(Request request, Response response) {
-        messageSystem.addResponse(request, response);
+        serviceManager.addResponse(request, response);
     }
 
-    public void setMessageSystem(MessageSystem messageSystem) {
-        this.messageSystem = messageSystem;
+    public void setServiceManager(ServiceManager serviceManager) {
+        this.serviceManager = serviceManager;
     }
 
     public void addRequest(Request request) {
@@ -34,7 +34,7 @@ public abstract class Service implements Runnable {
 
     @Override
     public void run() {
-        if (messageSystem == null) {
+        if (serviceManager == null) {
             throw new RuntimeException("Service not registered in ServiceManager");
         }
 
@@ -44,19 +44,19 @@ public abstract class Service implements Runnable {
                 Response response = processRequest(request);
 
                 if (response != null) {
-                    messageSystem.addResponse(request, response);
+                    serviceManager.addResponse(request, response);
                 }
             }
 
             for(Request request : listeners.keySet()) {
-                Response response = messageSystem.getResponse(request);
+                Response response = serviceManager.getResponse(request);
                 if (response != null) {
                     listeners.get(request).onResponse(response);
                 }
             }
 
             try {
-                Thread.sleep(MessageSystem.SERVICE_SLEEP_TIME);
+                Thread.sleep(ServiceManager.SERVICE_SLEEP_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -5,7 +5,7 @@ import utils.Bundle;
 /**
  * nickolay, 28.05.15.
  */
-public abstract class Request {
+public class Request {
     private boolean response = false;
     private String method;
     private Bundle args;
