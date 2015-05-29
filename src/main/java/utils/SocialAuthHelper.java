@@ -1,6 +1,7 @@
 package utils;
 
 import com.github.mirreck.FakeFactory;
+import com.github.mirreck.domain.Gender;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
@@ -19,7 +20,7 @@ import java.util.UUID;
  */
 public class SocialAuthHelper {
 
-    public static final String GUEST_AVATAR_URL = "https://lh3.googleusercontent.com/-Zup5rbe0aCU/UCR5yUB5tsI/AAAAAAAAy8w/cEM_AU9bJlo/s506/chrome_app_theme_default_200_percent_login_guest.png";
+    public static final String GUEST_AVATAR_URL = "http://api.adorable.io/avatars/200/%s";
     public static final String OAUTH_REDIRECT_URL = "http://%s/api/v1/auth/social?type=%d";
 
     public static final String VK_APP_ID = "4930885";
@@ -172,11 +173,12 @@ public class SocialAuthHelper {
 
     private static UserProfile getGuestUser(String code) {
         FakeFactory factory = new FakeFactory();
+        String id = UUID.randomUUID().toString();
 
         return new UserProfile(
-                factory.firstName(),
+                factory.firstName(Gender.M),
                 factory.lastName(),
-                GUEST_AVATAR_URL,
+                String.format(GUEST_AVATAR_URL, id),
                 AuthProvider.AUTH_PROVIDER_GUEST.ordinal(),
                 UUID.randomUUID().toString()
         );
