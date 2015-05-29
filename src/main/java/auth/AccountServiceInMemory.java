@@ -1,5 +1,8 @@
 package auth;
 
+import messageSystem.Abonent;
+import messageSystem.Address;
+import messageSystem.MessageSystem;
 import model.UserProfile;
 
 import java.util.HashMap;
@@ -9,10 +12,13 @@ import java.util.UUID;
 /**
  * Created by Dimorinny on 29.04.15.
  */
-public class AccountServiceInMemory extends SocialAccountService {
+public class AccountServiceInMemory extends SocialAccountService implements Abonent, Runnable {
+    private final Address address = new Address();
+
     HashMap<String, UserProfile> users;
 
-    public AccountServiceInMemory() {
+    public AccountServiceInMemory(MessageSystem messageSystem) {
+        super(messageSystem);
         users = new HashMap<>();
     }
 

@@ -2,6 +2,9 @@ package auth;
 
 import com.mongodb.DB;
 import dao.UsersDao;
+import messageSystem.Abonent;
+import messageSystem.Address;
+import messageSystem.MessageSystem;
 import model.UserProfile;
 
 import java.net.UnknownHostException;
@@ -13,7 +16,8 @@ import java.net.UnknownHostException;
 public class MongoAccountService extends SocialAccountService {
     private UsersDao usersDao;
 
-    public MongoAccountService(DB db) throws UnknownHostException {
+    public MongoAccountService(MessageSystem messageSystem, DB db) throws UnknownHostException {
+        super(messageSystem);
         this.usersDao = new UsersDao(db);
     }
 

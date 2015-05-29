@@ -8,6 +8,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import configuration.DatabaseConfig;
 import configuration.XmlLoader;
+import messageSystem.MessageSystem;
 import model.UserProfile;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -44,7 +46,8 @@ public class MongoAccountServiceTests {
         }});
         DB db = mongoClient.getDB(dbConfig.name);
 
-        accountService = new MongoAccountService(db);
+        MessageSystem messageSystem = new MessageSystem();
+        accountService = new MongoAccountService(messageSystem, db);
     }
 
     @Test

@@ -2,6 +2,7 @@ package frontend.servlet;
 
 import auth.SocialAccountService;
 import frontend.AbstractServlet;
+import frontend.FrontendService;
 import model.UserProfile;
 import utils.PageGenerator;
 import utils.SocialAuthHelper;
@@ -16,8 +17,9 @@ import java.util.Map;
 
 public class SocialSignInServlet extends HttpServlet {
     SocialAccountService socialAccountService;
+    FrontendService frontendService;
 
-    public SocialSignInServlet(SocialAccountService socialAccountService) {
+    public SocialSignInServlet(FrontendService frontendService, SocialAccountService socialAccountService) {
         this.socialAccountService = socialAccountService;
     }
 

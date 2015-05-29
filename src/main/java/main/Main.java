@@ -11,9 +11,11 @@ import configuration.DatabaseConfig;
 import configuration.GameMechanicsConfig;
 import configuration.NetworkConfig;
 import configuration.XmlLoader;
+import frontend.FrontendService;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameService;
+import messageSystem.MessageSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
@@ -56,10 +58,16 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
+        final MessageSystem messageSystem = new MessageSystem();
 
+        final Thread accountServiceThread;
         SocialAccountService socialAccountService;
         if (Boolean.valueOf(dbConfig.offline)) {
-            socialAccountService = new AccountServiceInMemory();
+            AccountServiceInMemory memoryAccountService = new AccountServiceInMemory(messageSystem);
+            accountServiceThread = new Thread(memoryAccountService);
+            socialAccountService = memoryAccountService;
+            accountServiceThread.setDaemon(true);
+            accountServiceThread.setName("Memory account service");
         } else {
             ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
             MongoCredential credential = MongoCredential.createCredential(
@@ -72,14 +80,25 @@ public class Main {
                 add(credential);
             }});
             DB db = mongoClient.getDB(dbConfig.name);
-            socialAccountService = new MongoAccountService(db);
+            socialAccountService = new MongoAccountService(messageSystem, db);
+
+            accountServiceThread = new Thread(new MongoAccountService(messageSystem, db));
+            accountServiceThread.setDaemon(true);
+            accountServiceThread.setName("Social account service");
         }
+
+        FrontendService frontendService = new FrontendService(messageSystem);
+        Thread frontendServiceThread = new Thread(frontendService);
+        frontendServiceThread.setDaemon(true);
+        frontendServiceThread.setName("Frontend service");
+        frontendServiceThread.start();
+
 
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        Servlet socialSignIn = new SocialSignInServlet(socialAccountService);
+        Servlet socialSignIn = new SocialSignInServlet(frontendService, socialAccountService);
         Servlet signOut = new SignOutServlet(socialAccountService);
 
         Servlet user = new UserServlet(socialAccountService);
@@ -100,7 +119,6 @@ public class Main {
         resourceHandler.setResourceBase("public_html");
 
         GameService gameService = new GameService();
-
         WebSocketHandler wsHandler = new WebSocketHandler() {
             @Override
             public void configure(WebSocketServletFactory factory) {
@@ -117,6 +135,7 @@ public class Main {
 
         server.setHandler(handlers);
 
+        accountServiceThread.start();
         server.start();
         server.join();
     }
