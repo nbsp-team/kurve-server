@@ -5,23 +5,10 @@ import game.Room;
 /**
  * egor, 18.04.15.
  */
-public class StartGameMessage extends Message {
-    private Room room;
-    private int playerId;
+public class StartGameMessage extends AbstractStartMessage {
+
 
     public StartGameMessage(Room room, int playerId) {
-        this.playerId = playerId;
-
-        this.room = room;
+        super(room, playerId);
     }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-
 }

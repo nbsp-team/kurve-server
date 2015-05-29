@@ -5,18 +5,9 @@ import game.Room;
 /**
  * egor, 18.04.15.
  */
-public class GameOverMessage extends Message {
-
-    private Room room;
-
+public class GameOverMessage extends AbstractMessageToRoom {
 
     public GameOverMessage(Room room) {
-        this.room = room;
+        super(room);
     }
-
-    public Room getRoom() {
-        return room;
-    }
-
-
 }
