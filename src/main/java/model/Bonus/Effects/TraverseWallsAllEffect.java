@@ -10,6 +10,7 @@ import java.util.List;
 public class TraverseWallsAllEffect extends AbstractTemporaryEffect {
 
     private List<Snake> snakes;
+
     public TraverseWallsAllEffect(List<Snake> snakes) {
 
         this.snakes = snakes;
@@ -18,11 +19,11 @@ public class TraverseWallsAllEffect extends AbstractTemporaryEffect {
 
     @Override
     public void activate() {
-        for(Snake snake : snakes) snake.setTravThroughWalls(true);
+        for (Snake snake : snakes) snake.setTravThroughWalls(true);
     }
 
     @Override
     public void deactivate() {
-        for(Snake snake : snakes) snake.setTravThroughWalls(false);
+        for (Snake snake : snakes) snake.setTravThroughWalls(false);
     }
 }

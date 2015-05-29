@@ -1,270 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="kurve-server" default="all">
-  
-  
-  <property file="kurve-server.properties"/>
-  <!-- Uncomment the following property if no tests compilation is needed -->
-  <!-- 
-  <property name="skip.tests" value="true"/>
-   -->
-  
-  <!-- Compiler options -->
-  
-  <property name="compiler.debug" value="on"/>
-  <property name="compiler.generate.no.warnings" value="off"/>
-  <property name="compiler.args" value=""/>
-  <property name="compiler.max.memory" value="700m"/>
-  <patternset id="ignored.files">
-    <exclude name="**/CVS/**"/>
-    <exclude name="**/SCCS/**"/>
-    <exclude name="**/RCS/**"/>
-    <exclude name="**/rcs/**"/>
-    <exclude name="**/.DS_Store/**"/>
-    <exclude name="**/.svn/**"/>
-    <exclude name="**/.pyc/**"/>
-    <exclude name="**/.pyo/**"/>
-    <exclude name="**/*.pyc/**"/>
-    <exclude name="**/*.pyo/**"/>
-    <exclude name="**/.git/**"/>
-    <exclude name="**/*.hprof/**"/>
-    <exclude name="**/_svn/**"/>
-    <exclude name="**/.hg/**"/>
-    <exclude name="**/*.lib/**"/>
-    <exclude name="**/*~/**"/>
-    <exclude name="**/__pycache__/**"/>
-    <exclude name="**/.bundle/**"/>
-    <exclude name="**/*.rbc/**"/>
-    <exclude name="**/vssver.scc/**"/>
-    <exclude name="**/vssver2.scc/**"/>
-  </patternset>
-  <patternset id="library.patterns">
-    <include name="*.war"/>
-    <include name="*.ear"/>
-    <include name="*.apk"/>
-    <include name="*.zip"/>
-    <include name="*.swc"/>
-    <include name="*.ane"/>
-    <include name="*.egg"/>
-    <include name="*.jar"/>
-  </patternset>
-  <patternset id="compiler.resources">
-    <exclude name="**/?*.java"/>
-    <exclude name="**/?*.form"/>
-    <exclude name="**/?*.class"/>
-    <exclude name="**/?*.groovy"/>
-    <exclude name="**/?*.scala"/>
-    <exclude name="**/?*.flex"/>
-    <exclude name="**/?*.kt"/>
-    <exclude name="**/?*.clj"/>
-  </patternset>
-  
-  <!-- JDK definitions -->
-  
-  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
-  <path id="jdk.classpath.1.8">
-    <fileset dir="${jdk.home.1.8}">
-      <include name="jre/lib/jsse.jar"/>
-      <include name="jre/lib/resources.jar"/>
-      <include name="jre/lib/management-agent.jar"/>
-      <include name="jre/lib/rt.jar"/>
-      <include name="jre/lib/plugin.jar"/>
-      <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/deploy.jar"/>
-      <include name="jre/lib/javaws.jar"/>
-      <include name="jre/lib/jfr.jar"/>
-      <include name="jre/lib/charsets.jar"/>
-      <include name="jre/lib/jfxswt.jar"/>
-      <include name="jre/lib/ext/localedata.jar"/>
-      <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jfxrt.jar"/>
-      <include name="jre/lib/ext/nashorn.jar"/>
-      <include name="jre/lib/ext/cldrdata.jar"/>
-      <include name="jre/lib/ext/sunpkcs11.jar"/>
-      <include name="jre/lib/ext/sunec.jar"/>
-      <include name="jre/lib/ext/zipfs.jar"/>
-      <include name="jre/lib/ext/sunjce_provider.jar"/>
-    </fileset>
-  </path>
-  
-  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
-  
-  
-  <!-- Project Libraries -->
-  
-  <path id="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath">
-    <pathelement location="${path.variable.maven_repository}/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
-  </path>
-  
-  <path id="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath">
-    <pathelement location="${path.variable.maven_repository}/com/ovea/jetty-session-redis/2.3.ga/jetty-session-redis-2.3.ga.jar"/>
-  </path>
-  
-  <path id="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath">
-    <pathelement location="${path.variable.maven_repository}/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
-  </path>
-  
-  <path id="library.maven:_junit:junit:4.10.classpath">
-    <pathelement location="${path.variable.maven_repository}/junit/junit/4.10/junit-4.10.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-api/9.3.0.M0/websocket-api-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-client/9.3.0.M0/websocket-client-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-common/9.3.0.M0/websocket-common-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-server/9.3.0.M0/websocket-server-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-servlet/9.3.0.M0/websocket-servlet-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-client/9.3.0.M0/jetty-client-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-continuation/9.3.0.M0/jetty-continuation-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-http/9.3.0.M0/jetty-http-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-io/9.3.0.M0/jetty-io-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-rewrite/9.3.0.M0/jetty-rewrite-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-security/9.3.0.M0/jetty-security-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-server/9.3.0.M0/jetty-server-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlet/9.3.0.M0/jetty-servlet-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlets/9.3.0.M0/jetty-servlets-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-util/9.3.0.M0/jetty-util-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-webapp/9.3.0.M0/jetty-webapp-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-xml/9.3.0.M0/jetty-xml-9.3.0.M0.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.freemarker:freemarker:2.3.20.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/freemarker/freemarker/2.3.20/freemarker-2.3.20.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
-  </path>
-  
-  <path id="library.maven:_org.mongodb:bson:2.3.classpath">
-    <pathelement location="${path.variable.maven_repository}/org/mongodb/bson/2.3/bson-2.3.jar"/>
-  </path>
-  
-  
-  <!-- Global Libraries -->
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm-all.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
-  
-  <!-- Modules -->
-  
-  <import file="${basedir}/module_kurve-server.xml"/>
-  
-  <target name="init" description="Build initialization">
-    <!-- Perform any build initialization in this target -->
-  </target>
-  
-  <target name="clean" depends="clean.module.kurve-server" description="cleanup all"/>
-  
-  <target name="build.modules" depends="init, clean, compile.module.kurve-server" description="build all modules"/>
-  
-  <target name="init.artifacts">
-    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
-    <property name="artifact.output.kurve-server:jar" value="${basedir}/out/artifacts/kurve_server_jar"/>
-    <mkdir dir="${artifacts.temp.dir}"/>
-    <property name="temp.jar.path.kurve-server.jar" value="${artifacts.temp.dir}/kurve-server.jar"/>
-  </target>
-  
-  <target name="artifact.kurve-server:jar" depends="init.artifacts, compile.module.kurve-server" description="Build &#39;kurve-server:jar&#39; artifact">
-    <property name="artifact.temp.output.kurve-server:jar" value="${artifacts.temp.dir}/kurve_server_jar"/>
-    <mkdir dir="${artifact.temp.output.kurve-server:jar}"/>
-    <jar destfile="${temp.jar.path.kurve-server.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
-      <zipfileset dir="${kurve-server.output.dir}"/>
-      <zipfileset src="${path.variable.maven_repository}/junit/junit/4.10/junit-4.10.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-io/9.3.0.M0/jetty-io-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-xml/9.3.0.M0/jetty-xml-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlets/9.3.0.M0/jetty-servlets-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-security/9.3.0.M0/jetty-security-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/com/ovea/jetty-session-redis/2.3.ga/jetty-session-redis-2.3.ga.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-rewrite/9.3.0.M0/jetty-rewrite-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-util/9.3.0.M0/jetty-util-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/mongodb/bson/2.3/bson-2.3.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-client/9.3.0.M0/jetty-client-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-server/9.3.0.M0/websocket-server-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-server/9.3.0.M0/jetty-server-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-continuation/9.3.0.M0/jetty-continuation-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-client/9.3.0.M0/websocket-client-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-http/9.3.0.M0/jetty-http-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/freemarker/freemarker/2.3.20/freemarker-2.3.20.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-servlet/9.3.0.M0/websocket-servlet-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-webapp/9.3.0.M0/jetty-webapp-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlet/9.3.0.M0/jetty-servlet-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-common/9.3.0.M0/websocket-common-9.3.0.M0.jar"/>
-      <zipfileset src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-api/9.3.0.M0/websocket-api-9.3.0.M0.jar"/>
-    </jar>
-    <copy file="${temp.jar.path.kurve-server.jar}" tofile="${artifact.temp.output.kurve-server:jar}/kurve-server.jar"/>
-  </target>
-  
-  <target name="build.all.artifacts" depends="artifact.kurve-server:jar" description="Build all artifacts">
-    <mkdir dir="${artifact.output.kurve-server:jar}"/>
-    <copy todir="${artifact.output.kurve-server:jar}">
-      <fileset dir="${artifact.temp.output.kurve-server:jar}"/>
-    </copy>
-    
-    <!-- Delete temporary files -->
-    <delete dir="${artifacts.temp.dir}"/>
-  </target>
-  
-  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+
+
+    <property file="kurve-server.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+    <property name="skip.tests" value="true"/>
+     -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="700m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/.pyc/**"/>
+        <exclude name="**/.pyo/**"/>
+        <exclude name="**/*.pyc/**"/>
+        <exclude name="**/*.pyo/**"/>
+        <exclude name="**/.git/**"/>
+        <exclude name="**/*.hprof/**"/>
+        <exclude name="**/_svn/**"/>
+        <exclude name="**/.hg/**"/>
+        <exclude name="**/*.lib/**"/>
+        <exclude name="**/*~/**"/>
+        <exclude name="**/__pycache__/**"/>
+        <exclude name="**/.bundle/**"/>
+        <exclude name="**/*.rbc/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+    </patternset>
+    <patternset id="library.patterns">
+        <include name="*.war"/>
+        <include name="*.ear"/>
+        <include name="*.apk"/>
+        <include name="*.zip"/>
+        <include name="*.swc"/>
+        <include name="*.ane"/>
+        <include name="*.egg"/>
+        <include name="*.jar"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <exclude name="**/?*.java"/>
+        <exclude name="**/?*.form"/>
+        <exclude name="**/?*.class"/>
+        <exclude name="**/?*.groovy"/>
+        <exclude name="**/?*.scala"/>
+        <exclude name="**/?*.flex"/>
+        <exclude name="**/?*.kt"/>
+        <exclude name="**/?*.clj"/>
+    </patternset>
+
+    <!-- JDK definitions -->
+
+    <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+    <path id="jdk.classpath.1.8">
+        <fileset dir="${jdk.home.1.8}">
+            <include name="jre/lib/jsse.jar"/>
+            <include name="jre/lib/resources.jar"/>
+            <include name="jre/lib/management-agent.jar"/>
+            <include name="jre/lib/rt.jar"/>
+            <include name="jre/lib/plugin.jar"/>
+            <include name="jre/lib/jce.jar"/>
+            <include name="jre/lib/deploy.jar"/>
+            <include name="jre/lib/javaws.jar"/>
+            <include name="jre/lib/jfr.jar"/>
+            <include name="jre/lib/charsets.jar"/>
+            <include name="jre/lib/jfxswt.jar"/>
+            <include name="jre/lib/ext/localedata.jar"/>
+            <include name="jre/lib/ext/dnsns.jar"/>
+            <include name="jre/lib/ext/jfxrt.jar"/>
+            <include name="jre/lib/ext/nashorn.jar"/>
+            <include name="jre/lib/ext/cldrdata.jar"/>
+            <include name="jre/lib/ext/sunpkcs11.jar"/>
+            <include name="jre/lib/ext/sunec.jar"/>
+            <include name="jre/lib/ext/zipfs.jar"/>
+            <include name="jre/lib/ext/sunjce_provider.jar"/>
+        </fileset>
+    </path>
+
+    <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+    <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+    <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+
+
+    <!-- Project Libraries -->
+
+    <path id="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
+    </path>
+
+    <path id="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/com/ovea/jetty-session-redis/2.3.ga/jetty-session-redis-2.3.ga.jar"/>
+    </path>
+
+    <path id="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
+    </path>
+
+    <path id="library.maven:_junit:junit:4.10.classpath">
+        <pathelement location="${path.variable.maven_repository}/junit/junit/4.10/junit-4.10.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-api/9.3.0.M0/websocket-api-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-client/9.3.0.M0/websocket-client-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-common/9.3.0.M0/websocket-common-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-server/9.3.0.M0/websocket-server-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-servlet/9.3.0.M0/websocket-servlet-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-client/9.3.0.M0/jetty-client-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-continuation/9.3.0.M0/jetty-continuation-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-http/9.3.0.M0/jetty-http-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-io/9.3.0.M0/jetty-io-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-rewrite/9.3.0.M0/jetty-rewrite-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-security/9.3.0.M0/jetty-security-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-server/9.3.0.M0/jetty-server-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlet/9.3.0.M0/jetty-servlet-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlets/9.3.0.M0/jetty-servlets-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-util/9.3.0.M0/jetty-util-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-webapp/9.3.0.M0/jetty-webapp-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/eclipse/jetty/jetty-xml/9.3.0.M0/jetty-xml-9.3.0.M0.jar"/>
+    </path>
+
+    <path id="library.maven:_org.freemarker:freemarker:2.3.20.classpath">
+        <pathelement
+                location="${path.variable.maven_repository}/org/freemarker/freemarker/2.3.20/freemarker-2.3.20.jar"/>
+    </path>
+
+    <path id="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath">
+        <pathelement location="${path.variable.maven_repository}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
+    </path>
+
+    <path id="library.maven:_org.mongodb:bson:2.3.classpath">
+        <pathelement location="${path.variable.maven_repository}/org/mongodb/bson/2.3/bson-2.3.jar"/>
+    </path>
+
+
+    <!-- Global Libraries -->
+    <!-- Register Custom Compiler Taskdefs -->
+    <property name="javac2.home" value="${idea.home}/lib"/>
+    <path id="javac2.classpath">
+        <pathelement location="${javac2.home}/javac2.jar"/>
+        <pathelement location="${javac2.home}/jdom.jar"/>
+        <pathelement location="${javac2.home}/asm-all.jar"/>
+        <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+    </path>
+    <target name="register.custom.compilers">
+        <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+        <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions"
+                 classpathref="javac2.classpath"/>
+    </target>
+
+    <!-- Modules -->
+
+    <import file="${basedir}/module_kurve-server.xml"/>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.kurve-server" description="cleanup all"/>
+
+    <target name="build.modules" depends="init, clean, compile.module.kurve-server" description="build all modules"/>
+
+    <target name="init.artifacts">
+        <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+        <property name="artifact.output.kurve-server:jar" value="${basedir}/out/artifacts/kurve_server_jar"/>
+        <mkdir dir="${artifacts.temp.dir}"/>
+        <property name="temp.jar.path.kurve-server.jar" value="${artifacts.temp.dir}/kurve-server.jar"/>
+    </target>
+
+    <target name="artifact.kurve-server:jar" depends="init.artifacts, compile.module.kurve-server"
+            description="Build &#39;kurve-server:jar&#39; artifact">
+        <property name="artifact.temp.output.kurve-server:jar" value="${artifacts.temp.dir}/kurve_server_jar"/>
+        <mkdir dir="${artifact.temp.output.kurve-server:jar}"/>
+        <jar destfile="${temp.jar.path.kurve-server.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+            <zipfileset dir="${kurve-server.output.dir}"/>
+            <zipfileset src="${path.variable.maven_repository}/junit/junit/4.10/junit-4.10.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-io/9.3.0.M0/jetty-io-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-xml/9.3.0.M0/jetty-xml-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlets/9.3.0.M0/jetty-servlets-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-security/9.3.0.M0/jetty-security-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/com/ovea/jetty-session-redis/2.3.ga/jetty-session-redis-2.3.ga.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-rewrite/9.3.0.M0/jetty-rewrite-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-util/9.3.0.M0/jetty-util-9.3.0.M0.jar"/>
+            <zipfileset src="${path.variable.maven_repository}/org/mongodb/bson/2.3/bson-2.3.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-client/9.3.0.M0/jetty-client-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-server/9.3.0.M0/websocket-server-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-server/9.3.0.M0/jetty-server-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-continuation/9.3.0.M0/jetty-continuation-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-client/9.3.0.M0/websocket-client-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-http/9.3.0.M0/jetty-http-9.3.0.M0.jar"/>
+            <zipfileset src="${path.variable.maven_repository}/org/freemarker/freemarker/2.3.20/freemarker-2.3.20.jar"/>
+            <zipfileset src="${path.variable.maven_repository}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-servlet/9.3.0.M0/websocket-servlet-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-webapp/9.3.0.M0/jetty-webapp-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/jetty-servlet/9.3.0.M0/jetty-servlet-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-common/9.3.0.M0/websocket-common-9.3.0.M0.jar"/>
+            <zipfileset
+                    src="${path.variable.maven_repository}/org/eclipse/jetty/websocket/websocket-api/9.3.0.M0/websocket-api-9.3.0.M0.jar"/>
+        </jar>
+        <copy file="${temp.jar.path.kurve-server.jar}"
+              tofile="${artifact.temp.output.kurve-server:jar}/kurve-server.jar"/>
+    </target>
+
+    <target name="build.all.artifacts" depends="artifact.kurve-server:jar" description="Build all artifacts">
+        <mkdir dir="${artifact.output.kurve-server:jar}"/>
+        <copy todir="${artifact.output.kurve-server:jar}">
+            <fileset dir="${artifact.temp.output.kurve-server:jar}"/>
+        </copy>
+
+        <!-- Delete temporary files -->
+        <delete dir="${artifacts.temp.dir}"/>
+    </target>
+
+    <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>

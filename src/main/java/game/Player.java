@@ -9,7 +9,6 @@ import model.UserProfile;
 import websocket.WebSocketConnection;
 import websocket.message.Message;
 
-import javax.jws.soap.SOAPBinding;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;

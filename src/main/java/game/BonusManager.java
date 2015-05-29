@@ -8,7 +8,9 @@ import utils.MathUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by egor on 22.04.15.
@@ -33,7 +35,7 @@ public class BonusManager {
         bonusSpawnProbability = Integer.valueOf(Main.mechanicsConfig.bonusSpawnProbability);
 
         bonusProbSum = 0;
-        for(int i = 0; i < Main.mechanicsConfig.bonusProbabilities.size(); ++i) {
+        for (int i = 0; i < Main.mechanicsConfig.bonusProbabilities.size(); ++i) {
             int prob = Integer.parseInt(Main.mechanicsConfig.bonusProbabilities.get(i));
             bonusProbSum += prob;
             bonusProbabilities[i] = bonusProbSum;
@@ -76,8 +78,8 @@ public class BonusManager {
                 applyTempEffect(new SharpCornersSelfEffect(snake));
                 break;
             case SPEED_ENEMY:
-                for(Snake other: snakes) {
-                    if(other != snake) applyTempEffect(new SpeedSelfEffect(other));
+                for (Snake other : snakes) {
+                    if (other != snake) applyTempEffect(new SpeedSelfEffect(other));
                 }
                 break;
             case THICK_ENEMY:

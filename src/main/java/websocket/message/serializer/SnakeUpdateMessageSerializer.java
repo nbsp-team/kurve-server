@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
  */
 public class SnakeUpdateMessageSerializer implements JsonSerializer<SnakeUpdateMessage> {
     public JsonElement serialize(SnakeUpdateMessage src, Type typeOfSrc, JsonSerializationContext context) {
-        if(src.getJsonElement() == null) {
+        if (src.getJsonElement() == null) {
             JsonObject responseObject = new JsonObject();
             responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_SNAKE_ARC_RESPONSE.ordinal());
 

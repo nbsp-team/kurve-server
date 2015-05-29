@@ -86,7 +86,7 @@ public class GameFieldImpl implements GameField {
 
         new Thread(() -> {
             try {
-                Thread.sleep(Integer.valueOf(Main.mechanicsConfig.gameStartCountdown)*1000);
+                Thread.sleep(Integer.valueOf(Main.mechanicsConfig.gameStartCountdown) * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

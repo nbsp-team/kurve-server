@@ -22,7 +22,7 @@ public class SelfBonusesTests {
     private BonusManager bonusManager;
 
     @Before
-    public void before(){
+    public void before() {
         Room room = new Room(new GameService());
         SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 
@@ -35,7 +35,7 @@ public class SelfBonusesTests {
     }
 
     @Test
-    public void testSpeedSelfBonus(){
+    public void testSpeedSelfBonus() {
         Bonus bonus = new Bonus(0, 0, Bonus.Kind.SPEED_SELF);
 
         double oldSpeed = snake.getSpeed();

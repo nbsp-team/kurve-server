@@ -10,7 +10,8 @@ public class SnakeUpdateMessage extends Message {
     private Snake snake;
     private int id;
     private JsonElement jsonElement = null;
-    public SnakeUpdateMessage(Snake snake, int id){
+
+    public SnakeUpdateMessage(Snake snake, int id) {
         this.id = id;
         this.snake = snake;
 

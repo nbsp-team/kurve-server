@@ -1,11 +1,11 @@
 package frontend.servlet;
 
+import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.annotation.AuthenticationRequired;
 import frontend.response.AuthErrorResponse;
 import frontend.response.GetUserResponse;
 import frontend.response.Response;
-import auth.SocialAccountService;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;

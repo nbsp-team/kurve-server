@@ -1,9 +1,9 @@
 package frontend.servlet;
 
+import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.response.RatingResponse;
 import frontend.response.Response;
-import auth.SocialAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 

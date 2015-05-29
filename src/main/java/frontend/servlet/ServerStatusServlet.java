@@ -1,10 +1,10 @@
 package frontend.servlet;
 
+import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.annotation.AdminRightsRequired;
 import frontend.response.Response;
 import frontend.response.ServerStatusResponse;
-import auth.SocialAccountService;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 
 import javax.servlet.http.HttpServletRequest;

@@ -10,6 +10,7 @@ import java.util.List;
 public class SlowEnemyEffect extends AbstractTemporaryEffect {
     private Snake snake;
     private List<Snake> snakes;
+
     public SlowEnemyEffect(Snake eater, List<Snake> snakes) {
         this.snake = eater;
         this.snakes = snakes;
@@ -18,8 +19,8 @@ public class SlowEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void activate() {
-        for(Snake other : snakes){
-            if(other != snake) {
+        for (Snake other : snakes) {
+            if (other != snake) {
                 other.multiplySpeedBy(0.5);
             }
         }
@@ -27,8 +28,8 @@ public class SlowEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void deactivate() {
-        for(Snake other : snakes){
-            if(other != snake) other.multiplySpeedBy(2);
+        for (Snake other : snakes) {
+            if (other != snake) other.multiplySpeedBy(2);
         }
     }
 }

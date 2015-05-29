@@ -1,7 +1,6 @@
 package websocket.message.serializer;
 
 import com.google.gson.*;
-import model.Bonus.Bonus;
 import websocket.GameWebSocketHandler;
 import websocket.message.SnakePatchMessage;
 import websocket.message.SnakeUpdateMessage;
@@ -19,11 +18,10 @@ public class SnakePatchMessageSerializer implements JsonSerializer<SnakePatchMes
         responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_SNAKE_PATCH_RESPONSE.ordinal());
         List<SnakeUpdateMessage> updates = src.getUpdates();
         JsonArray array = new JsonArray();
-        for(SnakeUpdateMessage msg : updates) {
+        for (SnakeUpdateMessage msg : updates) {
             array.add(context.serialize(msg));
         }
         responseObject.add("updates", array);
-
 
 
         return responseObject;

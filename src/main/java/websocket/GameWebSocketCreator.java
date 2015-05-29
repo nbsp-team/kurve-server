@@ -1,16 +1,12 @@
 package websocket;
 
+import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.SessionManager;
-import auth.SocialAccountService;
 import model.UserProfile;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import service.Request;
-import service.ServiceManager;
-import service.ServiceType;
-import utils.Bundle;
 
 import javax.servlet.http.HttpSession;
 import java.net.HttpCookie;
@@ -56,16 +52,7 @@ public class GameWebSocketCreator implements WebSocketCreator {
         if (session.isPresent()) {
             String userId = (String) session.get().getAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE);
             if (userId != null) {
-                Bundle args = new Bundle();
-                args.putString("id", userId);
-                Request req = new Request("get_user", args, true);
-                ServiceManager.getInstance().process(
-                        ServiceType.ACCOUNT_SERVICE,
-                        sessionId.hashCode(),
-                        req
-                );
-                service.Response response = ServiceManager.getInstance().waitResponse(req);
-                return (UserProfile) response.getArgs().getSerializable("user");
+                return socialAccountService.getUserById(userId);
             } else {
                 return null;
             }

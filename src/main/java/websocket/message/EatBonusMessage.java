@@ -8,6 +8,7 @@ import model.Snake.Snake;
 public class EatBonusMessage extends Message {
     private int bonusId;
     private Snake eater;
+
     public EatBonusMessage(int bonusId, Snake eater) {
         this.bonusId = bonusId;
         this.eater = eater;

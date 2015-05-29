@@ -25,7 +25,7 @@ public class EnemyBonusesTests {
     private BonusManager bonusManager;
 
     @Before
-    public void before(){
+    public void before() {
         Room room = new Room(new GameService());
         SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 
@@ -49,7 +49,7 @@ public class EnemyBonusesTests {
         bonusManager.timeStep();
 
         assertTrue(mainSnake.getRadius() == oldMainSnakeThick
-            && oldOtherSnakeThick < otherSnake.getRadius());
+                && oldOtherSnakeThick < otherSnake.getRadius());
     }
 
     @Test

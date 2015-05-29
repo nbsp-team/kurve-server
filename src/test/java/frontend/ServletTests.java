@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**

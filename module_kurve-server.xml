@@ -1,201 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_kurve-server" default="compile.module.kurve-server">
-  <dirname property="module.kurve-server.basedir" file="${ant.file.module_kurve-server}"/>
-  
-  <property name="module.jdk.home.kurve-server" value="${jdk.home.1.8}"/>
-  <property name="module.jdk.bin.kurve-server" value="${jdk.bin.1.8}"/>
-  <property name="module.jdk.classpath.kurve-server" value="jdk.classpath.1.8"/>
-  
-  <property name="compiler.args.kurve-server" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
-  
-  <property name="kurve-server.output.dir" value="${module.kurve-server.basedir}/target/classes"/>
-  <property name="kurve-server.testoutput.dir" value="${module.kurve-server.basedir}/target/test-classes"/>
-  
-  <path id="kurve-server.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
-  
-  <path id="kurve-server.module.production.classpath">
-    <path refid="${module.jdk.classpath.kurve-server}"/>
-    <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
-    <path refid="library.maven:_junit:junit:4.10.classpath"/>
-    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
-    <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
-    <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
-  </path>
-  
-  <path id="kurve-server.runtime.production.module.classpath">
-    <pathelement location="${kurve-server.output.dir}"/>
-    <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
-    <path refid="library.maven:_junit:junit:4.10.classpath"/>
-    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
-    <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
-    <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
-  </path>
-  
-  <path id="kurve-server.module.classpath">
-    <path refid="${module.jdk.classpath.kurve-server}"/>
-    <pathelement location="${kurve-server.output.dir}"/>
-    <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
-    <path refid="library.maven:_junit:junit:4.10.classpath"/>
-    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
-    <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
-    <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
-  </path>
-  
-  <path id="kurve-server.runtime.module.classpath">
-    <pathelement location="${kurve-server.testoutput.dir}"/>
-    <pathelement location="${kurve-server.output.dir}"/>
-    <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
-    <path refid="library.maven:_junit:junit:4.10.classpath"/>
-    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
-    <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
-    <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
-    <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
-  </path>
-  
-  
-  <patternset id="excluded.from.module.kurve-server">
-    <patternset refid="ignored.files"/>
-  </patternset>
-  
-  <patternset id="excluded.from.compilation.kurve-server">
-    <patternset refid="excluded.from.module.kurve-server"/>
-  </patternset>
-  
-  <path id="kurve-server.module.sourcepath">
-    <dirset dir="${module.kurve-server.basedir}">
-      <include name="src/main/java"/>
-      <include name="src/main/resources"/>
-    </dirset>
-  </path>
-  
-  <path id="kurve-server.module.test.sourcepath">
-    <dirset dir="${module.kurve-server.basedir}">
-      <include name="src/test/java"/>
-    </dirset>
-  </path>
-  
-  
-  <target name="compile.module.kurve-server" depends="compile.module.kurve-server.production,compile.module.kurve-server.tests" description="Compile module kurve-server"/>
-  
-  <target name="compile.module.kurve-server.production" depends="register.custom.compilers" description="Compile module kurve-server; production classes">
-    <mkdir dir="${kurve-server.output.dir}"/>
-    <javac2 destdir="${kurve-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.kurve-server}/javac">
-      <compilerarg line="${compiler.args.kurve-server}"/>
-      <bootclasspath refid="kurve-server.module.bootclasspath"/>
-      <classpath refid="kurve-server.module.production.classpath"/>
-      <src refid="kurve-server.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.kurve-server"/>
-    </javac2>
-    
-    <copy todir="${kurve-server.output.dir}">
-      <fileset dir="${module.kurve-server.basedir}/src/main/java">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-      <fileset dir="${module.kurve-server.basedir}/src/main/resources">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="compile.module.kurve-server.tests" depends="register.custom.compilers,compile.module.kurve-server.production" description="compile module kurve-server; test classes" unless="skip.tests">
-    <mkdir dir="${kurve-server.testoutput.dir}"/>
-    <javac2 destdir="${kurve-server.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.kurve-server}/javac">
-      <compilerarg line="${compiler.args.kurve-server}"/>
-      <bootclasspath refid="kurve-server.module.bootclasspath"/>
-      <classpath refid="kurve-server.module.classpath"/>
-      <src refid="kurve-server.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.kurve-server"/>
-    </javac2>
-    
-    <copy todir="${kurve-server.testoutput.dir}">
-      <fileset dir="${module.kurve-server.basedir}/src/test/java">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="clean.module.kurve-server" description="cleanup module">
-    <delete dir="${kurve-server.output.dir}"/>
-    <delete dir="${kurve-server.testoutput.dir}"/>
-  </target>
+    <dirname property="module.kurve-server.basedir" file="${ant.file.module_kurve-server}"/>
+
+    <property name="module.jdk.home.kurve-server" value="${jdk.home.1.8}"/>
+    <property name="module.jdk.bin.kurve-server" value="${jdk.bin.1.8}"/>
+    <property name="module.jdk.classpath.kurve-server" value="jdk.classpath.1.8"/>
+
+    <property name="compiler.args.kurve-server" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+
+    <property name="kurve-server.output.dir" value="${module.kurve-server.basedir}/target/classes"/>
+    <property name="kurve-server.testoutput.dir" value="${module.kurve-server.basedir}/target/test-classes"/>
+
+    <path id="kurve-server.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="kurve-server.module.production.classpath">
+        <path refid="${module.jdk.classpath.kurve-server}"/>
+        <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
+        <path refid="library.maven:_junit:junit:4.10.classpath"/>
+        <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
+        <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
+        <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
+    </path>
+
+    <path id="kurve-server.runtime.production.module.classpath">
+        <pathelement location="${kurve-server.output.dir}"/>
+        <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
+        <path refid="library.maven:_junit:junit:4.10.classpath"/>
+        <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
+        <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
+        <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
+    </path>
+
+    <path id="kurve-server.module.classpath">
+        <path refid="${module.jdk.classpath.kurve-server}"/>
+        <pathelement location="${kurve-server.output.dir}"/>
+        <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
+        <path refid="library.maven:_junit:junit:4.10.classpath"/>
+        <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
+        <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
+        <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
+    </path>
+
+    <path id="kurve-server.runtime.module.classpath">
+        <pathelement location="${kurve-server.testoutput.dir}"/>
+        <pathelement location="${kurve-server.output.dir}"/>
+        <path refid="library.maven:_com.googlecode.json-simple:json-simple:1.1.1.classpath"/>
+        <path refid="library.maven:_junit:junit:4.10.classpath"/>
+        <path refid="library.maven:_org.hamcrest:hamcrest-core:1.1.classpath"/>
+        <path refid="library.maven:_org.freemarker:freemarker:2.3.20.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-http:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-io:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlets:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-continuation:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-util:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-webapp:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-xml:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-security:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-rewrite:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty:jetty-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-server:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-common:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-api:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-client:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.eclipse.jetty.websocket:websocket-servlet:9.3.0.m0.classpath"/>
+        <path refid="library.maven:_org.mongodb:bson:2.3.classpath"/>
+        <path refid="library.maven:_com.ovea:jetty-session-redis:2.3.ga.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.kurve-server">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.kurve-server">
+        <patternset refid="excluded.from.module.kurve-server"/>
+    </patternset>
+
+    <path id="kurve-server.module.sourcepath">
+        <dirset dir="${module.kurve-server.basedir}">
+            <include name="src/main/java"/>
+            <include name="src/main/resources"/>
+        </dirset>
+    </path>
+
+    <path id="kurve-server.module.test.sourcepath">
+        <dirset dir="${module.kurve-server.basedir}">
+            <include name="src/test/java"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.kurve-server"
+            depends="compile.module.kurve-server.production,compile.module.kurve-server.tests"
+            description="Compile module kurve-server"/>
+
+    <target name="compile.module.kurve-server.production" depends="register.custom.compilers"
+            description="Compile module kurve-server; production classes">
+        <mkdir dir="${kurve-server.output.dir}"/>
+        <javac2 destdir="${kurve-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.kurve-server}/javac">
+            <compilerarg line="${compiler.args.kurve-server}"/>
+            <bootclasspath refid="kurve-server.module.bootclasspath"/>
+            <classpath refid="kurve-server.module.production.classpath"/>
+            <src refid="kurve-server.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.kurve-server"/>
+        </javac2>
+
+        <copy todir="${kurve-server.output.dir}">
+            <fileset dir="${module.kurve-server.basedir}/src/main/java">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+            <fileset dir="${module.kurve-server.basedir}/src/main/resources">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.kurve-server.tests"
+            depends="register.custom.compilers,compile.module.kurve-server.production"
+            description="compile module kurve-server; test classes" unless="skip.tests">
+        <mkdir dir="${kurve-server.testoutput.dir}"/>
+        <javac2 destdir="${kurve-server.testoutput.dir}" debug="${compiler.debug}"
+                nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.kurve-server}/javac">
+            <compilerarg line="${compiler.args.kurve-server}"/>
+            <bootclasspath refid="kurve-server.module.bootclasspath"/>
+            <classpath refid="kurve-server.module.classpath"/>
+            <src refid="kurve-server.module.test.sourcepath"/>
+            <patternset refid="excluded.from.compilation.kurve-server"/>
+        </javac2>
+
+        <copy todir="${kurve-server.testoutput.dir}">
+            <fileset dir="${module.kurve-server.basedir}/src/test/java">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean.module.kurve-server" description="cleanup module">
+        <delete dir="${kurve-server.output.dir}"/>
+        <delete dir="${kurve-server.testoutput.dir}"/>
+    </target>
 </project>

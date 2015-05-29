@@ -1,10 +1,10 @@
 package websocket.message.serializer;
 
 import com.google.gson.*;
-import utils.MathUtils;
 import model.Snake.Snake;
 import model.Snake.SnakePartArc;
 import model.Snake.SnakePartLine;
+import utils.MathUtils;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -18,7 +18,7 @@ public class SnakeUpdatesSerializer implements JsonSerializer<Snake> {
 
 
         JsonArray arcsToSend = new JsonArray();
-        List<SnakePartArc> snakeArcs= src.getSnakeArcs();
+        List<SnakePartArc> snakeArcs = src.getSnakeArcs();
         List<SnakePartLine> snakeLines = src.getSnakeLines();
         for (int i = Math.max(0, src.getArcsSent()); i < snakeArcs.size(); i++) {
             arcsToSend.add(context.serialize(snakeArcs.get(i)));

@@ -10,6 +10,7 @@ import java.util.List;
 public class ReverseEnemyEffect extends AbstractTemporaryEffect {
     private Snake snake;
     private List<Snake> snakes;
+
     public ReverseEnemyEffect(Snake eater, List<Snake> snakes) {
         this.snake = eater;
         this.snakes = snakes;
@@ -18,8 +19,8 @@ public class ReverseEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void activate() {
-        for(Snake other : snakes){
-            if(other != snake) {
+        for (Snake other : snakes) {
+            if (other != snake) {
                 other.reverse();
             }
         }
@@ -27,7 +28,7 @@ public class ReverseEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void deactivate() {
-        for(Snake other : snakes){
+        for (Snake other : snakes) {
             other.reverse();
         }
     }

@@ -24,8 +24,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import service.ServiceManager;
-import service.ServiceType;
 import websocket.GameWebSocketCreator;
 
 import javax.servlet.Servlet;
@@ -118,9 +116,6 @@ public class Main {
         handlers.setHandlers(new Handler[]{wsHandler, resourceHandler, context});
 
         server.setHandler(handlers);
-
-        ServiceManager.getInstance().registerService(socialAccountService, ServiceType.ACCOUNT_SERVICE);
-        ServiceManager.getInstance().startAll();
 
         server.start();
         server.join();

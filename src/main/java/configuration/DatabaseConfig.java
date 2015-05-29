@@ -25,6 +25,6 @@ public class DatabaseConfig {
     @FieldElement(name = "password")
     public String password;
 
-    @FieldElement(name="offline")
+    @FieldElement(name = "offline")
     public String offline;
 }

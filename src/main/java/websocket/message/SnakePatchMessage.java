@@ -1,9 +1,6 @@
 package websocket.message;
 
 
-import com.google.gson.JsonElement;
-import game.Room;
-
 import java.util.List;
 
 /**
@@ -12,7 +9,7 @@ import java.util.List;
 public class SnakePatchMessage extends Message {
     private List<SnakeUpdateMessage> updates;
 
-    public SnakePatchMessage( List<SnakeUpdateMessage> updates) {
+    public SnakePatchMessage(List<SnakeUpdateMessage> updates) {
         this.updates = updates;
     }
 

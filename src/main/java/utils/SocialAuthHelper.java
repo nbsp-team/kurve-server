@@ -123,7 +123,7 @@ public class SocialAuthHelper {
 
             String accessToken = null;
             List<NameValuePair> params = URLEncodedUtils.parse(accessTokenResponseString, Charset.defaultCharset());
-            for(NameValuePair pair : params) {
+            for (NameValuePair pair : params) {
                 if (pair.getName().equals("access_token")) {
                     accessToken = pair.getValue();
                     break;

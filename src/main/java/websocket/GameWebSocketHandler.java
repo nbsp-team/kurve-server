@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import websocket.message.SnakePatchMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,10 +90,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                     break;
                 case CODE_SNAKE_UPDATES_RESPONSE:
                     break;
-		        case CODE_SNAKE_PATCH_REQUEST:
+                case CODE_SNAKE_PATCH_REQUEST:
                     JsonArray array = jresponse.get("ids").getAsJsonArray();
                     List<Integer> lostIds = new ArrayList<>();
-                    for(JsonElement elem : array){
+                    for (JsonElement elem : array) {
                         lostIds.add(elem.getAsInt());
                     }
 

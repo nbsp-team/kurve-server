@@ -5,7 +5,6 @@ import game.Player;
 import main.Main;
 import model.Snake.Snake;
 import websocket.GameWebSocketHandler;
-import websocket.message.StartGameMessage;
 import websocket.message.StartRoundMessage;
 
 import java.lang.reflect.Type;

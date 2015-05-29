@@ -6,8 +6,8 @@ import org.junit.Test;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-import static utils.TestUtils.assertEqualsJSON;
 import static org.mockito.Mockito.*;
+import static utils.TestUtils.assertEqualsJSON;
 
 /**
  * nickolay, 03.04.15.

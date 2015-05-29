@@ -1,8 +1,8 @@
 package model.Bonus;
 
 import main.Main;
-import utils.MathUtils;
 import model.Snake.Snake;
+import utils.MathUtils;
 
 /**
  * Created by egor on 22.04.15.

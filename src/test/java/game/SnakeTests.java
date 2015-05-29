@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import websocket.SnakeUpdatesManager;
 
-import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertTrue;
+
 /**
  * Created by egor on 07.05.15.
  */
@@ -21,8 +21,9 @@ public class SnakeTests {
 
         this.snake = new Snake(0, 0, 0, manager, 0);
     }
+
     @Test
-    public void testTurning(){
+    public void testTurning() {
         assertTrue(!snake.isTurning());
         snake.stopTurning(Snake.turningState.TURNING_LEFT);
         assertTrue(!snake.isTurning());
@@ -37,7 +38,7 @@ public class SnakeTests {
     }
 
     @Test
-    public void testParts(){
+    public void testParts() {
         assertTrue(snake.getSnakeArcs().size() == 0);
         assertTrue(snake.getSnakeLines().size() == 1);
         snake.startTurning(Snake.turningState.TURNING_LEFT);

@@ -10,6 +10,7 @@ import java.util.List;
 public class BigTurnsEnemyEffect extends AbstractTemporaryEffect {
     private Snake snake;
     private List<Snake> snakes;
+
     public BigTurnsEnemyEffect(Snake eater, List<Snake> snakes) {
         this.snake = eater;
         this.snakes = snakes;
@@ -18,8 +19,8 @@ public class BigTurnsEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void activate() {
-        for(Snake other : snakes){
-            if(other != snake) {
+        for (Snake other : snakes) {
+            if (other != snake) {
                 other.multiplyTurnRadiusBy(1.25);
             }
         }
@@ -27,8 +28,8 @@ public class BigTurnsEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void deactivate() {
-        for(Snake other : snakes){
-            if(other != snake) other.multiplyTurnRadiusBy(0.8);
+        for (Snake other : snakes) {
+            if (other != snake) other.multiplyTurnRadiusBy(0.8);
         }
     }
 }

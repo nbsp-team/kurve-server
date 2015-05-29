@@ -10,6 +10,7 @@ import java.util.List;
 public class ThickEnemyEffect extends AbstractTemporaryEffect {
     private Snake snake;
     private List<Snake> snakes;
+
     public ThickEnemyEffect(Snake eater, List<Snake> snakes) {
         this.snake = eater;
         this.snakes = snakes;
@@ -18,15 +19,15 @@ public class ThickEnemyEffect extends AbstractTemporaryEffect {
 
     @Override
     public void activate() {
-        for(Snake other : snakes){
-            if(other != snake) other.multiplyRadiusBy(2);
+        for (Snake other : snakes) {
+            if (other != snake) other.multiplyRadiusBy(2);
         }
     }
 
     @Override
     public void deactivate() {
-        for(Snake other : snakes){
-            if(other != snake) other.multiplyRadiusBy(0.5);
+        for (Snake other : snakes) {
+            if (other != snake) other.multiplyRadiusBy(0.5);
         }
     }
 }

@@ -25,7 +25,7 @@ public class AllBonusesTests {
     private BonusManager bonusManager;
 
     @Before
-    public void before(){
+    public void before() {
         Room room = new Room(new GameService());
         SnakeUpdatesManager manager = new SnakeUpdatesManager(room);
 

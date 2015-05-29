@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class SnakePartsTests {
     @Test
     public void testArcCollisions() {
-        for(int i=0; i<2;i++) {
+        for (int i = 0; i < 2; i++) {
             boolean inPi2 = i == 0;
             SnakePartArc arc = new SnakePartArc(0, 0, 100, 0, 10, 0, !inPi2, 0);
             arc.updateHead(Math.PI / 2);
@@ -25,16 +25,17 @@ public class SnakePartsTests {
         }
 
     }
+
     @Test
     public void testLineCollisions() {
         double sqrt2 = Math.sqrt(2);
         SnakePartLine line = new SnakePartLine(0, 0, 0.1, 0.1, 10, 0);
-        line.updateHead(100, 100, 100*sqrt2);
+        line.updateHead(100, 100, 100 * sqrt2);
         assertTrue(line.isInside(11, 11, 10));
         assertTrue(!line.isInside(-10, -10, 10));
         assertTrue(line.isInside(91, 91, 10));
         assertTrue(!line.isInside(110, 110, 1));
         assertTrue(line.isInside(10, 15, 10));
-        assertTrue(!line.isInside(-12/sqrt2, 12/sqrt2, 1));
+        assertTrue(!line.isInside(-12 / sqrt2, 12 / sqrt2, 1));
     }
 }

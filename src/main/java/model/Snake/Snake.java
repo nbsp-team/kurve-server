@@ -1,7 +1,7 @@
 package model.Snake;
 
-import utils.MathUtils;
 import main.Main;
+import utils.MathUtils;
 import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
@@ -41,7 +41,6 @@ public class Snake {
     private boolean travThroughWalls = false;
 
 
-
     public void setArcsSent(int arcsSent) {
         this.arcsSent = arcsSent;
     }
@@ -60,7 +59,7 @@ public class Snake {
         snakeArcs = new ArrayList<>();
         snakeLines = new ArrayList<>();
         this.id = id;
-	    this.updatesManager = updatesManager;
+        this.updatesManager = updatesManager;
 
 
         v = (double) defaultSpeed / FPS;
@@ -93,9 +92,11 @@ public class Snake {
     }
 
     private boolean reversed = false;
+
     public synchronized void startTurning(turningState where) {
 
-        if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
+        if (reversed && where != turningState.NOT_TURNING)
+            where = (where == turningState.TURNING_LEFT) ? turningState.TURNING_RIGHT : turningState.TURNING_LEFT;
         if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
             angleV = -angleV;
             sinV = -sinV;
@@ -107,7 +108,8 @@ public class Snake {
 
     public synchronized void stopTurning(turningState where) {
 
-        if(reversed && where != turningState.NOT_TURNING) where = (where == turningState.TURNING_LEFT)?turningState.TURNING_RIGHT:turningState.TURNING_LEFT;
+        if (reversed && where != turningState.NOT_TURNING)
+            where = (where == turningState.TURNING_LEFT) ? turningState.TURNING_RIGHT : turningState.TURNING_LEFT;
         if (turning == where) {
             turning = turningState.NOT_TURNING;
             angle = MathUtils.normAngle(angle);
@@ -145,8 +147,9 @@ public class Snake {
 
         snakeArcs.add(newArc);
     }
+
     public void sendUpdates() {
-	    updatesManager.broadcast(this);
+        updatesManager.broadcast(this);
     }
 
     private void doLine() {
@@ -218,8 +221,8 @@ public class Snake {
             sendUpdates();
     }
 
-    public void reverse(){
-        if(reversed){
+    public void reverse() {
+        if (reversed) {
             startTurning(turning);
             reversed = !reversed;
         } else {

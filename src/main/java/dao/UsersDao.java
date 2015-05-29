@@ -1,6 +1,9 @@
 package dao;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import model.UserProfile;
 import org.bson.types.ObjectId;
 

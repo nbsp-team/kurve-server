@@ -2,7 +2,6 @@ package game;
 
 import interfaces.GameField;
 import model.UserProfile;
-import websocket.SnakeUpdatesManager;
 import websocket.WebSocketConnection;
 import websocket.message.*;
 
@@ -19,6 +18,7 @@ public class Room {
         WAITING,
         GAME;
     }
+
     private List<Player> players;
 
     private RoomState roomState = RoomState.WAITING;
@@ -32,7 +32,7 @@ public class Room {
     }
 
     public void onPlayerDeath(int playerId, int deathId) {
-        if(playerId >= players.size()) return;
+        if (playerId >= players.size()) return;
         players.get(playerId).setPoints(getPointsByDeathId(deathId));
     }
 
@@ -186,7 +186,7 @@ public class Room {
         return readyUserCount;
     }
 
-    public void sendPatchToUser(UserProfile user, List<Integer> lostIds){
+    public void sendPatchToUser(UserProfile user, List<Integer> lostIds) {
         getPlayerByUser(user).sendMessage(new SnakePatchMessage(gameField.getUpdatesManager().getListByIds(lostIds)));
     }
 

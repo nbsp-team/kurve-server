@@ -1,7 +1,6 @@
 package utils;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Random;
@@ -21,23 +20,23 @@ public class MathUtilsTests {
     }
 
     @Test
-    public void testMaxLimit(){
-        for(int i = 0; i < 10; ++i) {
+    public void testMaxLimit() {
+        for (int i = 0; i < 10; ++i) {
             assertTrue(MathUtils.randInt(0, 100) < 101);
             assertTrue(MathUtils.randInt(0, 5) < 6);
         }
     }
 
     @Test
-    public void testMinLimit(){
-        for(int i = 0; i < 10; ++i) {
+    public void testMinLimit() {
+        for (int i = 0; i < 10; ++i) {
             assertTrue(MathUtils.randInt(0, 100) >= 0);
             assertTrue(MathUtils.randInt(10, 100) >= 10);
         }
     }
 
     @Test
-    public void shortDouble(){
+    public void shortDouble() {
         double result1 = MathUtils.shortDouble(0.123456789);
         assertEquals(0.0625, result1, 0.001);
 

@@ -3,10 +3,6 @@ package game;
 import main.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.Address;
-import service.Request;
-import service.Response;
-import service.Service;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
 import websocket.message.ConnectedPlayerMessage;
@@ -20,8 +16,7 @@ import java.util.List;
 /**
  * nickolay, 21.02.15.
  */
-public class GameService extends Service implements GameWebSocketHandler.WebSocketMessageListener {
-    private final Address address = new Address();
+public class GameService implements GameWebSocketHandler.WebSocketMessageListener {
     public static final Logger LOG = LogManager.getLogger(GameService.class);
 
     private final int MIN_PLAYER_IN_ROOM;
@@ -149,15 +144,5 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
             }
         }
         return "#000000";
-    }
-
-    @Override
-    public Address getAddress() {
-        return  address;
-    }
-
-    @Override
-    protected Response processRequest(Request request) {
-        return null;
     }
 }
