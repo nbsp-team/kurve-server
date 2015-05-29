@@ -20,8 +20,12 @@ public class PageGeneratorTests {
                 "<html>\n" +
                 "<head>\n" +
                 "    <script>\n" +
-                "        window.opener.onSocialAuth(true);\n" +
-                "        window.close();\n" +
+                "        setTimeout(function () {\n" +
+                "            if (window.opener.onSocialAuth !== undefined) {\n" +
+                "                window.opener.onSocialAuth(true);\n" +
+                "                window.close();\n" +
+                "            }\n" +
+                "        }, 150);\n" +
                 "    </script>\n" +
                 "</head>\n" +
                 "<body></body>\n" +

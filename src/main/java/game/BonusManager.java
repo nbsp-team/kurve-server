@@ -43,7 +43,6 @@ public class BonusManager {
     }
 
     public void addBonus(Bonus bonus) {
-        System.out.println(bonus.getKind().ordinal());
         bonuses.add(bonus);
         room.broadcastMessage(new NewBonusMessage(bonus));
     }
@@ -149,8 +148,6 @@ public class BonusManager {
 //            }
 //            i++;
 //        }
-//
-//        System.out.println("error: random bonus");
         return Bonus.Kind.values()[MathUtils.rand.nextInt(Bonus.Kind.values().length)];
     }
 }

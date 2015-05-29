@@ -2,7 +2,7 @@ package game;
 
 import interfaces.GameField;
 import model.UserProfile;
-import websocket.WebSocketConnection;
+import websocket.GameWebSocketHandler;
 import websocket.message.*;
 
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class Room {
         }
     }
 
-    public void broadcastMessageExceptConnection(Message message, WebSocketConnection connection) {
+    public void broadcastMessageExceptConnection(Message message, GameWebSocketHandler connection) {
         for (Player player : players) {
             player.sendMessageExceptConnection(message, connection);
         }

@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import main.Main;
 import model.UserProfile;
-import websocket.WebSocketConnection;
+import websocket.GameWebSocketHandler;
 import websocket.message.Message;
 
 import java.lang.reflect.Type;
@@ -23,7 +23,7 @@ public class Player {
 
     private String id;
     private int points = 0;
-    private Set<WebSocketConnection> connections;
+    private Set<GameWebSocketHandler> connections;
     private String color;
     private UserProfile userProfile;
     private boolean isReady = false;
@@ -40,7 +40,7 @@ public class Player {
         this.id = id;
     }
 
-    public void addConnection(WebSocketConnection connection) {
+    public void addConnection(GameWebSocketHandler connection) {
         connections.add(connection);
     }
 
@@ -48,18 +48,18 @@ public class Player {
         return connections.size();
     }
 
-    public void removeConnection(WebSocketConnection connection) {
+    public void removeConnection(GameWebSocketHandler connection) {
         connections.remove(connection);
     }
 
     public void sendMessage(Message message) {
-        for (WebSocketConnection connection : connections) {
+        for (GameWebSocketHandler connection : connections) {
             connection.sendMessage(message);
         }
     }
 
-    public void sendMessageExceptConnection(Message message, WebSocketConnection exceptedConnection) {
-        for (WebSocketConnection connection : connections) {
+    public void sendMessageExceptConnection(Message message, GameWebSocketHandler exceptedConnection) {
+        for (GameWebSocketHandler connection : connections) {
             if (!connection.equals(exceptedConnection)) {
                 connection.sendMessage(message);
             }

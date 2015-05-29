@@ -4,7 +4,6 @@ import main.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import websocket.GameWebSocketHandler;
-import websocket.WebSocketConnection;
 import websocket.message.ConnectedPlayerMessage;
 import websocket.message.ControlMessage;
 import websocket.message.RoomPlayersMessage;
@@ -32,11 +31,11 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection) {
+    public Room onNewConnection(GameWebSocketHandler handler) {
         LOG.debug("New WebSocket connection: " + handler.getUserProfile());
 
         if (handler.getUserProfile() == null) {
-            connection.disconnect(WebSocketConnection.CLOSE_REASON_NO_AUTH, "Auth required");
+            handler.disconnect(GameWebSocketHandler.CLOSE_REASON_NO_AUTH, "Auth required");
             return null;
         }
 
@@ -48,7 +47,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             Player player = room.getPlayerByUser(handler.getUserProfile());
 
             if (player != null) {
-                player.addConnection(connection);
+                player.addConnection(handler);
                 player.sendMessage(new RoomPlayersMessage(room));
                 room.broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
                         room.getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
@@ -56,21 +55,21 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             }
 
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
-                connectUserToRoom(connection, handler, room);
+                connectUserToRoom(handler, room);
                 return room;
             }
         }
 
         Room newRoom = new Room(this);
-        connectUserToRoom(connection, handler, newRoom);
+        connectUserToRoom(handler, newRoom);
         rooms.add(newRoom);
         return newRoom;
     }
 
-    private void connectUserToRoom(WebSocketConnection connection, GameWebSocketHandler handler, Room room) {
+    private void connectUserToRoom(GameWebSocketHandler handler, Room room) {
         String playerColor = getUnusedColor(room);
         Player newPlayer = new Player(playerColor, handler.getUserProfile());
-        newPlayer.addConnection(connection);
+        newPlayer.addConnection(handler);
         room.onNewPlayer(newPlayer);
         handler.setRoom(room);
     }
@@ -89,7 +88,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection) {
+    public void onDisconnect(GameWebSocketHandler handler) {
         if (handler.getUserProfile() == null) {
             return;
         }
@@ -101,7 +100,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
                 userRoom.onPlayerDisconnect(player);
                 handler.setRoom(null);
             } else {
-                player.removeConnection(connection);
+                player.removeConnection(handler);
             }
         }
     }
@@ -116,7 +115,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
                 checkRoomReady(room);
 
                 if (room.getRoomState() == Room.RoomState.GAME) {
-                    handler.getConnection().sendMessage(
+                    handler.sendMessage(
                             new StartGameMessage(room, room.getPlayerIdByUser(player.getUserProfile()))
                     );
                 }
@@ -131,7 +130,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             int sender = room.getPlayerIdByUser(handler.getUserProfile());
             room.broadcastMessageExceptConnection(
                     new ControlMessage(isLeft, isUp, sender),
-                    handler.getConnection()
+                    handler
             );
             room.onKeyEvent(isLeft, isUp, sender);
         }

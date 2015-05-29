@@ -10,7 +10,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import org.eclipse.jetty.websocket.common.WebSocketSession;
+import websocket.message.Message;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class GameWebSocketHandler extends WebSocketAdapter {
     public static final Logger LOG = LogManager.getLogger(GameWebSocketHandler.class);
+    public static final int CLOSE_REASON_NO_AUTH = 1;
 
     public enum MessageType {
         CODE_ROOM_PLAYERS_RESPONSE,
@@ -45,7 +49,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     private WebSocketMessageListener messageListener;
     private UserProfile userProfile;
     private Room room;
-    private WebSocketConnection connection;
+    private Session session;
 
     public GameWebSocketHandler(UserProfile userProfile, WebSocketMessageListener messageListener) {
         this.userProfile = userProfile;
@@ -60,7 +64,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         LOG.debug("WebSocket closed: " + statusCode + " for user " + userProfile);
-        messageListener.onDisconnect(this, connection);
+        messageListener.onDisconnect(this);
     }
 
     @Override
@@ -117,12 +121,28 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     @Override
     public void onWebSocketConnect(Session session) {
-        connection = new WebSocketConnection(session);
-        room = messageListener.onNewConnection(this, connection);
+        this.session = session;
+        room = messageListener.onNewConnection(this);
     }
 
-    public WebSocketConnection getConnection() {
-        return connection;
+    public synchronized void sendMessage(Message message) {
+        try {
+            session.getRemote().sendString(
+                    message.getBody()
+            );
+        } catch (IOException e) {
+            // TODO: error response
+            try {
+                session.getRemote().sendString("500");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnect(int closeReason, String description) {
+        session.close(closeReason, description);
     }
 
     public UserProfile getUserProfile() {
@@ -139,9 +159,9 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     public interface WebSocketMessageListener {
 
-        Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
+        Room onNewConnection(GameWebSocketHandler handler);
 
-        void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection);
+        void onDisconnect(GameWebSocketHandler handler);
 
         void onUserReady(GameWebSocketHandler handler, boolean isReady);
 

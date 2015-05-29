@@ -163,7 +163,6 @@ public class GameFieldImpl implements GameField {
             long now, dt = 0;
             long last = System.nanoTime();
             long stepTime = STEP_TIME;
-            System.out.println("run()");
             while (playing) {
                 now = System.nanoTime();
                 dt += Math.min(1000000000, (now - last));
