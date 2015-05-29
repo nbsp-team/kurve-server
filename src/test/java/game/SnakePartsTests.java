@@ -11,17 +11,20 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class SnakePartsTests {
+    private void testArc(int x, int y, int r, double angle, int lineRadius, boolean inPi2){
+        SnakePartArc arc = new SnakePartArc(x, y, r, angle, lineRadius, 0, !inPi2, 0);
+        arc.updateHead(Math.PI / 2);
+        assertTrue(inPi2 == arc.isInside(110 * Math.cos(Math.PI / 3), 110 * Math.sin(Math.PI / 3), 10));
+        assertTrue(inPi2 == arc.isInside(110 * Math.cos(Math.PI / 5), 110 * Math.sin(Math.PI / 5), 10));
+        assertTrue(inPi2 == arc.isInside(150 * Math.cos(Math.PI / 5), 150 * Math.sin(Math.PI / 5), 50));
+        assertTrue(inPi2 != arc.isInside(110 * Math.cos(Math.PI / 1.5), 110 * Math.sin(Math.PI / 1.5), 10));
+        assertTrue(inPi2 != arc.isInside(110 * Math.cos(Math.PI * 1.5), 110 * Math.sin(Math.PI * 1.5), 10));
+
+    }
     @Test
     public void testArcCollisions() {
         for (int i = 0; i < 2; i++) {
-            boolean inPi2 = i == 0;
-            SnakePartArc arc = new SnakePartArc(0, 0, 100, 0, 10, 0, !inPi2, 0);
-            arc.updateHead(Math.PI / 2);
-            assertTrue(inPi2 == arc.isInside(110 * Math.cos(Math.PI / 3), 110 * Math.sin(Math.PI / 3), 10));
-            assertTrue(inPi2 == arc.isInside(110 * Math.cos(Math.PI / 5), 110 * Math.sin(Math.PI / 5), 10));
-            assertTrue(inPi2 == arc.isInside(150 * Math.cos(Math.PI / 5), 150 * Math.sin(Math.PI / 5), 50));
-            assertTrue(inPi2 != arc.isInside(110 * Math.cos(Math.PI / 1.5), 110 * Math.sin(Math.PI / 1.5), 10));
-            assertTrue(inPi2 != arc.isInside(110 * Math.cos(Math.PI * 1.5), 110 * Math.sin(Math.PI * 1.5), 10));
+            testArc(0, 0, 100, 0, 10, i == 0);
         }
 
     }
