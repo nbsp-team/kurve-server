@@ -40,4 +40,12 @@ public class Bundle {
     public Integer getInteger(String key) {
         return (Integer) mHashMap.get(key);
     }
+
+    public void putBoolean(String key, Boolean value) {
+        mHashMap.put(key, value);
+    }
+
+    public Boolean getBoolean(String key) {
+        return (Boolean) mHashMap.get(key);
+    }
 }

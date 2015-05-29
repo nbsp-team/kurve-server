@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class SignOutServletTests extends ServletTests {
     @Test
     public void testNotAuth() throws ServletException, IOException {
-        AbstractServlet signOutServlet = new SignOutServlet(socialAccountService);
+        AbstractServlet signOutServlet = new SignOutServlet(serviceManager, socialAccountService);
 
         when(testRequest.getSession()).thenReturn(httpSession);
         when(testResponse.getWriter()).thenReturn(responsePrintWriter);
@@ -32,7 +32,7 @@ public class SignOutServletTests extends ServletTests {
 
     @Test
     public void testOk() throws ServletException, IOException {
-        AbstractServlet signOutServlet = new SignOutServlet(socialAccountService);
+        AbstractServlet signOutServlet = new SignOutServlet(serviceManager, socialAccountService);
 
         when(httpSession.getAttribute(AbstractServlet.USER_ID_SESSION_ATTRIBUTE)).thenReturn("abc");
         when(testRequest.getSession()).thenReturn(httpSession);

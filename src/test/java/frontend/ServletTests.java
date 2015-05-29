@@ -3,6 +3,8 @@ package frontend;
 import auth.SocialAccountService;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
+import service.Service;
+import service.ServiceManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +24,11 @@ public class ServletTests {
     protected PrintWriter responsePrintWriter;
     protected ArgumentCaptor<String> servletResponseCaptor;
     protected HttpSession httpSession;
+    protected ServiceManager serviceManager;
 
     @Before
     public void setUp() {
+        serviceManager = mock(ServiceManager.class);
         socialAccountService = mock(SocialAccountService.class);
         testRequest = mock(HttpServletRequest.class);
         testResponse = mock(HttpServletResponse.class);

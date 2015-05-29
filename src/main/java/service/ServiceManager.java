@@ -12,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ServiceManager {
     public static final Response MISS_RESPONSE = new Response(-1, null);
-    public static ServiceManager instance = new ServiceManager();
     public static final int SERVICE_SLEEP_TIME = 40;
     private static final Random random = new Random();
 
@@ -20,14 +19,10 @@ public class ServiceManager {
     private final Map<ServiceType, List<Address>> addresses = new HashMap<>();
     private final Map<Request, Response> requests = new ConcurrentHashMap<>();
 
-    private ServiceManager() {
+    public ServiceManager() {
         for(ServiceType type : ServiceType.values()) {
             addresses.put(type, new CopyOnWriteArrayList<>());
         }
-    }
-
-    public static ServiceManager getInstance() {
-        return instance;
     }
 
     public void registerService(Service service, ServiceType serviceType) {

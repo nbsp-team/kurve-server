@@ -25,8 +25,10 @@ public class GameWebSocketCreator implements WebSocketCreator {
     private SocialAccountService socialAccountService;
     private SessionManager sessionManager;
     private GameWebSocketHandler.WebSocketMessageListener messageListener;
+    private ServiceManager serviceManager;
 
-    public GameWebSocketCreator(SessionManager sessionManager, SocialAccountService socialAccountService, GameWebSocketHandler.WebSocketMessageListener messageListener) {
+    public GameWebSocketCreator(ServiceManager serviceManager, SessionManager sessionManager, SocialAccountService socialAccountService, GameWebSocketHandler.WebSocketMessageListener messageListener) {
+        this.serviceManager = serviceManager;
         this.socialAccountService = socialAccountService;
         this.sessionManager = sessionManager;
         this.messageListener = messageListener;
@@ -36,6 +38,7 @@ public class GameWebSocketCreator implements WebSocketCreator {
     public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
         String sessionId = getSessionId(servletUpgradeRequest.getCookies());
         return new GameWebSocketHandler(
+                serviceManager,
                 getUserBySessionId(sessionId),
                 messageListener
         );
@@ -59,12 +62,12 @@ public class GameWebSocketCreator implements WebSocketCreator {
                 Bundle args = new Bundle();
                 args.putString("id", userId);
                 Request req = new Request("get_user", args, true);
-                ServiceManager.getInstance().process(
+                serviceManager.process(
                         ServiceType.ACCOUNT_SERVICE,
                         sessionId.hashCode(),
                         req
                 );
-                service.Response response = ServiceManager.getInstance().waitResponse(req);
+                service.Response response = serviceManager.waitResponse(req);
                 return (UserProfile) response.getArgs().getSerializable("user");
             } else {
                 return null;

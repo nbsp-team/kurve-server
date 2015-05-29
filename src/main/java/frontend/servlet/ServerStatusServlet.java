@@ -6,6 +6,7 @@ import frontend.response.Response;
 import frontend.response.ServerStatusResponse;
 import auth.SocialAccountService;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
+import service.ServiceManager;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ServerStatusServlet extends AbstractServlet {
     private HashSessionIdManager sessionIdManager;
 
-    public ServerStatusServlet(SocialAccountService socialAccountService, HashSessionIdManager sessionIdManager) {
-        super(socialAccountService);
+    public ServerStatusServlet(ServiceManager serviceManager, SocialAccountService socialAccountService, HashSessionIdManager sessionIdManager) {
+        super(serviceManager, socialAccountService);
         this.sessionIdManager = sessionIdManager;
     }
 

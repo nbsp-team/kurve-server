@@ -10,8 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import service.Request;
+import service.Response;
+import service.ServiceManager;
+import service.ServiceType;
+import utils.Bundle;
 import websocket.message.SnakePatchMessage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +25,9 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 
-public class GameWebSocketHandler extends WebSocketAdapter {
+public class GameWebSocketHandler extends WebSocketAdapter implements Serializable {
     public static final Logger LOG = LogManager.getLogger(GameWebSocketHandler.class);
+    private final ServiceManager serviceManager;
 
     public enum MessageType {
         CODE_ROOM_PLAYERS_RESPONSE,
@@ -48,9 +55,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     private Room room;
     private WebSocketConnection connection;
 
-    public GameWebSocketHandler(UserProfile userProfile, WebSocketMessageListener messageListener) {
+    public GameWebSocketHandler(ServiceManager serviceManager, UserProfile userProfile, WebSocketMessageListener messageListener) {
         this.userProfile = userProfile;
         this.messageListener = messageListener;
+        this.serviceManager = serviceManager;
     }
 
     @Override
@@ -61,7 +69,12 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         LOG.debug("WebSocket closed: " + statusCode + " for user " + userProfile);
-        messageListener.onDisconnect(this, connection);
+        messageListener.onDisconnect(this);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("handler", this);
+        serviceManager.process(ServiceType.GAME_SERVICE, 0,
+                new Request("on_disconnect", bundle));
     }
 
     @Override
@@ -70,12 +83,17 @@ public class GameWebSocketHandler extends WebSocketAdapter {
             JsonObject jresponse = (JsonObject) new JsonParser().parse(message);
             MessageType responseType = MessageType.values()[jresponse.get("code").getAsInt()];
 
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("handler", this);
+
             switch (responseType) {
                 case CODE_ROOM_PLAYERS_RESPONSE:
                     break;
                 case CODE_READY_REQUEST:
                     boolean isReady = jresponse.get("ready").getAsBoolean();
-                    messageListener.onUserReady(this, isReady);
+                    bundle.putBoolean("ready", isReady);
+                    serviceManager.process(ServiceType.GAME_SERVICE, 0,
+                            new Request("on_user_ready", bundle));
                     break;
                 case CODE_READY_RESPONSE:
                     break;
@@ -84,8 +102,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_KEY_REQUEST:
                     boolean isLeft = jresponse.get("isLeft").getAsBoolean();
                     boolean isUp = jresponse.get("isUp").getAsBoolean();
-                    messageListener.onControl(this, isLeft, isUp);
-
+                    bundle.putBoolean("left", isLeft);
+                    bundle.putBoolean("up", isUp);
+                    serviceManager.process(ServiceType.GAME_SERVICE, 0,
+                            new Request("on_control", bundle));
                     break;
                 case CODE_KEY_RESPONSE:
                     break;
@@ -119,7 +139,13 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketConnect(Session session) {
         connection = new WebSocketConnection(session);
-        room = messageListener.onNewConnection(this, connection);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("handler", this);
+        Request request = new Request("on_new_connection", bundle, true);
+        serviceManager.process(ServiceType.GAME_SERVICE, 0, request);
+        Response response = serviceManager.waitResponse(request);
+        room = (Room) response.getArgs().getSerializable("room");
     }
 
     public WebSocketConnection getConnection() {
@@ -140,9 +166,9 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     public interface WebSocketMessageListener {
 
-        Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection);
+        Room onNewConnection(GameWebSocketHandler handler);
 
-        void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection);
+        void onDisconnect(GameWebSocketHandler handler);
 
         void onUserReady(GameWebSocketHandler handler, boolean isReady);
 

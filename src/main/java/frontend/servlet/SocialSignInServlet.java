@@ -3,10 +3,7 @@ package frontend.servlet;
 import frontend.AbstractServlet;
 import auth.SocialAccountService;
 import model.UserProfile;
-import service.ServiceManager;
-import service.Request;
-import service.Response;
-import service.ServiceType;
+import service.*;
 import utils.Bundle;
 import utils.PageGenerator;
 import utils.SocialAuthHelper;
@@ -21,9 +18,11 @@ import java.util.Map;
 
 public class SocialSignInServlet extends HttpServlet {
     SocialAccountService socialAccountService;
+    ServiceManager serviceManager;
 
-    public SocialSignInServlet(SocialAccountService socialAccountService) {
+    public SocialSignInServlet(ServiceManager serviceManager, SocialAccountService socialAccountService) {
         this.socialAccountService = socialAccountService;
+        this.serviceManager = serviceManager;
     }
 
     @Override
@@ -40,16 +39,15 @@ public class SocialSignInServlet extends HttpServlet {
                 code
         );
 
-        //socialAccountService.addUser(user);
         Bundle args = new Bundle();
         args.putSerializable("user", user);
         Request request = new Request("add_user", args, true);
-        ServiceManager.getInstance().process(
+        serviceManager.process(
                 ServiceType.ACCOUNT_SERVICE,
                 req.getSession().getId().hashCode(),
                 request
         );
-        Response response = ServiceManager.getInstance().waitResponse(request);
+        Response response = serviceManager.waitResponse(request);
         user = (UserProfile) response.getArgs().getSerializable("user");
 
         Map<String, Object> pageVariables = new HashMap<>();

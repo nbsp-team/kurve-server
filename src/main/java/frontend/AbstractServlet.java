@@ -25,9 +25,11 @@ import java.io.IOException;
 public abstract class AbstractServlet extends HttpServlet {
     public static final String USER_ID_SESSION_ATTRIBUTE = "user_id";
     protected SocialAccountService socialAccountService;
+    protected ServiceManager serviceManager;
 
-    public AbstractServlet(SocialAccountService socialAccountService) {
+    public AbstractServlet(ServiceManager serviceManager, SocialAccountService socialAccountService) {
         this.socialAccountService = socialAccountService;
+        this.serviceManager = serviceManager;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -137,13 +139,13 @@ public abstract class AbstractServlet extends HttpServlet {
         Bundle args = new Bundle();
         args.putString("id", userId);
         Request req = new Request("get_user", args, true);
-        ServiceManager.getInstance().process(
+        serviceManager.process(
                 ServiceType.ACCOUNT_SERVICE,
                 request.getSession().getId().hashCode(),
                 req
         );
 
-        service.Response response = ServiceManager.getInstance().waitResponse(req);
+        service.Response response = serviceManager.waitResponse(req);
         return (UserProfile) response.getArgs().getSerializable("user");
     }
 

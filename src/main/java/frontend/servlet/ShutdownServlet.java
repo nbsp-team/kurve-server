@@ -5,13 +5,14 @@ import frontend.annotation.AdminRightsRequired;
 import frontend.response.Response;
 import frontend.response.SuccessResponse;
 import auth.SocialAccountService;
+import service.ServiceManager;
 
 import javax.servlet.http.HttpServletRequest;
 
 @AdminRightsRequired
 public class ShutdownServlet extends AbstractServlet {
-    public ShutdownServlet(SocialAccountService socialAccountService) {
-        super(socialAccountService);
+    public ShutdownServlet(ServiceManager serviceManager, SocialAccountService socialAccountService) {
+        super(serviceManager, socialAccountService);
     }
 
     public Response onPost(HttpServletRequest request) {

@@ -1,12 +1,15 @@
 package game;
 
 import main.Main;
+import model.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import service.Address;
 import service.Request;
 import service.Response;
 import service.Service;
+import utils.Bundle;
 import websocket.GameWebSocketHandler;
 import websocket.WebSocketConnection;
 import websocket.message.ConnectedPlayerMessage;
@@ -14,6 +17,7 @@ import websocket.message.ControlMessage;
 import websocket.message.RoomPlayersMessage;
 import websocket.message.StartGameMessage;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +41,10 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
     }
 
     @Override
-    public Room onNewConnection(GameWebSocketHandler handler, WebSocketConnection connection) {
+    public Room onNewConnection(GameWebSocketHandler handler) {
         LOG.debug("New WebSocket connection: " + handler.getUserProfile());
+
+        WebSocketConnection connection = handler.getConnection();
 
         if (handler.getUserProfile() == null) {
             connection.disconnect(WebSocketConnection.CLOSE_REASON_NO_AUTH, "Auth required");
@@ -94,7 +100,7 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
     }
 
     @Override
-    public void onDisconnect(GameWebSocketHandler handler, WebSocketConnection connection) {
+    public void onDisconnect(GameWebSocketHandler handler) {
         if (handler.getUserProfile() == null) {
             return;
         }
@@ -106,7 +112,7 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
                 userRoom.onPlayerDisconnect(player);
                 handler.setRoom(null);
             } else {
-                player.removeConnection(connection);
+                player.removeConnection(handler.getConnection());
             }
         }
     }
@@ -153,11 +159,39 @@ public class GameService extends Service implements GameWebSocketHandler.WebSock
 
     @Override
     public Address getAddress() {
-        return  address;
+        return address;
     }
 
     @Override
     protected Response processRequest(Request request) {
+        switch (request.getMethod()) {
+            case "on_new_connection":
+                Bundle args = request.getArgs();
+                GameWebSocketHandler handler = (GameWebSocketHandler) args.getSerializable("handler");
+                Bundle bundle = new Bundle();
+                Room room = onNewConnection(handler);
+                bundle.putSerializable("room", room);
+                return new Response(bundle);
+            case "on_disconnect":
+                args = request.getArgs();
+                handler = (GameWebSocketHandler) args.getSerializable("handler");
+                onDisconnect(handler);
+                return null;
+            case "on_user_ready":
+                args = request.getArgs();
+                handler = (GameWebSocketHandler) args.getSerializable("handler");
+                boolean ready = args.getBoolean("ready");
+                onUserReady(handler, ready);
+                return null;
+            case "on_control":
+                args = request.getArgs();
+                handler = (GameWebSocketHandler) args.getSerializable("handler");
+                boolean left = args.getBoolean("left");
+                boolean up = args.getBoolean("up");
+                onControl(handler, left, up);
+                return null;
+        }
+
         return null;
     }
 }

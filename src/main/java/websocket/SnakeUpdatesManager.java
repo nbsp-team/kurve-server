@@ -28,10 +28,6 @@ public class SnakeUpdatesManager {
         room.broadcastMessage(msg);
     }
 
-    public SnakeUpdateMessage getMessageById(int id){
-        return messages.get(id);
-    }
-
     public List<SnakeUpdateMessage> getListByIds(List<Integer> ids){
         List<SnakeUpdateMessage> list = new ArrayList<>();
         for(Integer i : ids){

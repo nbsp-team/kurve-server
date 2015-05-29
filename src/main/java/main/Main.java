@@ -59,6 +59,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
 
+        ServiceManager serviceManager = new ServiceManager();
+
         SocialAccountService socialAccountService;
         if (Boolean.valueOf(dbConfig.offline)) {
             socialAccountService = new AccountServiceInMemory();
@@ -81,13 +83,13 @@ public class Main {
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 
-        Servlet socialSignIn = new SocialSignInServlet(socialAccountService);
-        Servlet signOut = new SignOutServlet(socialAccountService);
+        Servlet socialSignIn = new SocialSignInServlet(serviceManager, socialAccountService);
+        Servlet signOut = new SignOutServlet(serviceManager, socialAccountService);
 
-        Servlet user = new UserServlet(socialAccountService);
-        Servlet rating = new RatingServlet(socialAccountService);
-        Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager);
-        Servlet serverShutdown = new ShutdownServlet(socialAccountService);
+        Servlet user = new UserServlet(serviceManager, socialAccountService);
+        Servlet rating = new RatingServlet(serviceManager, socialAccountService);
+        Servlet serverStatus = new ServerStatusServlet(serviceManager, socialAccountService, sessionManager);
+        Servlet serverShutdown = new ShutdownServlet(serviceManager, socialAccountService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(socialSignIn), "/api/v" + API_VERSION + "/auth/social");
@@ -107,6 +109,7 @@ public class Main {
             @Override
             public void configure(WebSocketServletFactory factory) {
                 factory.setCreator(new GameWebSocketCreator(
+                        serviceManager,
                         sessionManager,
                         socialAccountService,
                         gameService
@@ -119,8 +122,9 @@ public class Main {
 
         server.setHandler(handlers);
 
-        ServiceManager.getInstance().registerService(socialAccountService, ServiceType.ACCOUNT_SERVICE);
-        ServiceManager.getInstance().startAll();
+        serviceManager.registerService(socialAccountService, ServiceType.ACCOUNT_SERVICE);
+        serviceManager.registerService(gameService, ServiceType.GAME_SERVICE);
+        serviceManager.startAll();
 
         server.start();
         server.join();

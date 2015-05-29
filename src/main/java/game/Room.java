@@ -6,13 +6,14 @@ import websocket.SnakeUpdatesManager;
 import websocket.WebSocketConnection;
 import websocket.message.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * nickolay, 21.02.15.
  */
-public class Room {
+public class Room implements Serializable {
     public static final int ROUND_NUMBER = 6;
 
     enum RoomState {
