@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        setTimeout(function () {
+            if (window.opener.onSocialAuth !== undefined) {
+                window.opener.onSocialAuth(${authSuccess});
+                window.close();
+            }
+        }, 150);
+    </script>
+</head>
+<body></body>
+</html>
