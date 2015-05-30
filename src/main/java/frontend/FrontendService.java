@@ -47,8 +47,12 @@ public class FrontendService implements Abonent, Runnable {
     public void onAuth(UserProfile user, Message request) {
         System.out.println("OnAuth, request: " + request.toString());
         if (userResponses.containsKey(request)) {
-            System.out.println("Setting user to request: " + request.toString());
-            userResponses.get(request).setUser(user);
+            UserResponse response = userResponses.get(request);
+            System.out.println("Setting user to request: " + request.toString() + " to response " + response);
+            response.setUser(user);
+            synchronized (response) {
+                response.notifyAll();
+            }
         }
     }
 
@@ -59,9 +63,15 @@ public class FrontendService implements Abonent, Runnable {
         UserResponse response = new UserResponse();
         userResponses.put(request, response);
 
-        System.out.println("Putted request to hashmap: " + request.toString());
+        System.out.println("Putted request to hashmap: " + request.toString() + ", with response " + response.toString());
 
-        while(response.isEmpty()) {}
+        synchronized (response) {
+            try {
+                response.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         UserProfile responseUser = response.getUser();
         userResponses.remove(request);

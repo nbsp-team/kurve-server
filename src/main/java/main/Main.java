@@ -80,9 +80,9 @@ public class Main {
                 add(credential);
             }});
             DB db = mongoClient.getDB(dbConfig.name);
-            socialAccountService = new MongoAccountService(messageSystem, db);
 
-            accountServiceThread = new Thread(new MongoAccountService(messageSystem, db));
+            socialAccountService = new MongoAccountService(messageSystem, db);
+            accountServiceThread = new Thread(socialAccountService);
             accountServiceThread.setDaemon(true);
             accountServiceThread.setName("Social account service");
         }

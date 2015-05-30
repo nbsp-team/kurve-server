@@ -19,7 +19,7 @@ public final class MessageSystem {
     }
 
     public void addService(Abonent abonent) {
-        messages.put(abonent.getAddress(), new ConcurrentLinkedQueue<Message>());
+        messages.put(abonent.getAddress(), new ConcurrentLinkedQueue<>());
     }
 
     public void sendMessage(Message message) {
