@@ -25,6 +25,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import websocket.GameWebSocketCreator;
+import websocket.SocketServlet;
 
 import javax.servlet.Servlet;
 import java.net.InetSocketAddress;
@@ -87,6 +88,13 @@ public class Main {
         Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager);
         Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
+        GameService gameService = new GameService();
+        SocketServlet socketServlet = new SocketServlet(new GameWebSocketCreator(
+                sessionManager,
+                socialAccountService,
+                gameService
+        ));
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(socialSignIn), "/api/v" + API_VERSION + "/auth/social");
         context.addServlet(new ServletHolder(signOut), "/api/v" + API_VERSION + "/auth/signout");
@@ -94,26 +102,14 @@ public class Main {
         context.addServlet(new ServletHolder(rating), "/api/v" + API_VERSION + "/rating/");
         context.addServlet(new ServletHolder(serverStatus), "/api/v" + API_VERSION + "/admin/status");
         context.addServlet(new ServletHolder(serverShutdown), "/api/v" + API_VERSION + "/admin/shutdown");
+        context.addServlet(new ServletHolder(socketServlet), "/socket/");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setResourceBase("public_html");
 
-        GameService gameService = new GameService();
-
-        WebSocketHandler wsHandler = new WebSocketHandler() {
-            @Override
-            public void configure(WebSocketServletFactory factory) {
-                factory.setCreator(new GameWebSocketCreator(
-                        sessionManager,
-                        socialAccountService,
-                        gameService
-                ));
-            }
-        };
-
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{wsHandler, resourceHandler, context});
+        handlers.setHandlers(new Handler[]{resourceHandler, context});
 
         server.setHandler(handlers);
 
