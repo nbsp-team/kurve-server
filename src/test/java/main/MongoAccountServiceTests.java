@@ -15,9 +15,10 @@ import utils.SocialAuthHelper;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * nickolay, 28.05.15.
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertNull;
 public class MongoAccountServiceTests {
     private static SocialAccountService accountService;
 
-    public static final String DB_CONFIG_FILE = "config/db.xml";
+    public static final String DB_CONFIG_FILE = "config/test_db.xml";
     public static final DatabaseConfig dbConfig =
             (DatabaseConfig) XmlLoader.getInstance()
                     .load(DatabaseConfig.class, DB_CONFIG_FILE);
@@ -44,7 +45,7 @@ public class MongoAccountServiceTests {
         }});
         DB db = mongoClient.getDB(dbConfig.name);
 
-        accountService = new MongoAccountService(db);
+        accountService = new MongoAccountService( db);
     }
 
     @Test
@@ -64,5 +65,33 @@ public class MongoAccountServiceTests {
         accountService.removeUser(testUser.getId());
         testUser = accountService.getUserById(testUser.getId());
         assertNull(testUser);
+    }
+
+    @Test
+    public void testCount() {
+        long userCount = 10;
+        long beforeCount = accountService.getUserCount();
+
+        List<UserProfile> userProfileList = new ArrayList<>();
+        for(int i = 0; i < userCount; ++i) {
+            userProfileList.add(accountService.addUser(new UserProfile(
+                    "Test",
+                    "Test user",
+                    "http://example.org/",
+                    SocialAuthHelper.AuthProvider.AUTH_PROVIDER_GUEST.ordinal(),
+                    UUID.randomUUID().toString()
+            )));
+        }
+
+        long afterCount = accountService.getUserCount();
+
+        assertEquals(afterCount - beforeCount, userCount);
+
+        for(UserProfile user : userProfileList) {
+            accountService.removeUser(user.getId());
+        }
+
+        long afterRemoveCount = accountService.getUserCount();
+        assertEquals(beforeCount, afterRemoveCount);
     }
 }
