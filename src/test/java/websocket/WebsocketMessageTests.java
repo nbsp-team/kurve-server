@@ -1,5 +1,6 @@
 package websocket;
 
+import frontend.ResponseTests;
 import game.GameService;
 import game.Player;
 import game.Room;
@@ -8,6 +9,8 @@ import model.Snake.Snake;
 import model.UserProfile;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import utils.MathUtilsTests;
+import utils.TestHelper;
 import websocket.message.*;
 
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static utils.TestUtils.assertEqualsJSON;
 
+import static utils.TestUtils.assertEqualsJSON;
 /**
  * nickolay, 26.05.15.
  */
@@ -42,38 +45,36 @@ public class WebsocketMessageTests {
         room.onNewPlayer(player);
     }
 
+    
+
     @Test
     public void testConnectedPlayerMessage() {
-        Message message = new ConnectedPlayerMessage(
-                player, 0
+        
+        TestHelper.testMessage(
+                new ConnectedPlayerMessage(
+                        player, 0
+                ),
+                "{\"code\":1,\"player\":{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"" + player.getId() + "\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}}"
         );
-
-        String expectedResult = "{\"code\":1,\"player\":{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"" + player.getId() + "\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testControlMessage() {
-        Message message = new ControlMessage(
-                true, false, 0
+        TestHelper.testMessage(
+                new ControlMessage(
+                        true, false, 0
+                ),
+                "{\"code\":7,\"sender\":0,\"isLeft\":true,\"isUp\":false}"
         );
 
-        String expectedResult = "{\"code\":7,\"sender\":0,\"isLeft\":true,\"isUp\":false}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testDisconnectedPlayerMessage() {
-        Message message = new DisconnectedPlayerMessage(player);
+        TestHelper.testMessage(new DisconnectedPlayerMessage(player),
+                "{\"code\":2,\"player\":{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"" + player.getId() + "\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}}"
+        );
 
-        String expectedResult = "{\"code\":2,\"player\":{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"" + player.getId() + "\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
@@ -81,52 +82,43 @@ public class WebsocketMessageTests {
         Snake eater = mock(Snake.class);
         when(eater.getId()).thenReturn(234);
 
-        Message message = new EatBonusMessage(0, eater);
+        TestHelper.testMessage(new EatBonusMessage(0, eater),
+                "{\"code\":10,\"bonus_id\":0,\"eater_id\":234}"
+        );
 
-        String expectedResult = "{\"code\":10,\"bonus_id\":0,\"eater_id\":234}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testGameOverMessage() {
-        Message message = new GameOverMessage(room);
+        TestHelper.testMessage(new GameOverMessage(room),
+                "{\"code\":12,\"results\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"}]}"
+        );
 
-        String expectedResult = "{\"code\":12,\"results\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"points\":0,\"color\":\"#000000\"}]}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testNewBonusMessage() {
-        Message message = new NewBonusMessage(new Bonus(0, 0, Bonus.Kind.BIG_HOLE_SELF));
+        TestHelper.testMessage(new NewBonusMessage(new Bonus(0, 0, Bonus.Kind.BIG_HOLE_SELF)),
+                "{\"code\":9,\"bonus\":{\"kind\":3,\"x\":0.0,\"y\":0.0,\"id\":9}}"
+        );
 
-        String expectedResult = "{\"code\":9,\"bonus\":{\"kind\":3,\"x\":0.0,\"y\":0.0,\"id\":9}}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testReadyMessage() {
-        Message message = new ReadyMessage(player, true);
+        TestHelper.testMessage(new ReadyMessage(player, true),
+                "{\"code\":4,\"ready\":true,\"player_id\":\"9999999999\"}"
+        );
 
-        String expectedResult = "{\"code\":4,\"ready\":true,\"player_id\":\"9999999999\"}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testRoomPlayersMessage() {
-        Message message = new RoomPlayersMessage(room);
+        TestHelper.testMessage(new RoomPlayersMessage(room),
 
-        String expectedResult = "{\"code\":0,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}";
-        String actualResult = message.getBody();
+                "{\"code\":0,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}"
+        );
 
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
@@ -139,45 +131,36 @@ public class WebsocketMessageTests {
                 0
         ), 0));
 
-        Message message = new SnakePatchMessage(updateMessages);
+        TestHelper.testMessage(new SnakePatchMessage(updateMessages),
+                "{\"code\":16,\"updates\":[{\"code\":14,\"snake\":{\"lines\":[{\"id\":0,\"x1\":-1.3125,\"y1\":0.0,\"x2\":-1.3125,\"y2\":0.0,\"lineRadius\":4.0}],\"arcs\":[],\"id\":0,\"x\":0.0,\"y\":0.0,\"angle\":0.0,\"angleV\":0.02916666666666667,\"v\":1.2833333333333334,\"nlines\":1,\"narcs\":0,\"radius\":4,\"distance\":0.0,\"alive\":true,\"turnRadius\":44.0,\"partStopper\":0},\"id\":0}]}"
+        );
 
-        String expectedResult = "{\"code\":16,\"updates\":[{\"code\":14,\"snake\":{\"lines\":[{\"id\":0,\"x1\":-1.3125,\"y1\":0.0,\"x2\":-1.3125,\"y2\":0.0,\"lineRadius\":4.0}],\"arcs\":[],\"id\":0,\"x\":0.0,\"y\":0.0,\"angle\":0.0,\"angleV\":0.02916666666666667,\"v\":1.2833333333333334,\"nlines\":1,\"narcs\":0,\"radius\":4,\"distance\":0.0,\"alive\":true,\"turnRadius\":44.0,\"partStopper\":0},\"id\":0}]}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testSnakeUpdateMessage() {
-        Message message = new SnakeUpdateMessage(new Snake(
+        Snake snake = new Snake(
                 0, 0, 0,
                 new SnakeUpdatesManager(room),
-                0
-        ), 0);
+                0);
 
-        String expectedResult = "{\"code\":14,\"snake\":{\"lines\":[{\"id\":0,\"x1\":-1.3125,\"y1\":0.0,\"x2\":-1.3125,\"y2\":0.0,\"lineRadius\":4.0}],\"arcs\":[],\"id\":0,\"x\":0.0,\"y\":0.0,\"angle\":0.0,\"angleV\":0.02916666666666667,\"v\":1.2833333333333334,\"nlines\":1,\"narcs\":0,\"radius\":4,\"distance\":0.0,\"alive\":true,\"turnRadius\":44.0,\"partStopper\":236},\"id\":0}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
+        TestHelper.testMessage(new SnakeUpdateMessage(snake, 0),
+                "{\"code\":14,\"snake\":{\"lines\":[{\"id\":0,\"x1\":-1.3125,\"y1\":0.0,\"x2\":-1.3125,\"y2\":0.0,\"lineRadius\":4.0}],\"arcs\":[],\"id\":0,\"x\":0.0,\"y\":0.0,\"angle\":0.0,\"angleV\":0.02916666666666667,\"v\":1.2833333333333334,\"nlines\":1,\"narcs\":0,\"radius\":4,\"distance\":0.0,\"alive\":true,\"turnRadius\":44.0,\"partStopper\":236},\"id\":0}"
+        );
     }
 
     @Test
     public void testStartGameMessage() {
-        Message message = new StartGameMessage(room, 0);
+        TestHelper.testMessage(new StartGameMessage(room, 0),
+                "{\"code\":5,\"FPS\":60,\"width\":1200,\"height\":600,\"speed\":77,\"angleSpeed\":50.13380707394703,\"holeLength\":20,\"myId\":0,\"countdown\":3,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}"
+        );
 
-        String expectedResult = "{\"code\":5,\"FPS\":60,\"width\":1200,\"height\":600,\"speed\":77,\"angleSpeed\":50.13380707394703,\"holeLength\":20,\"myId\":0,\"countdown\":3,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
     }
 
     @Test
     public void testStartRoundMessage() {
-        Message message = new StartRoundMessage(room, 0);
-
-        String expectedResult = "{\"code\":17,\"FPS\":60,\"width\":1200,\"height\":600,\"speed\":77,\"angleSpeed\":50.13380707394703,\"holeLength\":20,\"myId\":0,\"countdown\":3,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}";
-        String actualResult = message.getBody();
-
-        assertEqualsJSON(actualResult, expectedResult);
+        TestHelper.testMessage(new StartRoundMessage(room, 0),
+                "{\"code\":17,\"FPS\":60,\"width\":1200,\"height\":600,\"speed\":77,\"angleSpeed\":50.13380707394703,\"holeLength\":20,\"myId\":0,\"countdown\":3,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}"
+        );
     }
 }
