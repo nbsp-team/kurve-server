@@ -159,7 +159,7 @@ public class WebsocketMessageTests {
 
     @Test
     public void testStartRoundMessage() {
-        TestHelper.testMessage(new StartRoundMessage(room, 0),
+        TestHelper.testMessage(new StartRoundMessage(room, 0, 0),
                 "{\"code\":17,\"FPS\":60,\"width\":1200,\"height\":600,\"speed\":77,\"angleSpeed\":50.13380707394703,\"holeLength\":20,\"myId\":0,\"countdown\":3,\"players\":[{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"},{\"user_id\":\"123\",\"first_name\":\"Test\",\"last_name\":\"Abc\",\"avatar\":\"http://sdf/\",\"player_id\":\"9999999999\",\"global_rating\":0,\"is_ready\":false,\"color\":\"#000000\"}]}"
         );
     }

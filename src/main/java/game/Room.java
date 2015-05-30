@@ -33,7 +33,11 @@ public class Room {
 
     public void onPlayerDeath(int playerId, int deathId) {
         if (playerId >= players.size()) return;
-        players.get(playerId).setPoints(getPointsByDeathId(deathId));
+
+        int playerPoints = players.get(playerId).getPoints() + getPointsByDeathId(deathId);
+        players.get(playerId).setPoints(playerPoints);
+
+        broadcastMessage(new RatingUpdateMessage(this));
     }
 
     public Room(GameService gameService) {
@@ -93,6 +97,7 @@ public class Room {
             gameField.play();
         } else {
             endGame();
+            gameField.pause();
             gameService.destroyRoom(this);
         }
     }

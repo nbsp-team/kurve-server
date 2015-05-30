@@ -141,6 +141,7 @@ public class GameFieldImpl implements GameField {
 
             }
         }
+
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
@@ -149,19 +150,10 @@ public class GameFieldImpl implements GameField {
             playing = false;
             room.startRound();
         }
-
-        if (dead == numPlayers || numPlayers == 0) {
-            playing = false;
-            room.endGame();
-            gameService.destroyRoom(room);
-        }
-
     }
 
     public void run() {
         Runnable gameLoop = () -> {
-            System.out.println("Started game loop");
-
             long now, dt = 0;
             long last = System.currentTimeMillis();
             long stepTime = STEP_TIME;
@@ -173,8 +165,6 @@ public class GameFieldImpl implements GameField {
                         dt -= stepTime;
                         step();
                     }
-
-
                 }
                 last = now;
             }

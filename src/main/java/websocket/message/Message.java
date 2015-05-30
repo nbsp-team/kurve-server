@@ -33,6 +33,7 @@ public abstract class Message extends AbstractJsonMessage {
                 .registerTypeAdapter(SnakePatchMessage.class, new SnakePatchMessageSerializer())
                 .registerTypeAdapter(Snake.class, new SnakeUpdatesSerializer())
                 .registerTypeAdapter(StartRoundMessage.class, new StartRoundMessageSerializer())
+                .registerTypeAdapter(RatingUpdateMessage.class, new RatingUpdateMessageSerializer())
                 .serializeNulls()
                 .create();
     }
