@@ -22,14 +22,16 @@ public class GameWebSocketCreator implements WebSocketCreator {
     private SessionManager sessionManager;
     private GameWebSocketHandler.WebSocketMessageListener messageListener;
 
-    public GameWebSocketCreator(SessionManager sessionManager, SocialAccountService socialAccountService, GameWebSocketHandler.WebSocketMessageListener messageListener) {
+    public GameWebSocketCreator(SessionManager sessionManager, SocialAccountService socialAccountService,
+                                GameWebSocketHandler.WebSocketMessageListener messageListener) {
         this.socialAccountService = socialAccountService;
         this.sessionManager = sessionManager;
         this.messageListener = messageListener;
     }
 
     @Override
-    public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
+    public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest,
+                                  ServletUpgradeResponse servletUpgradeResponse) {
         String sessionId = getSessionId(servletUpgradeRequest.getCookies());
         return new GameWebSocketHandler(
                 getUserBySessionId(sessionId),

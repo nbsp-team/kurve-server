@@ -127,9 +127,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     public synchronized void sendMessage(Message message) {
         try {
-            session.getRemote().sendString(
-                    message.getBody()
-            );
+            session.getRemote().sendString(message.getBody());
         } catch (IOException e) {
             // TODO: error response
             try {
