@@ -1,6 +1,5 @@
 package frontend.response;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import frontend.AbstractJsonMessage;
 import frontend.response.serializer.*;
@@ -19,6 +18,7 @@ public class Response  extends AbstractJsonMessage{
                 .registerTypeAdapter(RatingResponse.class, new RatingResponseSerializer())
                 .registerTypeAdapter(ServerStatusResponse.class, new ServerStatusResponseSerializer())
                 .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
+                .registerTypeAdapter(GetMobileUrlResponse.class, new GetMobileUrlResponseSerializer())
 
                 .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
 

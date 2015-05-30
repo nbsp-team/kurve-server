@@ -35,7 +35,6 @@ public class SocialSignInServlet extends HttpServlet {
                 code
         );
 
-
         user = socialAccountService.addUser(user);
 
         Map<String, Object> pageVariables = new HashMap<>();

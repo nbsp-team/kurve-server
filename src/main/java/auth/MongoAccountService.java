@@ -19,6 +19,9 @@ public class MongoAccountService extends SocialAccountService {
 
     @Override
     public UserProfile addUser(UserProfile userProfile) {
+        if (userProfile == null) {
+            return null;
+        }
         return usersDao.insert(userProfile);
     }
 

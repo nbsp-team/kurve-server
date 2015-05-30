@@ -22,8 +22,6 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import websocket.GameWebSocketCreator;
 import websocket.SocketServlet;
 
@@ -95,6 +93,9 @@ public class Main {
                 gameService
         ));
 
+        MobileUrlServlet mobileUrlServlet = new MobileUrlServlet(socialAccountService);
+        MobileAuthServlet mobileAuthServlet = new MobileAuthServlet(sessionManager);
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(socialSignIn), "/api/v" + API_VERSION + "/auth/social");
         context.addServlet(new ServletHolder(signOut), "/api/v" + API_VERSION + "/auth/signout");
@@ -102,6 +103,8 @@ public class Main {
         context.addServlet(new ServletHolder(rating), "/api/v" + API_VERSION + "/rating/");
         context.addServlet(new ServletHolder(serverStatus), "/api/v" + API_VERSION + "/admin/status");
         context.addServlet(new ServletHolder(serverShutdown), "/api/v" + API_VERSION + "/admin/shutdown");
+        context.addServlet(new ServletHolder(mobileUrlServlet), "/api/v" + API_VERSION + "/mobile/get");
+        context.addServlet(new ServletHolder(mobileAuthServlet), "/api/v" + API_VERSION + "/mobile/auth");
         context.addServlet(new ServletHolder(socketServlet), "/socket/");
 
         ResourceHandler resourceHandler = new ResourceHandler();
