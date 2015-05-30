@@ -9,26 +9,19 @@ import javax.jws.soap.SOAPBinding;
  */
 public class UserResponse {
     private UserProfile user;
-    private boolean empty = true;
 
     public UserResponse() {
     }
 
     public UserResponse(UserProfile userProfile) {
         this.user = userProfile;
-        empty = false;
     }
 
     public void setUser(UserProfile user) {
         this.user = user;
-        empty = false;
     }
 
     public UserProfile getUser() {
         return user;
-    }
-
-    public boolean isEmpty() {
-        return empty;
     }
 }
