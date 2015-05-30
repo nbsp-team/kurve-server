@@ -160,6 +160,8 @@ public class GameFieldImpl implements GameField {
 
     public void run() {
         Runnable gameLoop = () -> {
+            System.out.println("Started game loop");
+
             long now, dt = 0;
             long last = System.nanoTime();
             long stepTime = STEP_TIME;
