@@ -39,6 +39,7 @@ public abstract class SocialAccountService implements Abonent, Runnable {
 
     @Override
     public void run() {
+        System.out.println("SocialAccountService started");
         while (true){
             messageSystem.execForAbonent(this);
             try {

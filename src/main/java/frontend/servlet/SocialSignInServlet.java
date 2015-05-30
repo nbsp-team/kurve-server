@@ -21,6 +21,7 @@ public class SocialSignInServlet extends HttpServlet {
 
     public SocialSignInServlet(FrontendService frontendService, SocialAccountService socialAccountService) {
         this.socialAccountService = socialAccountService;
+        this.frontendService = frontendService;
     }
 
     @Override
@@ -37,8 +38,7 @@ public class SocialSignInServlet extends HttpServlet {
                 code
         );
 
-
-        user = socialAccountService.addUser(user);
+        user = frontendService.addUser(user);
 
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("authSuccess", user != null ? "true" : "false");

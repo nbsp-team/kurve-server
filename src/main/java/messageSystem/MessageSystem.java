@@ -23,6 +23,7 @@ public final class MessageSystem {
     }
 
     public void sendMessage(Message message) {
+        System.out.println("Sending new message: " + message.toString());
         messages.get(message.getTo()).add(message);
     }
 

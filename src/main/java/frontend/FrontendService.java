@@ -1,6 +1,7 @@
 package frontend;
 
 import auth.messages.SocialSignInMessage;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import messageSystem.Abonent;
 import messageSystem.Address;
 import messageSystem.Message;
@@ -44,7 +45,9 @@ public class FrontendService implements Abonent, Runnable {
     }
 
     public void onAuth(UserProfile user, Message request) {
+        System.out.println("OnAuth, request: " + request.toString());
         if (userResponses.containsKey(request)) {
+            System.out.println("Setting user to request: " + request.toString());
             userResponses.get(request).setUser(user);
         }
     }
@@ -55,6 +58,8 @@ public class FrontendService implements Abonent, Runnable {
 
         UserResponse response = new UserResponse();
         userResponses.put(request, response);
+
+        System.out.println("Putted request to hashmap: " + request.toString());
 
         while(response.isEmpty()) {}
 

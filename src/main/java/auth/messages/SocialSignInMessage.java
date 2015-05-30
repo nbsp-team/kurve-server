@@ -19,5 +19,6 @@ public final class SocialSignInMessage extends MessageToAccountService {
         UserProfile signUser = service.addUser(user);
         final Message back = new MessageIsAuthenticated(getTo(), getFrom(), this, signUser);
         service.getMessageSystem().sendMessage(back);
+        System.out.println("Sending auth message back " + back.toString());
     }
 }
