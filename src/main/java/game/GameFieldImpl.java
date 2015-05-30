@@ -19,7 +19,7 @@ public class GameFieldImpl implements GameField {
     public static final Logger LOG = LogManager.getLogger(GameService.class);
 
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
-    public static final int STEP_TIME = 1000000000 / FPS;
+    public static final int STEP_TIME = 1000 / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
@@ -150,11 +150,11 @@ public class GameFieldImpl implements GameField {
             room.startRound();
         }
 
-//        if (dead == numPlayers) {
-//            playing = false;
-//            room.endGame();
-//            gameManager.destroyRoom(room);
-//        }
+        if (dead == numPlayers || numPlayers == 0) {
+            playing = false;
+            room.endGame();
+            gameService.destroyRoom(room);
+        }
 
     }
 
@@ -163,11 +163,11 @@ public class GameFieldImpl implements GameField {
             System.out.println("Started game loop");
 
             long now, dt = 0;
-            long last = System.nanoTime();
+            long last = System.currentTimeMillis();
             long stepTime = STEP_TIME;
             while (playing) {
-                now = System.nanoTime();
-                dt += Math.min(1000000000, (now - last));
+                now = System.currentTimeMillis();
+                dt += Math.min(1000, (now - last));
                 if (dt > stepTime) {
                     while (dt > stepTime) {
                         dt -= stepTime;
