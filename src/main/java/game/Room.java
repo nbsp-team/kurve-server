@@ -16,7 +16,7 @@ public class Room {
 
     enum RoomState {
         WAITING,
-        GAME;
+        GAME
     }
 
     private List<Player> players;
@@ -85,7 +85,7 @@ public class Room {
             currentRound++;
 
             for (int i = 0; i < players.size(); i++) {
-                players.get(i).sendMessage(new StartRoundMessage(this, i));
+                players.get(i).sendMessage(new StartRoundMessage(this, i, currentRound));
             }
 
             roomState = RoomState.GAME;
