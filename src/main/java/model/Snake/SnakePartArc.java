@@ -31,6 +31,7 @@ public class SnakePartArc {
     }
 
     public boolean isInside(double x, double y, int lineRadius) {
+
         double d = MathUtils.distance(this.x, this.y, x, y);
         if (Math.abs(d - r) > lineRadius + this.lineRadius) return false;
         double alpha = MathUtils.normAngle(Math.atan2((y - this.y), (x - this.x)));

@@ -167,24 +167,23 @@ public class Snake {
         doNewPart();
     }
 
-    public synchronized void step() {
-
+    public synchronized void step(double frames) {
         makeHoles();
         if (turning == turningState.NOT_TURNING) {
-            x += vx;
-            y += vy;
-            if (drawing) lastLine().updateHead(x, y, v);
+            x += vx * frames;
+            y += vy * frames;
+            if (drawing) lastLine().updateHead(x, y, v * frames);
         } else {
-            double dx = (x - arcCenterX);
-            double dy = (y - arcCenterY);
-
-            angle += angleV;
-            y = arcCenterY + dy * cosV + dx * sinV;
-            x = arcCenterX - dy * sinV + dx * cosV;
-            if (drawing) lastArc().updateHead(angleV);
-
+            angle += angleV * frames;
+            if (turning == turningState.TURNING_LEFT) {
+                y = arcCenterY + turnRadius * Math.cos(angle);
+                x = arcCenterX - turnRadius * Math.sin(angle);
+            } else {
+                y = arcCenterY - turnRadius * Math.cos(angle);
+                x = arcCenterX + turnRadius * Math.sin(angle);
+            }
+            if (drawing) lastArc().updateHead(angleV * frames);
         }
-
     }
 
     private void makeHoles() {

@@ -19,7 +19,8 @@ public class GameFieldImpl implements GameField {
     public static final Logger LOG = LogManager.getLogger(GameService.class);
 
     public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
-    public static final int STEP_TIME = 1000 / FPS;
+    public static final int SECOND = 1_000_000_000;
+    public static final int STEP_TIME = SECOND / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
 
@@ -90,7 +91,6 @@ public class GameFieldImpl implements GameField {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             run();
         }).start();
     }
@@ -120,10 +120,10 @@ public class GameFieldImpl implements GameField {
         return updatesManager;
     }
 
-    private void step() {
+    private void step(double frames) {
         for (Snake snake : snakes) {
             if (snake.isAlive()) {
-                snake.step();
+                snake.step(frames);
 
                 double x = snake.getX();
                 double y = snake.getY();
@@ -155,15 +155,24 @@ public class GameFieldImpl implements GameField {
     public void run() {
         Runnable gameLoop = () -> {
             long now, dt = 0;
-            long last = System.currentTimeMillis();
+            long last = System.nanoTime();
             long stepTime = STEP_TIME;
             while (playing) {
-                now = System.currentTimeMillis();
-                dt += Math.min(1000, (now - last));
-                if (dt > stepTime) {
-                    while (dt > stepTime) {
-                        dt -= stepTime;
-                        step();
+                now = System.nanoTime();
+                dt = Math.min(SECOND, (now - last));
+//                if (dt > stepTime) {
+//                    while (dt > stepTime) {
+//                        dt -= stepTime;
+//                        step();
+//                    }
+//                }
+                step((double)dt / stepTime);
+                long sleepNano = (stepTime - (System.nanoTime() - now) );
+                if (sleepNano > 0) {
+                    try {
+                        Thread.sleep(sleepNano / 1000_000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
                 last = now;

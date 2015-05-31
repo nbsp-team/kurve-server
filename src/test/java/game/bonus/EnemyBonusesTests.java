@@ -54,21 +54,19 @@ public class EnemyBonusesTests {
 
     @Test
     public void bigTurnEnemyBonus() {
-//        Этот тест почему-то не проходит :(
 
+        Bonus bonus = new Bonus(0, 0, Bonus.Kind.BIG_TURNS_ENEMY);
 
-//        Bonus bonus = new Bonus(0, 0, Bonus.Kind.BIG_TURNS_ENEMY);
-//
-//        double oldMainSnakeTurnRadius = mainSnake.getTurnRadius();
-//        double oldOtherSnakeTurnRadius = otherSnake.getTurnRadius();
-//        bonusManager.addBonus(bonus);
-//        bonusManager.timeStep();
-//
-//        System.out.println(oldOtherSnakeTurnRadius);
-//        System.out.println(otherSnake.getTurnRadius());
-//
-//        assertTrue(mainSnake.getTurnRadius() == oldMainSnakeTurnRadius
-//                && oldOtherSnakeTurnRadius < otherSnake.getTurnRadius());
+        double oldMainSnakeTurnRadius = mainSnake.getTurnRadius();
+        double oldOtherSnakeTurnRadius = otherSnake.getTurnRadius();
+        bonusManager.addBonus(bonus);
+        bonusManager.timeStep();
+
+        System.out.println(oldOtherSnakeTurnRadius);
+        System.out.println(otherSnake.getTurnRadius());
+
+        assertTrue(mainSnake.getTurnRadius() == oldMainSnakeTurnRadius
+                && oldOtherSnakeTurnRadius < otherSnake.getTurnRadius());
     }
 
     @Test
