@@ -59,11 +59,13 @@ public class MongoAccountServiceTests {
         ));
         assertNotNull(testUser);
 
-        testUser = accountService.getUserById(testUser.getId());
-        assertNotNull(testUser);
+        UserProfile dbUser = accountService.getUserById(testUser.getId());
+        assertNotNull(dbUser);
 
-        accountService.removeUser(testUser.getId());
-        testUser = accountService.getUserById(testUser.getId());
+        assertEquals("Test", dbUser.getFirstName());
+
+        accountService.removeUser(dbUser.getId());
+        testUser = accountService.getUserById(dbUser.getId());
         assertNull(testUser);
     }
 
