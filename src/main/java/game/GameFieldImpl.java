@@ -155,17 +155,25 @@ public class GameFieldImpl implements GameField {
     public void run() {
         Runnable gameLoop = () -> {
             long now, dt = 0;
-            long last = System.currentTimeMillis();
             long stepTime = STEP_TIME;
+            long last = System.currentTimeMillis();
             while (playing) {
                 now = System.currentTimeMillis();
-                dt += Math.min(1000, (now - last));
-                if (dt > stepTime) {
-                    while (dt > stepTime) {
-                        dt -= stepTime;
-                        step();
-                    }
+
+                dt = Math.min(stepTime, stepTime - (now - last));
+                if (dt < 0) {
+                    dt = 0;
                 }
+
+                try {
+                    Thread.sleep(dt);
+                } catch (InterruptedException e) {
+                    playing = false;
+                    e.printStackTrace();
+                }
+
+                step();
+
                 last = now;
             }
         };

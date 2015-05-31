@@ -32,9 +32,12 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
 
     @Override
     public Room onNewConnection(GameWebSocketHandler handler) {
-        LOG.debug("New WebSocket connection: " + handler.getUserProfile());
+
+        System.out.println("New WebSocket connection: " + handler.getUserProfile());
+        System.out.println("Rooms: " + rooms.size());
 
         if (handler.getUserProfile() == null) {
+            System.out.println("Disconnect: auth required");
             handler.disconnect(GameWebSocketHandler.CLOSE_REASON_NO_AUTH, "Auth required");
             return null;
         }
@@ -47,6 +50,8 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             Player player = room.getPlayerByUser(handler.getUserProfile());
 
             if (player != null) {
+                System.out.println("User already in room, attaching: " + handler.getUserProfile().getFirstName());
+
                 player.addConnection(handler);
                 player.sendMessage(new RoomPlayersMessage(room));
                 room.broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
@@ -55,11 +60,14 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             }
 
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
+                System.out.println("Founded room, connecting: " + handler.getUserProfile().getFirstName());
+
                 connectUserToRoom(handler, room);
                 return room;
             }
         }
 
+        System.out.println("Creating new room: " + handler.getUserProfile().getFirstName());
         Room newRoom = new Room(this);
         connectUserToRoom(handler, newRoom);
         rooms.add(newRoom);
@@ -84,6 +92,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     public void destroyRoom(Room room) {
+        System.out.println("Destroying room: " + room);
         rooms.remove(room);
     }
 
