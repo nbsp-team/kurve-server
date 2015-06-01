@@ -19,7 +19,7 @@ public class UserProfileSerializer implements JsonSerializer<UserProfile> {
         jsonObject.addProperty("first_name", src.getFirstName());
         jsonObject.addProperty("last_name", src.getLastName());
         jsonObject.addProperty("avatar", src.getAvatarUrl());
-        jsonObject.addProperty("global_rating", 0);
+        jsonObject.addProperty("global_rating", src.getGlobalRating());
 
         if (src.isAdmin()) {
             jsonObject.addProperty("isAdmin", true);

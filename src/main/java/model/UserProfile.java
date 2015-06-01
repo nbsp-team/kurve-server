@@ -16,6 +16,7 @@ public class UserProfile implements Serializable {
     private int authProvider;
     private String socialID;
     private boolean isAdmin = false;
+    private int globalRating = 0;
 
     public UserProfile(String id, String firstName, String lastName, String avatarUrl, int authProvider, String socialID) {
         this.id = id;
@@ -32,6 +33,16 @@ public class UserProfile implements Serializable {
         this.avatarUrl = avatarUrl;
         this.authProvider = authProvider;
         this.socialID = socialID;
+    }
+
+    public UserProfile(String id, String firstName, String lastName, String avatarUrl, int authProvider, String socialID, int globalRating) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.avatarUrl = avatarUrl;
+        this.authProvider = authProvider;
+        this.socialID = socialID;
+        this.globalRating = globalRating;
     }
 
     public String getId() {
@@ -80,6 +91,14 @@ public class UserProfile implements Serializable {
 
     public void setSocialID(String socialID) {
         this.socialID = socialID;
+    }
+
+    public int getGlobalRating() {
+        return globalRating;
+    }
+
+    public void setGlobalRating(int globalRating) {
+        this.globalRating = globalRating;
     }
 
     public boolean isAdmin() {

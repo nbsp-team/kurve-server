@@ -11,6 +11,8 @@ import configuration.DatabaseConfig;
 import configuration.GameMechanicsConfig;
 import configuration.NetworkConfig;
 import configuration.XmlLoader;
+import dao.ScoresDao;
+import dao.UsersDao;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameService;
@@ -57,22 +59,18 @@ public class Main {
         LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
 
         SocialAccountService socialAccountService;
-        if (Boolean.valueOf(dbConfig.offline)) {
-            socialAccountService = new AccountServiceInMemory();
-        } else {
-            ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
-            MongoCredential credential = MongoCredential.createCredential(
-                    dbConfig.username,
-                    dbConfig.name,
-                    dbConfig.password.toCharArray()
-            );
+        ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
+        MongoCredential credential = MongoCredential.createCredential(
+                dbConfig.username,
+                dbConfig.name,
+                dbConfig.password.toCharArray()
+        );
 
-            MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
-                add(credential);
-            }});
-            DB db = mongoClient.getDB(dbConfig.name);
-            socialAccountService = new MongoAccountService(db);
-        }
+        MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
+            add(credential);
+        }});
+        DB db = mongoClient.getDB(dbConfig.name);
+        socialAccountService = new MongoAccountService(db);
 
         Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
         SessionManager sessionManager = new SessionManager();
@@ -82,11 +80,11 @@ public class Main {
         Servlet signOut = new SignOutServlet(socialAccountService);
 
         Servlet user = new UserServlet(socialAccountService);
-        Servlet rating = new RatingServlet(socialAccountService);
+        Servlet rating = new RatingServlet(socialAccountService, new ScoresDao(db));
         Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager);
         Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
-        GameService gameService = new GameService();
+        GameService gameService = new GameService(new ScoresDao(db));
         SocketServlet socketServlet = new SocketServlet(new GameWebSocketCreator(
                 sessionManager,
                 socialAccountService,

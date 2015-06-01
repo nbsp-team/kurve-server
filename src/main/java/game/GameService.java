@@ -1,6 +1,8 @@
 package game;
 
+import dao.ScoresDao;
 import main.Main;
+import model.Score;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import websocket.GameWebSocketHandler;
@@ -10,6 +12,7 @@ import websocket.message.RoomPlayersMessage;
 import websocket.message.StartGameMessage;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,13 +24,15 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     private final int MIN_PLAYER_IN_ROOM;
     private final int MAX_PLAYER_IN_ROOM;
 
+    private final ScoresDao scoresDao;
     private List<Room> rooms;
 
-    public GameService() {
+    public GameService(ScoresDao scoresDao) {
         MIN_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.minPlayerNumber);
         MAX_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.maxPlayerNumber);
 
         rooms = new ArrayList<>();
+        this.scoresDao = scoresDao;
     }
 
     @Override
@@ -148,6 +153,14 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
             );
             room.onKeyEvent(isLeft, isUp, sender);
         }
+    }
+
+    public void writePointsToDb(Room room) {
+        room.getPlayers().stream().filter(player -> player.getPoints() > 0).forEach(player -> {
+            scoresDao.insert(
+                    new Score(player.getUserProfile().getId(), player.getPoints(), new Date())
+            );
+        });
     }
 
     private String getUnusedColor(Room room) {

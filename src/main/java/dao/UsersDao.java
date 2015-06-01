@@ -9,28 +9,30 @@ import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * nickolay, 05.05.15.
  */
 public class UsersDao {
-    private static final String USERS_COLLECTION = "users";
+    public static final String USERS_COLLECTION = "users";
 
-    private static final String ID_FIELD_NAME = "_id";
-    private static final String FIRST_NAME_FIELD_NAME = "first_name";
-    private static final String LAST_NAME_FIELD_NAME = "last_name";
-    private static final String AVATAR_URL_FIELD_NAME = "avatar";
-    private static final String AUTH_PROVIDER_FIELD_NAME = "auth_provider";
-    private static final String SOCIAL_ID_FIELD_NAME = "social_id";
+    public static final String USER_ID_FIELD_NAME = "_id";
+    public static final String FIRST_NAME_FIELD_NAME = "first_name";
+    public static final String LAST_NAME_FIELD_NAME = "last_name";
+    public static final String AVATAR_URL_FIELD_NAME = "avatar";
+    public static final String AUTH_PROVIDER_FIELD_NAME = "auth_provider";
+    public static final String SOCIAL_ID_FIELD_NAME = "social_id";
 
-    private DB db;
+    private final DBCollection users;
+    private ScoresDao scoresDao;
 
     public UsersDao(DB db) {
-        this.db = db;
+        this.users = db.getCollection(USERS_COLLECTION);
+        this.scoresDao = new ScoresDao(db);
     }
 
     public UserProfile insert(UserProfile user) {
-        DBCollection users = db.getCollection(USERS_COLLECTION);
 
         BasicDBObject userQuery = new BasicDBObject();
         List<BasicDBObject> obj = new ArrayList<>();
@@ -63,8 +65,6 @@ public class UsersDao {
 
 
     public void remove(String id) {
-        DBCollection users = db.getCollection(USERS_COLLECTION);
-
         BasicDBObject searchQuery = new BasicDBObject("_id", new ObjectId(id));
         DBObject userObject = users.findOne(searchQuery);
 
@@ -72,19 +72,18 @@ public class UsersDao {
     }
 
     public UserProfile getById(String id) {
-        DBCollection users = db.getCollection(USERS_COLLECTION);
-
         BasicDBObject searchQuery = new BasicDBObject("_id", new ObjectId(id));
         DBObject userObject = users.findOne(searchQuery);
 
         if (userObject != null) {
             return new UserProfile(
-                    userObject.get(ID_FIELD_NAME).toString(),
+                    userObject.get(USER_ID_FIELD_NAME).toString(),
                     userObject.get(FIRST_NAME_FIELD_NAME).toString(),
                     userObject.get(LAST_NAME_FIELD_NAME).toString(),
                     userObject.get(AVATAR_URL_FIELD_NAME).toString(),
-                    Integer.valueOf(userObject.get(AUTH_PROVIDER_FIELD_NAME).toString()),
-                    userObject.get(SOCIAL_ID_FIELD_NAME).toString()
+                    (int) userObject.get(AUTH_PROVIDER_FIELD_NAME),
+                    userObject.get(SOCIAL_ID_FIELD_NAME).toString(),
+                    scoresDao.getPoints(id)
             );
         } else {
             return null;
@@ -92,10 +91,10 @@ public class UsersDao {
     }
 
     public long getCount() {
-        return db.getCollection(USERS_COLLECTION).getCount();
+        return users.getCount();
     }
 
     public void clear() {
-        db.getCollection(USERS_COLLECTION).drop();
+        users.drop();
     }
 }

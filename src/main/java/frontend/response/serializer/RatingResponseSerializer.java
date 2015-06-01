@@ -2,6 +2,7 @@ package frontend.response.serializer;
 
 import com.google.gson.*;
 import frontend.response.RatingResponse;
+import model.UserProfile;
 
 import java.lang.reflect.Type;
 
@@ -13,18 +14,15 @@ public class RatingResponseSerializer implements JsonSerializer<RatingResponse> 
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("error", JsonNull.INSTANCE);
 
-        JsonObject responseObject = new JsonObject();
-
-        JsonArray usersArray = new JsonArray();
-        for (int i = 0; i < 20; ++i) {
-            JsonObject user = new JsonObject();
-            user.addProperty("username", "user" + i);
-            user.addProperty("global_rating", 100 + i * 5);
-            usersArray.add(user);
+        JsonArray ratingArray = new JsonArray();
+        for (UserProfile user : src.getRatings()) {
+            ratingArray.add(context.serialize(user));
         }
-        responseObject.add("users", usersArray);
 
-        jsonObject.add("response", responseObject);
+        JsonObject response = new JsonObject();
+        response.add("rating", ratingArray);
+
+        jsonObject.add("response", response);
 
         return jsonObject;
     }

@@ -12,7 +12,7 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 public class Room {
-    public static final int ROUND_NUMBER = 6;
+    public static final int ROUND_NUMBER = 2;
 
     enum RoomState {
         WAITING,
@@ -85,7 +85,7 @@ public class Room {
     }
 
     public void startRound() {
-        if (currentRound < ROUND_NUMBER) {
+        if (currentRound < ROUND_NUMBER - 1) {
             currentRound++;
 
             for (int i = 0; i < players.size(); i++) {
@@ -103,6 +103,7 @@ public class Room {
     }
 
     public void endGame() {
+        gameService.writePointsToDb(this);
         broadcastMessage(new GameOverMessage(this));
     }
 
