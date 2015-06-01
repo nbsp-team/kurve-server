@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.common.WebSocketSession;
 import websocket.message.Message;
 
@@ -127,20 +128,15 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         room = messageListener.onNewConnection(this);
     }
 
-    public void sendMessage(Message message) {
+    public boolean sendMessage(Message message) {
         RemoteEndpoint remote = session.getRemote();
         synchronized (remote) {
             try {
-                remote.sendString(message.getBody());
-            } catch (IOException e) {
-                // TODO: error response
-                System.out.println("ERROR: ioexception");
-                try {
-                    remote.sendString("500");
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
+                remote.sendStringByFuture(message.getBody());
+                return true;
+            } catch (WebSocketException we) {
+                we.printStackTrace();
+                return false;
             }
         }
     }
