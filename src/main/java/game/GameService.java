@@ -99,16 +99,21 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     @Override
     public void onDisconnect(GameWebSocketHandler handler) {
         if (handler.getUserProfile() == null) {
+            System.out.println("User disconnected: unknown profile");
             return;
         }
+
+        System.out.println("User disconnected: " + handler.getUserProfile().getFirstName());
 
         Room userRoom = handler.getRoom();
         if (userRoom != null) {
             Player player = userRoom.getPlayerByUser(handler.getUserProfile());
             if (player.getConnectionCount() == 1) {
+                System.out.println("Removed player (connection count = 1) " + handler.getUserProfile().getFirstName());
                 userRoom.onPlayerDisconnect(player);
                 handler.setRoom(null);
             } else {
+                System.out.println("Removed connection (connection count != 1) " + handler.getUserProfile().getFirstName());
                 player.removeConnection(handler);
             }
         }
