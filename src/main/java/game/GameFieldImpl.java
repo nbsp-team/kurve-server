@@ -155,7 +155,7 @@ public class GameFieldImpl implements GameField {
             (new Thread(() -> {
                 try {
                     Thread.sleep(LAST_DEATH_DELAY);
-                    killAll();
+                    //killAll();
                     playing = false;
                     room.startRound();
                 } catch (InterruptedException e) {
