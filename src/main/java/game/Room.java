@@ -119,6 +119,9 @@ public class Room {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(this, i));
         }
+
+        broadcastMessage(new RatingUpdateMessage(this));
+
         gameField = new GameFieldImpl(this, gameService);
 
         gameField.play();
