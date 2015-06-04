@@ -24,6 +24,6 @@ public class ServerStatusServlet extends AbstractServlet {
     public Response onGet(HttpServletRequest request) {
         long userCount = socialAccountService.getUserCount();
         long sessionCount = sessionIdManager.getSessions().size();
-        return new ServerStatusResponse(userCount, sessionCount, gameService.getRoomCount());
+        return new ServerStatusResponse(userCount, sessionCount, gameService);
     }
 }

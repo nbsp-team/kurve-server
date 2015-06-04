@@ -175,4 +175,8 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     public long getRoomCount() {
         return rooms.size();
     }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
 }

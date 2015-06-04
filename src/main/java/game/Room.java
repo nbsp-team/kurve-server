@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class Room {
     public static final int ROUND_NUMBER = 2;
+    private final long creationDate;
 
     enum RoomState {
         WAITING,
@@ -42,7 +43,7 @@ public class Room {
 
     public Room(GameService gameService) {
         players = new ArrayList<>();
-
+        this.creationDate = System.currentTimeMillis();
         this.gameService = gameService;
     }
 
@@ -213,5 +214,9 @@ public class Room {
 
     public GameField getGameField() {
         return gameField;
+    }
+
+    public long getCreationDate() {
+        return creationDate;
     }
 }

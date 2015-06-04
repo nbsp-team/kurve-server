@@ -3,7 +3,9 @@ package frontend.response;
 import com.google.gson.GsonBuilder;
 import frontend.AbstractJsonMessage;
 import frontend.response.serializer.*;
+import game.Player;
 import model.UserProfile;
+import websocket.message.serializer.PlayerSerializer;
 
 /**
  * nickolay, 25.02.15.
@@ -21,6 +23,7 @@ public class Response  extends AbstractJsonMessage{
                 .registerTypeAdapter(GetMobileUrlResponse.class, new GetMobileUrlResponseSerializer())
 
                 .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
+                .registerTypeAdapter(Player.class, new PlayerSerializer())
 
                 .serializeNulls()
                 .create();
