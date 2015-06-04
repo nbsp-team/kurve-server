@@ -23,6 +23,7 @@ public class GameFieldImpl implements GameField {
     public static final int STEP_TIME = SECOND / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
+    public static final int LAST_DEATH_DELAY = 3000;
 
     private final GameService gameService;
     private final SnakeUpdatesManager updatesManager;
@@ -115,6 +116,11 @@ public class GameFieldImpl implements GameField {
         dead++;
     }
 
+
+    public void killAll() {
+        snakes.stream().filter(Snake::isAlive).forEach(this::killSnake);
+    }
+
     @Override
     public SnakeUpdatesManager getUpdatesManager() {
         return updatesManager;
@@ -143,10 +149,19 @@ public class GameFieldImpl implements GameField {
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
-        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead >= numPlayers - 1)) {
+        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead == numPlayers)) {
             LOG.debug("Round over");
-            playing = false;
-            room.startRound();
+
+            (new Thread(() -> {
+                try {
+                    Thread.sleep(LAST_DEATH_DELAY);
+                    killAll();
+                    playing = false;
+                    room.startRound();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            })).start();
         }
     }
 
@@ -180,5 +195,4 @@ public class GameFieldImpl implements GameField {
         Thread loopThread = new Thread(gameLoop);
         loopThread.start();
     }
-
 }

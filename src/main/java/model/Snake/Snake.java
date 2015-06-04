@@ -40,7 +40,6 @@ public class Snake {
     private boolean bigHole = false;
     private boolean travThroughWalls = false;
 
-
     public void setArcsSent(int arcsSent) {
         this.arcsSent = arcsSent;
     }
@@ -352,4 +351,5 @@ public class Snake {
     public void setReversed(boolean reversed) {
         this.reversed = reversed;
     }
+
 }
