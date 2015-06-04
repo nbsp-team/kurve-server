@@ -28,7 +28,7 @@ public class Room {
     private int currentRound = 0;
 
     private int getPointsByDeathId(int deathId) {
-        return deathId + 1;
+        return deathId;
     }
 
     public void onPlayerDeath(int playerId, int deathId) {

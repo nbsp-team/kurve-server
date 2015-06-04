@@ -137,15 +137,13 @@ public class GameFieldImpl implements GameField {
                 } else if (y < 0) {
                     teleportOrKill(snake, snake.getX(), height);
                 }
-
-
             }
         }
 
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
-        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead == numPlayers - 1)) {
+        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead >= numPlayers - 1)) {
             LOG.debug("Round over");
             playing = false;
             room.startRound();
