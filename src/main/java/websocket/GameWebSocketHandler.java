@@ -62,6 +62,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketError(Throwable cause) {
         LOG.debug("WebSocket error: " + cause.toString() + " for user " + userProfile);
+        messageListener.onDisconnect(this);
     }
 
     @Override

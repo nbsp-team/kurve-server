@@ -85,6 +85,8 @@ public class Room {
     }
 
     public void startRound() {
+        System.out.println("startRound()");
+
         if (currentRound < ROUND_NUMBER - 1) {
             currentRound++;
 
@@ -96,6 +98,8 @@ public class Room {
             gameField = new GameFieldImpl(this, gameService);
             gameField.play();
         } else {
+            System.out.println("End game!");
+
             endGame();
             gameField.pause();
             gameService.destroyRoom(this);

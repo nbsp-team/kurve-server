@@ -35,6 +35,8 @@ public class GameFieldImpl implements GameField {
     private SnakeCollisionChecker snakeCollisionChecker;
 
     private Room room;
+    private boolean lastDeath = false;
+    private long lastDeathTimeMillis;
 
     public GameFieldImpl(Room room, GameService gameService) {
         updatesManager = new SnakeUpdatesManager(room);
@@ -127,41 +129,38 @@ public class GameFieldImpl implements GameField {
     }
 
     private void step(double frames) {
-        for (Snake snake : snakes) {
-            if (snake.isAlive()) {
-                snake.step(frames);
+        snakes.stream().filter(Snake::isAlive).forEach(snake -> {
+            snake.step(frames);
 
-                double x = snake.getX();
-                double y = snake.getY();
-                if (x > width) {
-                    teleportOrKill(snake, 0, snake.getY());
-                } else if (x < 0) {
-                    teleportOrKill(snake, width, snake.getY());
-                }
-                if (y > height) {
-                    teleportOrKill(snake, snake.getX(), 0);
-                } else if (y < 0) {
-                    teleportOrKill(snake, snake.getX(), height);
-                }
+            double x = snake.getX();
+            double y = snake.getY();
+            if (x > width) {
+                teleportOrKill(snake, 0, snake.getY());
+            } else if (x < 0) {
+                teleportOrKill(snake, width, snake.getY());
             }
-        }
+            if (y > height) {
+                teleportOrKill(snake, snake.getX(), 0);
+            } else if (y < 0) {
+                teleportOrKill(snake, snake.getX(), height);
+            }
+        });
 
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
-        if ((numPlayers == 1 && dead == 1) || (numPlayers > 1 && dead == numPlayers - 1)) {
+        if ((numPlayers > 1 && dead == numPlayers - 1) && !lastDeath) {
             LOG.debug("Round over");
+            lastDeath = true;
+            lastDeathTimeMillis = System.currentTimeMillis();
+        }
 
-            (new Thread(() -> {
-                try {
-                    Thread.sleep(LAST_DEATH_DELAY);
-                    //killAll();
-                    playing = false;
-                    room.startRound();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            })).start();
+        if (lastDeath) {
+            if ((System.currentTimeMillis() - lastDeathTimeMillis) >= LAST_DEATH_DELAY) {
+                killAll();
+                playing = false;
+                room.startRound();
+            }
         }
     }
 
@@ -173,13 +172,8 @@ public class GameFieldImpl implements GameField {
             while (playing) {
                 now = System.nanoTime();
                 dt = Math.min(SECOND, (now - last));
-//                if (dt > stepTime) {
-//                    while (dt > stepTime) {
-//                        dt -= stepTime;
-//                        step();
-//                    }
-//                }
                 step((double)dt / stepTime);
+
                 long sleepNano = (stepTime - (System.nanoTime() - now) );
                 if (sleepNano > 0) {
                     try {
