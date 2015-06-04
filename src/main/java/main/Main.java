@@ -79,17 +79,18 @@ public class Main {
         Servlet socialSignIn = new SocialSignInServlet(socialAccountService);
         Servlet signOut = new SignOutServlet(socialAccountService);
 
-        Servlet user = new UserServlet(socialAccountService);
-        Servlet rating = new RatingServlet(socialAccountService, new ScoresDao(db));
-        Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager);
-        Servlet serverShutdown = new ShutdownServlet(socialAccountService);
-
         GameService gameService = new GameService(new ScoresDao(db));
         SocketServlet socketServlet = new SocketServlet(new GameWebSocketCreator(
                 sessionManager,
                 socialAccountService,
                 gameService
         ));
+
+
+        Servlet user = new UserServlet(socialAccountService);
+        Servlet rating = new RatingServlet(socialAccountService, new ScoresDao(db));
+        Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager, gameService);
+        Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
         MobileUrlServlet mobileUrlServlet = new MobileUrlServlet(socialAccountService);
         MobileAuthServlet mobileAuthServlet = new MobileAuthServlet(sessionManager);

@@ -6,10 +6,12 @@ package frontend.response;
 public class ServerStatusResponse extends SuccessResponse {
     private long userCount;
     private long sessionCount;
+    private long roomCount;
 
-    public ServerStatusResponse(long userCount, long sessionCount) {
+    public ServerStatusResponse(long userCount, long sessionCount, long roomCount) {
         this.userCount = userCount;
         this.sessionCount = sessionCount;
+        this.roomCount = roomCount;
     }
 
     public long getUserCount() {
@@ -18,5 +20,9 @@ public class ServerStatusResponse extends SuccessResponse {
 
     public long getSessionCount() {
         return sessionCount;
+    }
+
+    public long getRoomCount() {
+        return roomCount;
     }
 }

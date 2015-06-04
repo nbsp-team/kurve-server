@@ -17,6 +17,7 @@ public class ServerStatusResponseSerializer implements JsonSerializer<ServerStat
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("userCount", src.getUserCount());
         responseObject.addProperty("sessionCount", src.getSessionCount());
+        responseObject.addProperty("roomCount", src.getRoomCount());
 
         jsonObject.add("response", responseObject);
         return jsonObject;
