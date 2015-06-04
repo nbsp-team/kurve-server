@@ -36,6 +36,7 @@ public class ServerStatusResponseSerializer implements JsonSerializer<ServerStat
 
             rooms.add(roomInfo);
         }
+        responseObject.add("rooms", rooms);
 
         jsonObject.add("response", responseObject);
         return jsonObject;
