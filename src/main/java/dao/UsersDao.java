@@ -51,9 +51,9 @@ public class UsersDao {
 
         String id;
         if (oldUser != null) {
-            users.update(userQuery, userObject);
+            // TODO: set access token using $set
+            //users.update(userQuery, userObject);
             id = oldUser.get("_id").toString();
-
         } else {
             users.insert(userObject);
             id = userObject.get("_id").toString();
