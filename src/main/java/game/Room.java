@@ -12,7 +12,7 @@ import java.util.List;
  * nickolay, 21.02.15.
  */
 public class Room {
-    public static final int ROUND_NUMBER = 2;
+    public static final int ROUND_NUMBER = 6;
     private final long creationDate;
 
     enum RoomState {
