@@ -113,6 +113,10 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
         Room userRoom = handler.getRoom();
         if (userRoom != null) {
             Player player = userRoom.getPlayerByUser(handler.getUserProfile());
+            if (player == null) {
+                return;
+            }
+
             if (player.getConnectionCount() == 1) {
                 System.out.println("Removed player (connection count = 1) " + handler.getUserProfile().getFirstName());
                 userRoom.onPlayerDisconnect(player);
