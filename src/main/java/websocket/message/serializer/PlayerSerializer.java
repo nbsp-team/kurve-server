@@ -21,7 +21,7 @@ public class PlayerSerializer implements JsonSerializer<Player> {
         jsonObject.addProperty("avatar", src.getUserProfile().getAvatarUrl());
 
         jsonObject.addProperty("player_id", src.getId());
-        jsonObject.addProperty("global_rating", 0);
+        jsonObject.addProperty("global_rating", src.getUserProfile().getGlobalRating());
         jsonObject.addProperty("is_ready", src.isReady());
         jsonObject.addProperty("color",
                 src.getColor()
