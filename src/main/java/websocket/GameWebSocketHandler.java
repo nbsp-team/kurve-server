@@ -133,10 +133,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         RemoteEndpoint remote = session.getRemote();
         synchronized (remote) {
             try {
-                remote.sendStringByFuture(message.getBody());
+                remote.sendString(message.getBody());
                 return true;
-            } catch (WebSocketException we) {
-                we.printStackTrace();
+            } catch (Exception we) {
+                messageListener.onDisconnect(this);
                 return false;
             }
         }
