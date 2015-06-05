@@ -135,7 +135,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
 
                 if (room.getRoomState() == Room.RoomState.GAME) {
                     handler.sendMessage(
-                            new StartGameMessage(room, room.getPlayerIdByUser(player.getUserProfile()))
+                            new StartGameMessage(room, room.getPlayerIdByUser(player.getUserProfile()), room.getCurrentRound(), Room.ROUND_NUMBER)
                     );
                 }
             }

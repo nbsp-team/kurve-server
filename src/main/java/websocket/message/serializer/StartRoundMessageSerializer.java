@@ -23,7 +23,8 @@ public class StartRoundMessageSerializer implements JsonSerializer<StartRoundMes
         responseObject.addProperty("angleSpeed", 180 / (2 * Math.PI) * (double) Snake.defaultSpeed / Snake.defaultTurnRadius);
         responseObject.addProperty("holeLength", Snake.holeLength);
         responseObject.addProperty("myId", src.getPlayerId());
-        responseObject.addProperty("roundNumber", src.getRoundNumber());
+        responseObject.addProperty("currentRound", src.getCurrentRound());
+        responseObject.addProperty("roundNumber", src.getRoundCount());
         responseObject.addProperty("countdown", Integer.valueOf(Main.mechanicsConfig.gameStartCountdown));
         JsonArray playersArray = new JsonArray();
         for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {

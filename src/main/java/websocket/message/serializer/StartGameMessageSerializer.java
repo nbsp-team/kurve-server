@@ -24,6 +24,9 @@ public class StartGameMessageSerializer implements JsonSerializer<StartGameMessa
         responseObject.addProperty("holeLength", Snake.holeLength);
         responseObject.addProperty("myId", src.getPlayerId());
         responseObject.addProperty("countdown", Integer.valueOf(Main.mechanicsConfig.gameStartCountdown));
+        responseObject.addProperty("currentRound", src.getCurrentRound());
+        responseObject.addProperty("roundNumber", src.getRoundCount());
+
         JsonArray playersArray = new JsonArray();
         for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
             Player player = src.getRoom().getPlayers().get(i);

@@ -92,7 +92,7 @@ public class Room {
             currentRound++;
 
             for (int i = 0; i < players.size(); i++) {
-                players.get(i).sendMessage(new StartRoundMessage(this, i, currentRound));
+                players.get(i).sendMessage(new StartRoundMessage(this, i, currentRound, ROUND_NUMBER));
             }
 
             roomState = RoomState.GAME;
@@ -118,7 +118,7 @@ public class Room {
         roomState = RoomState.GAME;
 
         for (int i = 0; i < players.size(); i++) {
-            players.get(i).sendMessage(new StartGameMessage(this, i));
+            players.get(i).sendMessage(new StartGameMessage(this, i, currentRound, ROUND_NUMBER));
         }
 
         broadcastMessage(new RatingUpdateMessage(this));
@@ -218,5 +218,9 @@ public class Room {
 
     public long getCreationDate() {
         return creationDate;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
     }
 }

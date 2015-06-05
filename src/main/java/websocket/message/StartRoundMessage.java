@@ -6,14 +6,20 @@ import game.Room;
  * egor, 18.04.15.
  */
 public class StartRoundMessage extends AbstractStartMessage {
-    private int roundNumber;
+    private final int roundCount;
+    private final int currentRound;
 
-    public StartRoundMessage(Room room, int playerId, int roundNumber) {
+    public StartRoundMessage(Room room, int playerId, int currentRound, int roundCount) {
         super(room, playerId);
-        this.roundNumber = roundNumber;
+        this.currentRound = currentRound;
+        this.roundCount = roundCount;
     }
 
-    public int getRoundNumber() {
-        return roundNumber;
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getRoundCount() {
+        return roundCount;
     }
 }
