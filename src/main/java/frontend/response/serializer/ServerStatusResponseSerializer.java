@@ -29,6 +29,7 @@ public class ServerStatusResponseSerializer implements JsonSerializer<ServerStat
             JsonObject roomInfo = new JsonObject();
 
             roomInfo.addProperty("creationDate", room.getCreationDate());
+            roomInfo.addProperty("status", String.valueOf(room.getRoomState()));
 
             JsonArray players = new JsonArray();
             for(Player player : room.getPlayers()) {
