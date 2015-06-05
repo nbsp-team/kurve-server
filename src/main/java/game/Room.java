@@ -139,7 +139,9 @@ public class Room {
             System.out.println("[Room] Конец игры: 0 игроков, удаление комнаты!");
 
             endGame();
-            gameField.pause();
+            if (gameField != null) {
+                gameField.pause();
+            }
             gameService.destroyRoom(this);
         }
     }
