@@ -17,13 +17,13 @@ public class SlowSelfEffect extends AbstractTemporaryEffect {
     public void activate() {
         snake.multiplySpeedBy(0.5);
         //snake.multiplyTurnRadiusBy(2.5);
-        snake.multiplyTurnRadiusBy(1.25);
+        //snake.multiplyTurnRadiusBy(1.25);
     }
 
     @Override
     public void deactivate() {
         //snake.multiplyTurnRadiusBy(0.4);
-        snake.multiplyTurnRadiusBy(0.8);
+        //snake.multiplyTurnRadiusBy(0.8);
         snake.multiplySpeedBy(2);
     }
 }
