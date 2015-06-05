@@ -147,13 +147,13 @@ public class Room {
         }
     }
 
-    public synchronized void broadcastMessage(Message message) {
+    public void broadcastMessage(Message message) {
         for (Player player : players) {
             player.sendMessage(message);
         }
     }
 
-    public synchronized void broadcastMessageExceptUser(Message message, UserProfile user) {
+    public void broadcastMessageExceptUser(Message message, UserProfile user) {
         for (Player player : players) {
             String roomUserId = player.getUserProfile().getId();
             if (!roomUserId.equals(user.getId())) {
@@ -162,7 +162,7 @@ public class Room {
         }
     }
 
-    public synchronized void broadcastMessageExceptConnection(Message message, GameWebSocketHandler connection) {
+    public void broadcastMessageExceptConnection(Message message, GameWebSocketHandler connection) {
         for (Player player : players) {
             player.sendMessageExceptConnection(message, connection);
         }
