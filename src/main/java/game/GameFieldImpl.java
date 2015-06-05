@@ -23,7 +23,7 @@ public class GameFieldImpl implements GameField {
     public static final int STEP_TIME = SECOND / FPS;
     public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
     public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
-    public static final int LAST_DEATH_DELAY = 3000;
+    public static final int LAST_DEATH_DELAY = 1700;
 
     private final GameService gameService;
     private final SnakeUpdatesManager updatesManager;
@@ -149,7 +149,7 @@ public class GameFieldImpl implements GameField {
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
-        if ((numPlayers > 1 && dead == numPlayers - 1) && !lastDeath) {
+        if (dead >= numPlayers - 1 && !lastDeath) {
             LOG.debug("Round over");
             lastDeath = true;
             lastDeathTimeMillis = System.currentTimeMillis();
