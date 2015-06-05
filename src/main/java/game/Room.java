@@ -131,10 +131,14 @@ public class Room {
     public void onPlayerDisconnect(Player player) {
         players.remove(player);
 
-        broadcastMessageExceptUser(
-                new DisconnectedPlayerMessage(player),
-                player.getUserProfile()
-        );
+        try {
+            broadcastMessageExceptUser(
+                    new DisconnectedPlayerMessage(player),
+                    player.getUserProfile()
+            );
+        } catch (Exception e) {
+            System.out.println("[Room] Disconnected player message sending error!");
+        }
 
         if (players.size() == 0) {
             System.out.println("[Room] Конец игры: 0 игроков, удаление комнаты!");
