@@ -86,7 +86,7 @@ public class Room {
     }
 
     public void startRound() {
-        System.out.println("startRound()");
+        System.out.println("[Room] startRound()");
 
         if (currentRound < ROUND_NUMBER - 1) {
             currentRound++;
@@ -99,7 +99,7 @@ public class Room {
             gameField = new GameFieldImpl(this, gameService);
             gameField.play();
         } else {
-            System.out.println("End game!");
+            System.out.println("[Room] Конец игры! Раунды закончились");
 
             endGame();
             gameField.pause();
@@ -136,7 +136,7 @@ public class Room {
         players.remove(player);
 
         if (players.size() == 0) {
-            System.out.println("End game: 0 players, removing room!");
+            System.out.println("[Room] Конец игры: 0 игроков, удаление комнаты!");
 
             endGame();
             gameField.pause();

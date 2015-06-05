@@ -61,13 +61,13 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     @Override
     public void onWebSocketError(Throwable cause) {
-        LOG.debug("WebSocket error: " + cause.toString() + " for user " + userProfile);
+        System.out.println("[GameWebSocketHandler] WebSocket error: " + cause.toString() + " for user " + userProfile);
         messageListener.onDisconnect(this);
     }
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
-        LOG.debug("WebSocket closed: " + statusCode + " for user " + userProfile);
+        System.out.println("[GameWebSocketHandler] WebSocket closed: " + statusCode + " for user " + userProfile);
         messageListener.onDisconnect(this);
     }
 
@@ -136,6 +136,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 remote.sendString(message.getBody());
                 return true;
             } catch (Exception we) {
+                System.out.println("[GameWebSocketHandler] Ошибка при отправке пакета (" + we.getMessage() + "). Дисконнектинг игрока.");
                 messageListener.onDisconnect(this);
                 return false;
             }
