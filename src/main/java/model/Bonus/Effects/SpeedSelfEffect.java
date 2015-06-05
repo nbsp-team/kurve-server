@@ -16,12 +16,12 @@ public class SpeedSelfEffect extends AbstractTemporaryEffect {
     @Override
     public void activate() {
         snake.multiplySpeedBy(2);
-        snake.multiplyTurnRadiusBy(2);
+       // snake.multiplyTurnRadiusBy(2);
     }
 
     @Override
     public void deactivate() {
-        snake.multiplyTurnRadiusBy(0.5);
+        //snake.multiplyTurnRadiusBy(0.5);
         snake.multiplySpeedBy(0.5);
     }
 }
