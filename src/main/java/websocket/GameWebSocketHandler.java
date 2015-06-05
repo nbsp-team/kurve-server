@@ -130,16 +130,23 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     }
 
     public boolean sendMessage(Message message) {
-        RemoteEndpoint remote = session.getRemote();
-        synchronized (remote) {
-            try {
-                remote.sendString(message.getBody());
-                return true;
-            } catch (Exception we) {
-                System.out.println("[GameWebSocketHandler] Ошибка при отправке пакета (" + we.getMessage() + "). Дисконнектинг игрока.");
-                messageListener.onDisconnect(this);
-                return false;
+        try {
+            RemoteEndpoint remote = session.getRemote();
+
+            synchronized (remote) {
+                try {
+                    remote.sendString(message.getBody());
+                    return true;
+                } catch (Exception we) {
+                    System.out.println("[GameWebSocketHandler] Ошибка при отправке пакета (" + we.getMessage() + "). Дисконнектинг игрока.");
+                    messageListener.onDisconnect(this);
+                    return false;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("[GameWebSocketHandler] Ошибка при получении RemoteEndpoint (" + e.getMessage() + "). Дисконнектинг игрока.");
+            messageListener.onDisconnect(this);
+            return false;
         }
     }
 
