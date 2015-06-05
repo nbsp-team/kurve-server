@@ -29,7 +29,9 @@ public class ReverseEnemyEffect extends AbstractTemporaryEffect {
     @Override
     public void deactivate() {
         for (Snake other : snakes) {
-            other.reverse();
+            if (other != snake) {
+                other.reverse();
+            }
         }
     }
 }
