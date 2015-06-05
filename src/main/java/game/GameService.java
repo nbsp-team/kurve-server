@@ -43,7 +43,7 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
 
         if (handler.getUserProfile() == null) {
             System.out.println("Disconnect: auth required");
-            handler.disconnect(GameWebSocketHandler.CLOSE_REASON_NO_AUTH, "Auth required");
+            handler.disconnect(GameWebSocketHandler.CLOSE_REASON_NO_AUTH , "Auth required");
             return null;
         }
 

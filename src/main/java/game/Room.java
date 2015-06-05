@@ -134,6 +134,14 @@ public class Room {
                 player.getUserProfile()
         );
         players.remove(player);
+
+        if (players.size() == 0) {
+            System.out.println("End game: 0 players, removing room!");
+
+            endGame();
+            gameField.pause();
+            gameService.destroyRoom(this);
+        }
     }
 
     public void broadcastMessage(Message message) {
