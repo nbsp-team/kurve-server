@@ -124,7 +124,7 @@ public class BonusManager {
         }
 
         c++;
-        if (c % MathUtils.randInt(bonusSpawnProbability, bonusSpawnProbability + DEFAULT_BONUS_JITTER) == 0) {
+        if (c % MathUtils.randInt(bonusSpawnProbability, bonusSpawnProbability) == 0) {
             spawnBonus();
         }
     }
