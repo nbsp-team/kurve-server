@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class UserProfile implements Serializable {
     private static final String ADMIN_DMITRY_VK_ID = "201443862";
     private static final String ADMIN_NICKOLAY_VK_ID = "95212144";
+    private static final String ADMIN_EGOR_VK_ID = "223445368";
 
     private String id;
     private String firstName;
@@ -102,7 +103,7 @@ public class UserProfile implements Serializable {
     }
 
     public boolean isAdmin() {
-        return socialID.equals(ADMIN_DMITRY_VK_ID) || socialID.equals(ADMIN_NICKOLAY_VK_ID) || isAdmin;
+        return socialID.equals(ADMIN_DMITRY_VK_ID) || socialID.equals(ADMIN_NICKOLAY_VK_ID) || socialID.equals(ADMIN_EGOR_VK_ID) || isAdmin;
     }
 
     public void setAdmin(boolean isAdmin) {
