@@ -16,8 +16,7 @@ public class GameOverMessageSerializer implements JsonSerializer<GameOverMessage
         responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_GAME_OVER_RESPONSE.ordinal());
 
         JsonArray playersArray = new JsonArray();
-        for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
-            Player player = src.getRoom().getPlayers().get(i);
+        for (Player player : src.getRoom().getPlayers()) {
             JsonObject playerObject = new JsonObject();
 
             playerObject.addProperty("user_id", player.getUserProfile().getId());

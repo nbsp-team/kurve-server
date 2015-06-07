@@ -30,10 +30,6 @@ public class MathUtils {
         return Math.floor(16 * a) / 16;
     }
 
-    public static int randInt(int min, int max) {
-        return rand.nextInt((max - min) + 1) + min;
-    }
-
     public static double squareSqrt(double... values) {
         double result = 0;
         for (double value : values) {

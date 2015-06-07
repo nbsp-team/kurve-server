@@ -5,6 +5,7 @@ import model.Bonus.Bonus;
 import model.Bonus.Effects.*;
 import model.Snake.Snake;
 import utils.MathUtils;
+import utils.RandomUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
@@ -94,7 +95,7 @@ public class BonusManager {
                 applyTempEffect(new TraverseWallsAllEffect(snakes));
                 break;
             case DEATH_ALL:
-                room.getGameField().killSnake(snakes.get(MathUtils.randInt(0, snakes.size() - 1)));
+                room.getGameField().killSnake(snakes.get(RandomUtils.randInt(0, snakes.size() - 1)));
                 break;
             case REVERSE_ENEMY:
                 applyTempEffect(new ReverseEnemyEffect(snake, snakes));
@@ -124,16 +125,16 @@ public class BonusManager {
         }
 
         c++;
-        if (c % MathUtils.randInt(bonusSpawnProbability, bonusSpawnProbability) == 0) {
+        if (c % RandomUtils.randInt(bonusSpawnProbability, bonusSpawnProbability) == 0) {
             spawnBonus();
         }
     }
 
     private void spawnBonus() {
-        int x = MathUtils.randInt(BONUS_SPAWN_PADDING,
+        int x = RandomUtils.randInt(BONUS_SPAWN_PADDING,
                 Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
 
-        int y = MathUtils.randInt(BONUS_SPAWN_PADDING,
+        int y = RandomUtils.randInt(BONUS_SPAWN_PADDING,
                 Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
 
         addBonus(new Bonus(x, y, getRandomBonusKind()));

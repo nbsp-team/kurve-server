@@ -11,11 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import org.eclipse.jetty.websocket.api.WebSocketException;
-import org.eclipse.jetty.websocket.common.WebSocketSession;
 import websocket.message.Message;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +43,12 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         CODE_SNAKE_PATCH_REQUEST,//15
         CODE_SNAKE_PATCH_RESPONSE,
         CODE_START_ROUND_RESPONSE,
-        CODE_RATING_UPDATE_RESPONSE
+        CODE_RATING_UPDATE_RESPONSE,
+        CODE_CREATE_ROOM_REQUEST,
+        CODE_CONNECT_TO_ROOM_REQUEST,
+        CODE_GET_ROOMS_REQUEST,
+        CODE_ROOMS_RESPONSE,
+        CODE_CONNECTED_TO_ROOM_RESPONSE
     }
 
     private WebSocketMessageListener messageListener;
@@ -80,6 +82,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
             switch (responseType) {
                 case CODE_ROOM_PLAYERS_RESPONSE:
                     break;
+                case CODE_PLAYER_CONNECTED_RESPONSE:
+                    break;
+                case CODE_PLAYER_DISCONNECTED_RESPONSE:
+                    break;
                 case CODE_READY_REQUEST:
                     boolean isReady = jresponse.get("ready").getAsBoolean();
                     messageListener.onUserReady(this, isReady);
@@ -98,6 +104,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                     break;
                 case CODE_SNAKE_UPDATES_RESPONSE:
                     break;
+                case CODE_ROOM_START_RESPONSE:
+                    break;
+                case CODE_SNAKE_ARC_RESPONSE:
+                    break;
                 case CODE_SNAKE_PATCH_REQUEST:
                     JsonArray array = jresponse.get("ids").getAsJsonArray();
                     List<Integer> lostIds = new ArrayList<>();
@@ -115,6 +125,29 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                     break;
                 case CODE_GAME_OVER_RESPONSE:
                     break;
+                case CODE_SNAKE_PATCH_RESPONSE:
+                    break;
+                case CODE_START_ROUND_RESPONSE:
+                    break;
+                case CODE_RATING_UPDATE_RESPONSE:
+                    break;
+                case CODE_CREATE_ROOM_REQUEST:
+                    messageListener.onCreateRoom(
+                            this,
+                            jresponse.get("private").getAsBoolean()
+                    );
+                    break;
+                case CODE_CONNECT_TO_ROOM_REQUEST:
+                    messageListener.onConnectToRoom(
+                            this,
+                            jresponse.get("room").getAsString()
+                    );
+                    break;
+                case CODE_GET_ROOMS_REQUEST:
+                    messageListener.onGetRooms(
+                            this
+                    );
+                    break;
             }
         } catch (ClassCastException e) {
             // TODO: error response
@@ -126,7 +159,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketConnect(Session session) {
         this.session = session;
-        room = messageListener.onNewConnection(this);
+        messageListener.onNewConnection(this);
     }
 
     public boolean sendMessage(Message message) {
@@ -166,7 +199,7 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
     public interface WebSocketMessageListener {
 
-        Room onNewConnection(GameWebSocketHandler handler);
+        void onNewConnection(GameWebSocketHandler handler);
 
         void onDisconnect(GameWebSocketHandler handler);
 
@@ -174,5 +207,10 @@ public class GameWebSocketHandler extends WebSocketAdapter {
 
         void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
 
+        void onCreateRoom(GameWebSocketHandler handler, boolean isPrivate);
+
+        void onConnectToRoom(GameWebSocketHandler handler, String room);
+
+        void onGetRooms(GameWebSocketHandler handler);
     }
 }

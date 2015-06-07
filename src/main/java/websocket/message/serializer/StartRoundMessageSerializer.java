@@ -26,9 +26,9 @@ public class StartRoundMessageSerializer implements JsonSerializer<StartRoundMes
         responseObject.addProperty("currentRound", src.getCurrentRound());
         responseObject.addProperty("roundNumber", src.getRoundCount());
         responseObject.addProperty("countdown", Integer.valueOf(Main.mechanicsConfig.gameStartCountdown));
+
         JsonArray playersArray = new JsonArray();
-        for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
-            Player player = src.getRoom().getPlayers().get(i);
+        for (Player player : src.getRoom().getPlayers()) {
             JsonElement playerObject = context.serialize(player);
             playersArray.add(playerObject);
         }

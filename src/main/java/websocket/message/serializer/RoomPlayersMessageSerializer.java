@@ -16,8 +16,7 @@ public class RoomPlayersMessageSerializer implements JsonSerializer<RoomPlayersM
         responseObject.addProperty("code", GameWebSocketHandler.MessageType.CODE_ROOM_PLAYERS_RESPONSE.ordinal());
 
         JsonArray playersArray = new JsonArray();
-        for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
-            Player player = src.getRoom().getPlayers().get(i);
+        for (Player player : src.getRoom().getPlayers()) {
             JsonElement playerObject = context.serialize(player);
             playersArray.add(playerObject);
         }

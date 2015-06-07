@@ -6,7 +6,10 @@ import websocket.GameWebSocketHandler;
 import websocket.message.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * nickolay, 21.02.15.
@@ -14,19 +17,29 @@ import java.util.List;
 public class Room {
     public static final int ROUND_NUMBER = 6;
     private final long creationDate;
+    private final boolean isPrivate;
+    private final String id;
 
     enum RoomState {
         WAITING,
         GAME
     }
 
-    private List<Player> players;
+    private Map<String, Player> players;
 
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
     private final GameService gameService;
 
     private int currentRound = 0;
+
+    public Room(GameService gameService, boolean isPrivate, String id) {
+        this.players = new ConcurrentHashMap<>();
+        this.creationDate = System.currentTimeMillis();
+        this.gameService = gameService;
+        this.isPrivate = isPrivate;
+        this.id = id;
+    }
 
     private int getPointsByDeathId(int deathId) {
         return deathId;
@@ -41,19 +54,27 @@ public class Room {
         broadcastMessage(new RatingUpdateMessage(this));
     }
 
-    public Room(GameService gameService) {
-        players = new ArrayList<>();
-        this.creationDate = System.currentTimeMillis();
-        this.gameService = gameService;
-    }
-
-    public void onNewPlayer(Player player) {
+    public void addPlayer(Player player) {
         if (roomState != RoomState.WAITING) return;
 
-        players.add(player);
+        players.put(player.getId(), player);
         player.sendMessage(new RoomPlayersMessage(this));
-        broadcastMessageExceptUser(new ConnectedPlayerMessage(player,
-                getPlayerIdByUser(player.getUserProfile())), player.getUserProfile());
+        broadcastMessage(new ConnectedPlayerMessage(player,
+                getPlayerIdByUser(player.getUserProfile())));
+    }
+
+    public void connect(GameWebSocketHandler handler) {
+        Player player = getPlayerByUser(handler.getUserProfile());
+        if (player != null) {
+            player.addConnection(handler);
+            handler.sendMessage(new RoomPlayersMessage(this));
+        } else {
+            String playerColor = getUnusedColor();
+            Player newPlayer = new Player(playerColor, handler.getUserProfile());
+            newPlayer.addConnection(handler);
+            addPlayer(newPlayer);
+            handler.setRoom(this);
+        }
     }
 
     public void onPlayerReady(Player player, boolean isReady) {
@@ -102,14 +123,17 @@ public class Room {
             System.out.println("[Room] Конец игры! Раунды закончились");
 
             endGame();
-            gameField.pause();
-            gameService.destroyRoom(this);
         }
     }
 
     public void endGame() {
         gameService.writePointsToDb(this);
         broadcastMessage(new GameOverMessage(this));
+
+        if (gameField != null) {
+            gameField.pause();
+        }
+        gameService.destroyRoom(this);
     }
 
     public void startGame() {
@@ -142,23 +166,18 @@ public class Room {
 
         if (players.size() == 0) {
             System.out.println("[Room] Конец игры: 0 игроков, удаление комнаты!");
-
             endGame();
-            if (gameField != null) {
-                gameField.pause();
-            }
-            gameService.destroyRoom(this);
         }
     }
 
     public void broadcastMessage(Message message) {
-        for (Player player : players) {
+        for (Player player : players.values()) {
             player.sendMessage(message);
         }
     }
 
     public void broadcastMessageExceptUser(Message message, UserProfile user) {
-        for (Player player : players) {
+        for (Player player : players.values()) {
             String roomUserId = player.getUserProfile().getId();
             if (!roomUserId.equals(user.getId())) {
                 player.sendMessage(message);
@@ -167,13 +186,13 @@ public class Room {
     }
 
     public void broadcastMessageExceptConnection(Message message, GameWebSocketHandler connection) {
-        for (Player player : players) {
+        for (Player player : players.values()) {
             player.sendMessageExceptConnection(message, connection);
         }
     }
 
     public Player getPlayerByUser(UserProfile userProfile) {
-        for (Player player : players) {
+        for (Player player : players.values()) {
             if (player.getUserProfile().getId().equals(userProfile.getId())) {
                 return player;
             }
@@ -183,7 +202,7 @@ public class Room {
 
     public int getPlayerIdByUser(UserProfile userProfile) {
         int index = 0;
-        for (Player player : players) {
+        for (Player player : players.values()) {
             if (player.getUserProfile().getId().equals(userProfile.getId())) {
                 return index;
             }
@@ -193,12 +212,21 @@ public class Room {
     }
 
     public boolean isColorUsed(String color) {
-        for (Player p : players) {
+        for (Player p : players.values()) {
             if (p.getColor().equals(color)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public String getUnusedColor() {
+        for (String c : Player.playerColors) {
+            if (!isColorUsed(c)) {
+                return c;
+            }
+        }
+        return "#000000";
     }
 
     public int getPlayerCount() {
@@ -207,7 +235,7 @@ public class Room {
 
     public int getReadyPlayerCount() {
         int readyUserCount = 0;
-        for (Player p : players) {
+        for (Player p : players.values()) {
             if (p.isReady()) {
                 readyUserCount++;
             }
@@ -219,8 +247,8 @@ public class Room {
         getPlayerByUser(user).sendMessage(new SnakePatchMessage(gameField.getUpdatesManager().getListByIds(lostIds)));
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public Collection<Player> getPlayers() {
+        return players.values();
     }
 
     public RoomState getRoomState() {
@@ -237,5 +265,13 @@ public class Room {
 
     public int getCurrentRound() {
         return currentRound;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public String getId() {
+        return id;
     }
 }

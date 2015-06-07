@@ -28,8 +28,7 @@ public class StartGameMessageSerializer implements JsonSerializer<StartGameMessa
         responseObject.addProperty("roundNumber", src.getRoundCount());
 
         JsonArray playersArray = new JsonArray();
-        for (int i = 0; i < src.getRoom().getPlayerCount(); ++i) {
-            Player player = src.getRoom().getPlayers().get(i);
+        for (Player player : src.getRoom().getPlayers()) {
             JsonElement playerObject = context.serialize(player);
             playersArray.add(playerObject);
         }

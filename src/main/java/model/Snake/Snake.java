@@ -2,6 +2,7 @@ package model.Snake;
 
 import main.Main;
 import utils.MathUtils;
+import utils.RandomUtils;
 import websocket.SnakeUpdatesManager;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class Snake {
         turnRadius = defaultTurnRadius;
 
 
-        partStopper = MathUtils.randInt(minPartLength, maxPartLength);
+        partStopper = RandomUtils.randInt(minPartLength, maxPartLength);
         holeStopper = partStopper + holeLength;
 
         this.x = x;
@@ -191,7 +192,7 @@ public class Snake {
 
             if (travSinceLastHole >= holeStopper) {
                 travSinceLastHole = 0;
-                partStopper = MathUtils.randInt(minPartLength, maxPartLength);
+                partStopper = RandomUtils.randInt(minPartLength, maxPartLength);
                 holeStopper = partStopper + holeLength;
                 drawing = true;
                 doNewPart();
