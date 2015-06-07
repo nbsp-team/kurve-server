@@ -60,7 +60,7 @@ public class RoomManager {
 
     public Room findFreePublicRoom(UserProfile user) {
         for (Room room : rooms.values()) {
-            if (room.getRoomState() == Room.RoomState.GAME) {
+            if (room.getRoomState() == Room.RoomState.GAME || room.isPrivate()) {
                 continue;
             }
 
