@@ -38,7 +38,8 @@ public class SocialAuthHelper {
     public enum AuthProvider {
         AUTH_PROVIDER_VK,
         AUTH_PROVIDER_FB,
-        AUTH_PROVIDER_GUEST
+        AUTH_PROVIDER_GUEST,
+        AUTH_PROVIDER_SNAKE_TEST
     }
 
     public static UserProfile auth(AuthProvider authProvider, String code) {
@@ -54,6 +55,7 @@ public class SocialAuthHelper {
             case AUTH_PROVIDER_GUEST:
                 user = getGuestUser(code);
                 break;
+
         }
 
         return user;
@@ -183,4 +185,5 @@ public class SocialAuthHelper {
                 UUID.randomUUID().toString()
         );
     }
+
 }

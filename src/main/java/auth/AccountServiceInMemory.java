@@ -1,6 +1,7 @@
 package auth;
 
 import model.UserProfile;
+import utils.SocialAuthHelper;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class AccountServiceInMemory extends SocialAccountService {
 
     public AccountServiceInMemory() {
         users = new HashMap<>();
+
     }
 
     @Override

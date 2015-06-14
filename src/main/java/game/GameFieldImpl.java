@@ -149,7 +149,7 @@ public class GameFieldImpl implements GameField {
         snakeCollisionChecker.timeStep();
         bonusManager.timeStep();
 
-        if (dead >= numPlayers - 1 && !lastDeath) {
+        if (dead >= numPlayers - 1 && !lastDeath && numPlayers != 1 || numPlayers == 1 && dead == 1) {
             LOG.debug("Round over");
             lastDeath = true;
             lastDeathTimeMillis = System.currentTimeMillis();

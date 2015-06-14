@@ -90,20 +90,34 @@ public class Snake {
         alive = false;
         sendUpdates();
     }
-
     private boolean reversed = false;
+    private boolean sharp = false;
 
     public synchronized void startTurning(turningState where) {
-
         if (reversed && where != turningState.NOT_TURNING)
             where = (where == turningState.TURNING_LEFT) ? turningState.TURNING_RIGHT : turningState.TURNING_LEFT;
-        if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
-            angleV = -angleV;
-            sinV = -sinV;
-        }
-        turning = where;
-        doArc();
 
+        if(sharp) {
+            double oldVx = vx;
+            if((where == turningState.TURNING_LEFT)) {
+                vx = vy;
+                vy = -oldVx;
+                angle = MathUtils.normAngle(angle - Math.PI/2);
+            } else {
+                vx = -vy;
+                vy = oldVx;
+                angle = MathUtils.normAngle(angle + Math.PI/2);
+            }
+            doLine();
+        } else {
+
+            if ((angleV > 0) != (where == turningState.TURNING_RIGHT)) {
+                angleV = -angleV;
+                sinV = -sinV;
+            }
+            turning = where;
+            doArc();
+        }
     }
 
     public synchronized void stopTurning(turningState where) {
