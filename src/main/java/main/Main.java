@@ -46,7 +46,21 @@ public class Main {
     public static final Config mechanicsConfig = ConfigFactory.parseFile(new File(MECHANICS_CONFIG_FILE));
     public static final Config socialConfig = ConfigFactory.parseFile(new File(SOCIAL_CONFIG_FILE));
 
+    public static ServerType serverType;
+
     public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            System.err.println("Please, provide server type as command line argument (--main or --game)");
+            return;
+        } else if (args[0].equals("--main")) {
+            serverType = ServerType.SERVER_MAIN;
+        } else if (args[0].equals("--game")) {
+            serverType = ServerType.SERVER_GAME;
+        } else {
+            System.err.println("Please, provide correct server type as command line argument (--main or --game)");
+            return;
+        }
+
         LOG.info(String.format("Starting server at: %s:%s",
                 networkConfig.getString("host"),
                 String.valueOf(networkConfig.getInt("port"))
