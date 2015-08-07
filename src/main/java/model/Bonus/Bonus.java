@@ -32,7 +32,7 @@ public class Bonus {
 
     private Kind kind;
     private double x, y;
-    private static final int radius = Integer.valueOf(Main.mechanicsConfig.bonusRadius);
+    private static final int radius = Main.mechanicsConfig.getInt("bonusRadius");
 
     public Bonus(int x, int y, Kind kind) {
         this.x = x;

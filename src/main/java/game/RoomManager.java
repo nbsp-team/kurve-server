@@ -22,8 +22,8 @@ public class RoomManager {
     private Map<String, Room> rooms;
 
     public RoomManager() {
-        MIN_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.minPlayerNumber);
-        MAX_PLAYER_IN_ROOM = Integer.valueOf(Main.mechanicsConfig.maxPlayerNumber);
+        MIN_PLAYER_IN_ROOM = Main.mechanicsConfig.getInt("minPlayerNumber");
+        MAX_PLAYER_IN_ROOM = Main.mechanicsConfig.getInt("maxPlayerNumber");
 
         rooms = new ConcurrentHashMap<>();
     }

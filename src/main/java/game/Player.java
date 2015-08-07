@@ -19,8 +19,6 @@ import java.util.UUID;
  * nickolay, 21.02.15.
  */
 public class Player {
-    public static final List<String> playerColors = Main.mechanicsConfig.colors;
-
     private String id;
     private int points = 0;
     private Set<GameWebSocketHandler> connections;

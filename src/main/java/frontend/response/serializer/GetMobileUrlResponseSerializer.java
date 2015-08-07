@@ -16,7 +16,7 @@ public class GetMobileUrlResponseSerializer implements JsonSerializer<GetMobileU
 
         JsonObject responseObject = new JsonObject();
 
-        String url = "http://" + Main.networkConfig.domain + "/api/v" + Main.API_VERSION + "/mobile/auth?hash=" + src.getSession();
+        String url = "http://" + Main.networkConfig.getString("domain") + "/api/v" + Main.API_VERSION + "/mobile/auth?hash=" + src.getSession();
         responseObject.add("mobile_url", new JsonPrimitive(url));
 
         jsonObject.add("response", responseObject);

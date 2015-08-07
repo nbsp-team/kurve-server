@@ -1,18 +1,14 @@
 package main;
 
-import auth.AccountServiceInMemory;
 import auth.MongoAccountService;
 import auth.SocialAccountService;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import configuration.DatabaseConfig;
-import configuration.GameMechanicsConfig;
-import configuration.NetworkConfig;
-import configuration.XmlLoader;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import dao.ScoresDao;
-import dao.UsersDao;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameService;
@@ -28,6 +24,7 @@ import websocket.GameWebSocketCreator;
 import websocket.SocketServlet;
 
 import javax.servlet.Servlet;
+import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
@@ -39,40 +36,41 @@ public class Main {
 
     public static final int API_VERSION = 1;
 
-    public static final String NETWORK_CONFIG_FILE = "config/network.xml";
-    public static final String MECHANICS_CONFIG_FILE = "config/mechanics.xml";
-    public static final String DB_CONFIG_FILE = "config/db.xml";
+    public static final String NETWORK_CONFIG_FILE = "config/network.cfg";
+    public static final String MECHANICS_CONFIG_FILE = "config/mechanics.cfg";
+    public static final String DB_CONFIG_FILE = "config/db.cfg";
+    public static final String SOCIAL_CONFIG_FILE = "config/social.cfg";
 
-    public static final NetworkConfig networkConfig =
-            (NetworkConfig) XmlLoader.getInstance()
-                    .load(NetworkConfig.class, NETWORK_CONFIG_FILE);
-
-    public static final DatabaseConfig dbConfig =
-            (DatabaseConfig) XmlLoader.getInstance()
-                    .load(DatabaseConfig.class, DB_CONFIG_FILE);
-
-    public static final GameMechanicsConfig mechanicsConfig =
-            (GameMechanicsConfig) XmlLoader.getInstance()
-                    .load(GameMechanicsConfig.class, MECHANICS_CONFIG_FILE);
+    public static final Config networkConfig = ConfigFactory.parseFile(new File(NETWORK_CONFIG_FILE));
+    public static final Config dbConfig = ConfigFactory.parseFile(new File(DB_CONFIG_FILE));
+    public static final Config mechanicsConfig = ConfigFactory.parseFile(new File(MECHANICS_CONFIG_FILE));
+    public static final Config socialConfig = ConfigFactory.parseFile(new File(SOCIAL_CONFIG_FILE));
 
     public static void main(String[] args) throws Exception {
-        LOG.info(String.format("Starting server at: %s:%s", networkConfig.port, String.valueOf(networkConfig.port)));
+        LOG.info(String.format("Starting server at: %s:%s",
+                networkConfig.getString("host"),
+                String.valueOf(networkConfig.getInt("port"))
+        ));
 
         SocialAccountService socialAccountService;
-        ServerAddress mongoServer = new ServerAddress(dbConfig.host, Integer.valueOf(dbConfig.port));
+        ServerAddress mongoServer = new ServerAddress(
+                dbConfig.getString("host"), dbConfig.getInt("port"));
+
         MongoCredential credential = MongoCredential.createCredential(
-                dbConfig.username,
-                dbConfig.name,
-                dbConfig.password.toCharArray()
+                dbConfig.getString("username"),
+                dbConfig.getString("dbname"),
+                dbConfig.getString("password").toCharArray()
         );
 
         MongoClient mongoClient = new MongoClient(mongoServer, new ArrayList<MongoCredential>() {{
             add(credential);
         }});
-        DB db = mongoClient.getDB(dbConfig.name);
+        DB db = mongoClient.getDB(dbConfig.getString("dbname"));
         socialAccountService = new MongoAccountService(db);
 
-        Server server = new Server(new InetSocketAddress(networkConfig.host, Integer.valueOf(networkConfig.port)));
+        Server server = new Server(new InetSocketAddress(
+                networkConfig.getString("host"), networkConfig.getInt("port")
+        ));
         SessionManager sessionManager = new SessionManager();
         server.setSessionIdManager(sessionManager);
 

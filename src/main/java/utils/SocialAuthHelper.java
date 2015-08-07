@@ -23,10 +23,10 @@ public class SocialAuthHelper {
     public static final String GUEST_AVATAR_URL = "http://api.adorable.io/avatars/200/%s";
     public static final String OAUTH_REDIRECT_URL = "http://%s/api/v1/auth/social?type=%d";
 
-    public static final String VK_APP_ID = "4930885";
-    public static final String FB_APP_ID = "925250904206070";
-    public static final String VK_SECRET = "5aBqPx1rZivFZnBw4McT";
-    public static final String FB_SECRET = "1710860008ea04bce6214ef5fb893170";
+    public static final String VK_APP_ID = Main.socialConfig.getString("vk.appId");
+    public static final String FB_APP_ID = Main.socialConfig.getString("fb.appId");
+    public static final String VK_SECRET = Main.socialConfig.getString("vk.secret");
+    public static final String FB_SECRET = Main.socialConfig.getString("fb.secret");
 
     public static final String GET_VK_USER_API_URL = "https://api.vk.com/method/users.get";
     public static final String GET_FB_USER_API_URL = "https://graph.facebook.com/v2.3/me";
@@ -65,7 +65,7 @@ public class SocialAuthHelper {
         try {
             String redirectUri = String.format(
                     OAUTH_REDIRECT_URL,
-                    Main.networkConfig.domain,
+                    Main.networkConfig.getString("domain"),
                     AuthProvider.AUTH_PROVIDER_VK.ordinal()
             );
 
@@ -110,7 +110,7 @@ public class SocialAuthHelper {
         try {
             String redirectUri = String.format(
                     OAUTH_REDIRECT_URL,
-                    Main.networkConfig.domain,
+                    Main.networkConfig.getString("domain"),
                     AuthProvider.AUTH_PROVIDER_FB.ordinal()
             );
 

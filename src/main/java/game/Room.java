@@ -1,11 +1,11 @@
 package game;
 
 import interfaces.GameField;
+import main.Main;
 import model.UserProfile;
 import websocket.GameWebSocketHandler;
 import websocket.message.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +19,7 @@ public class Room {
     private final long creationDate;
     private final boolean isPrivate;
     private final String id;
+    private final List<String> playerColors;
 
     enum RoomState {
         WAITING,
@@ -39,6 +40,7 @@ public class Room {
         this.gameService = gameService;
         this.isPrivate = isPrivate;
         this.id = id;
+        this.playerColors = Main.mechanicsConfig.getStringList("snake.colors");
     }
 
     private int getPointsByDeathId(int deathId) {
@@ -221,7 +223,7 @@ public class Room {
     }
 
     public String getUnusedColor() {
-        for (String c : Player.playerColors) {
+        for (String c : playerColors) {
             if (!isColorUsed(c)) {
                 return c;
             }

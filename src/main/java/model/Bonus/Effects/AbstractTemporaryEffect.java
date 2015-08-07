@@ -10,7 +10,7 @@ public abstract class AbstractTemporaryEffect implements TemporaryEffect {
 
 
     protected void setDuration(int seconds) {
-        countDownCounter = seconds * Integer.valueOf(Main.mechanicsConfig.FPS);
+        countDownCounter = seconds * Main.mechanicsConfig.getInt("FPS");
     }
 
     public boolean timeStep() {

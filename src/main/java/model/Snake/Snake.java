@@ -13,12 +13,12 @@ import java.util.List;
  */
 
 public class Snake {
-    public static final int defaultSpeed = Integer.valueOf(Main.mechanicsConfig.snakeDefaultSpeed);
-    public static final int defaultTurnRadius = Integer.valueOf(Main.mechanicsConfig.snakeDefaultTurnRadius);
-    public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
-    public static final int holeLength = Integer.valueOf(Main.mechanicsConfig.snakeHoleLength);
-    public static final int minPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMinPartLength);
-    public static final int maxPartLength = Integer.valueOf(Main.mechanicsConfig.snakeMaxPartLength);
+    public static final int defaultSpeed = Main.mechanicsConfig.getInt("snake.defaultSpeed");
+    public static final int defaultTurnRadius = Main.mechanicsConfig.getInt("snake.defaultTurnRadius");
+    public static final int FPS = Main.mechanicsConfig.getInt("FPS");
+    public static final int holeLength = Main.mechanicsConfig.getInt("snake.holeLength");
+    public static final int minPartLength = Main.mechanicsConfig.getInt("snake.minPartLength");
+    public static final int maxPartLength = Main.mechanicsConfig.getInt("snake.maxPartLength");
     private double angle;
 
     private int id;
@@ -34,7 +34,7 @@ public class Snake {
     private double travSinceLastHole = 0;
     private boolean drawing = true, alive = true;
     private turningState turning = turningState.NOT_TURNING;
-    private int radius = Integer.valueOf(Main.mechanicsConfig.defaultSnakeWidth) / 2;
+    private int radius = Main.mechanicsConfig.getInt("snake.defaultWidth") / 2;
     private int linesSent = 0, arcsSent = 0;
 
     private SnakeUpdatesManager updatesManager;
@@ -49,7 +49,7 @@ public class Snake {
         this.linesSent = linesSent;
     }
 
-    public static enum turningState {
+    public enum turningState {
         TURNING_LEFT,
         TURNING_RIGHT,
         NOT_TURNING

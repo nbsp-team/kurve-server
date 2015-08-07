@@ -9,6 +9,7 @@ import utils.RandomUtils;
 import websocket.message.EatBonusMessage;
 import websocket.message.NewBonusMessage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BonusManager {
     private List<Bonus> bonuses = new LinkedList<>();
     private Room room;
     private int bonusProbSum = 0;
-    private int[] bonusProbabilities = new int[Bonus.Kind.values().length];
+    private List<Integer> bonusProbabilities;
 
     private int bonusSpawnProbability;
 
@@ -33,14 +34,11 @@ public class BonusManager {
         this.room = room;
         this.snakes = snakes;
 
-        bonusSpawnProbability = Integer.valueOf(Main.mechanicsConfig.bonusSpawnProbability);
+        bonusSpawnProbability = Main.mechanicsConfig.getInt("bonusSpawnProbability");
 
         bonusProbSum = 0;
-        for (int i = 0; i < Main.mechanicsConfig.bonusProbabilities.size(); ++i) {
-            int prob = Integer.parseInt(Main.mechanicsConfig.bonusProbabilities.get(i));
-            bonusProbSum += prob;
-            bonusProbabilities[i] = bonusProbSum;
-        }
+        bonusProbabilities = Main.mechanicsConfig.getIntList("bonusProbabilities");
+        bonusProbSum = bonusProbabilities.stream().reduce((n1, n2) -> n1 + n2).get();
     }
 
     public void addBonus(Bonus bonus) {
@@ -132,10 +130,10 @@ public class BonusManager {
 
     private void spawnBonus() {
         int x = RandomUtils.randInt(BONUS_SPAWN_PADDING,
-                Integer.valueOf(Main.mechanicsConfig.gameFieldWidth) - 2 * BONUS_SPAWN_PADDING);
+                Integer.valueOf(Main.mechanicsConfig.getInt("gameField.width")) - 2 * BONUS_SPAWN_PADDING);
 
         int y = RandomUtils.randInt(BONUS_SPAWN_PADDING,
-                Integer.valueOf(Main.mechanicsConfig.gameFieldHeight) - 2 * BONUS_SPAWN_PADDING);
+                Integer.valueOf(Main.mechanicsConfig.getInt("gameField.height")) - 2 * BONUS_SPAWN_PADDING);
 
         addBonus(new Bonus(x, y, getRandomBonusKind()));
     }

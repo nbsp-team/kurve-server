@@ -18,11 +18,11 @@ import java.util.List;
 public class GameFieldImpl implements GameField {
     public static final Logger LOG = LogManager.getLogger(GameService.class);
 
-    public static final int FPS = Integer.valueOf(Main.mechanicsConfig.FPS);
+    public static final int FPS = Main.mechanicsConfig.getInt("FPS");
     public static final int SECOND = 1_000_000_000;
     public static final int STEP_TIME = SECOND / FPS;
-    public static final int width = Integer.valueOf(Main.mechanicsConfig.gameFieldWidth);
-    public static final int height = Integer.valueOf(Main.mechanicsConfig.gameFieldHeight);
+    public static final int width = Main.mechanicsConfig.getInt("gameField.width");
+    public static final int height = Main.mechanicsConfig.getInt("gameField.height");
     public static final int LAST_DEATH_DELAY = 1700;
 
     private final GameService gameService;
@@ -90,7 +90,7 @@ public class GameFieldImpl implements GameField {
 
         new Thread(() -> {
             try {
-                Thread.sleep(Integer.valueOf(Main.mechanicsConfig.gameStartCountdown) * 1000);
+                Thread.sleep(Main.mechanicsConfig.getInt("gameStartCountdown") * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
