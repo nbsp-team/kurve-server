@@ -101,6 +101,8 @@ public class Main {
 
         Servlet user = new UserServlet(socialAccountService);
         Servlet rating = new RatingServlet(socialAccountService, new ScoresDao(db));
+        Servlet rooms = new RoomsServlet(socialAccountService, gameService);
+        Servlet createRoom = new CreateRoomServlet(socialAccountService, gameService);
         Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager, gameService);
         Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
@@ -108,14 +110,16 @@ public class Main {
         MobileAuthServlet mobileAuthServlet = new MobileAuthServlet(sessionManager);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(socialSignIn), "/api/v" + API_VERSION + "/auth/social");
-        context.addServlet(new ServletHolder(signOut), "/api/v" + API_VERSION + "/auth/signout");
-        context.addServlet(new ServletHolder(user), "/api/v" + API_VERSION + "/user/");
-        context.addServlet(new ServletHolder(rating), "/api/v" + API_VERSION + "/rating/");
-        context.addServlet(new ServletHolder(serverStatus), "/api/v" + API_VERSION + "/admin/status");
-        context.addServlet(new ServletHolder(serverShutdown), "/api/v" + API_VERSION + "/admin/shutdown");
-        context.addServlet(new ServletHolder(mobileUrlServlet), "/api/v" + API_VERSION + "/mobile/get");
-        context.addServlet(new ServletHolder(mobileAuthServlet), "/api/v" + API_VERSION + "/mobile/auth");
+        addServlet(context, socialSignIn, "/auth/social");
+        addServlet(context, signOut, "/auth/signout");
+        addServlet(context, user, "/user/");
+        addServlet(context, rating, "/rating/");
+        addServlet(context, rooms, "/rooms/");
+        addServlet(context, createRoom, "/rooms/create");
+        addServlet(context, serverStatus, "/admin/status");
+        addServlet(context, serverShutdown, "/admin/shutdown");
+        addServlet(context, mobileUrlServlet, "/mobile/get");
+        addServlet(context, mobileAuthServlet, "/mobile/auth");
         context.addServlet(new ServletHolder(socketServlet), "/socket/");
 
         ResourceHandler resourceHandler = new ResourceHandler();
@@ -129,5 +133,9 @@ public class Main {
 
         server.start();
         server.join();
+    }
+
+    private static void addServlet(ServletContextHandler context, Servlet servlet, String endpoint) {
+        context.addServlet(new ServletHolder(servlet), "/api/v" + API_VERSION + endpoint);
     }
 }

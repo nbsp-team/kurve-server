@@ -3,6 +3,7 @@ package game;
 import interfaces.GameField;
 import main.Main;
 import model.UserProfile;
+import utils.RandomUtils;
 import websocket.GameWebSocketHandler;
 import websocket.message.*;
 
@@ -19,7 +20,7 @@ public class Room {
     private final long creationDate;
     private final boolean isPrivate;
     private final String id;
-    private final List<String> playerColors;
+    private static List<String> playerColors;
 
     enum RoomState {
         WAITING,
@@ -27,6 +28,7 @@ public class Room {
     }
 
     private Map<String, Player> players;
+    private UserProfile owner;
 
     private RoomState roomState = RoomState.WAITING;
     private GameField gameField;
@@ -34,12 +36,13 @@ public class Room {
 
     private int currentRound = 0;
 
-    public Room(GameService gameService, boolean isPrivate, String id) {
+    public Room(GameService gameService, UserProfile owner, boolean isPrivate, String id) {
         this.players = new ConcurrentHashMap<>();
         this.creationDate = System.currentTimeMillis();
         this.gameService = gameService;
         this.isPrivate = isPrivate;
         this.id = id;
+        this.owner = owner;
         this.playerColors = Main.mechanicsConfig.getStringList("snake.colors");
     }
 
@@ -231,6 +234,10 @@ public class Room {
         return "#000000";
     }
 
+    public static String getRandomColor() {
+        return playerColors.get(RandomUtils.randInt(0, playerColors.size()));
+    }
+
     public int getPlayerCount() {
         return players.size();
     }
@@ -275,5 +282,9 @@ public class Room {
 
     public String getId() {
         return id;
+    }
+
+    public UserProfile getOwner() {
+        return owner;
     }
 }

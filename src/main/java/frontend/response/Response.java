@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import frontend.AbstractJsonMessage;
 import frontend.response.serializer.*;
 import game.Player;
+import game.Room;
 import model.UserProfile;
 import websocket.message.serializer.PlayerSerializer;
 
@@ -21,9 +22,12 @@ public class Response  extends AbstractJsonMessage{
                 .registerTypeAdapter(ServerStatusResponse.class, new ServerStatusResponseSerializer())
                 .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
                 .registerTypeAdapter(GetMobileUrlResponse.class, new GetMobileUrlResponseSerializer())
+                .registerTypeAdapter(RoomsResponse.class, new RoomsSerializer())
+                .registerTypeAdapter(CreatedRoomResponse.class, new CreatedRoomResponseSerializer())
 
                 .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
                 .registerTypeAdapter(Player.class, new PlayerSerializer())
+                .registerTypeAdapter(Room.class, new RoomSerializer())
 
                 .serializeNulls()
                 .create();
