@@ -23,7 +23,7 @@ public class CreateRoomServlet extends AbstractServlet {
         this.gameService = gameService;
     }
 
-    public Response onGet(HttpServletRequest request) {
+    public Response onPost(HttpServletRequest request) {
         boolean isPrivate = false;
 
         String type = request.getParameter("type");
