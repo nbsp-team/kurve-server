@@ -9,6 +9,7 @@ import com.mongodb.ServerAddress;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import dao.ScoresDao;
+import frontend.servlet.RandomRoomServlet;
 import frontend.SessionManager;
 import frontend.servlet.*;
 import game.GameService;
@@ -103,6 +104,7 @@ public class Main {
         Servlet rating = new RatingServlet(socialAccountService, new ScoresDao(db));
         Servlet rooms = new RoomsServlet(socialAccountService, gameService);
         Servlet createRoom = new CreateRoomServlet(socialAccountService, gameService);
+        Servlet randomRoom = new RandomRoomServlet(socialAccountService, gameService);
         Servlet serverStatus = new ServerStatusServlet(socialAccountService, sessionManager, gameService);
         Servlet serverShutdown = new ShutdownServlet(socialAccountService);
 
@@ -116,6 +118,7 @@ public class Main {
         addServlet(context, rating, "/rating/");
         addServlet(context, rooms, "/rooms/");
         addServlet(context, createRoom, "/rooms/create");
+        addServlet(context, randomRoom, "/rooms/random");
         addServlet(context, serverStatus, "/admin/status");
         addServlet(context, serverShutdown, "/admin/shutdown");
         addServlet(context, mobileUrlServlet, "/mobile/get");

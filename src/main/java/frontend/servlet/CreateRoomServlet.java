@@ -3,15 +3,13 @@ package frontend.servlet;
 import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.annotation.AuthenticationRequired;
-import frontend.response.CreatedRoomResponse;
+import frontend.response.RoomIdResponse;
 import frontend.response.Response;
-import frontend.response.RoomsResponse;
 import game.GameService;
 import game.Room;
 import model.UserProfile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 
 @AuthenticationRequired
 public class CreateRoomServlet extends AbstractServlet {
@@ -34,6 +32,6 @@ public class CreateRoomServlet extends AbstractServlet {
         UserProfile user = getUser(request);
         Room room = gameService.getRoomManager().createRoom(gameService, user, isPrivate);
 
-        return new CreatedRoomResponse(room.getId());
+        return new RoomIdResponse(room.getId());
     }
 }

@@ -5,6 +5,8 @@ import model.UserProfile;
 import utils.RandomUtils;
 import websocket.GameWebSocketHandler;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,6 +64,7 @@ public class RoomManager {
     }
 
     public Room findFreePublicRoom(UserProfile user) {
+        List<Room> acceptableRooms = new ArrayList<>();
         for (Room room : rooms.values()) {
             if (room.getRoomState() == Room.RoomState.GAME || room.isPrivate()) {
                 continue;
@@ -75,8 +78,12 @@ public class RoomManager {
             }
 
             if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
-                return room;
+                acceptableRooms.add(room);
             }
+        }
+
+        if (acceptableRooms.size() > 0) {
+            return acceptableRooms.get(RandomUtils.randInt(0, acceptableRooms.size() - 1));
         }
 
         // Free room not found

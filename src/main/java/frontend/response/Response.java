@@ -23,7 +23,7 @@ public class Response  extends AbstractJsonMessage{
                 .registerTypeAdapter(SuccessResponse.class, new SuccessResponseSerializer())
                 .registerTypeAdapter(GetMobileUrlResponse.class, new GetMobileUrlResponseSerializer())
                 .registerTypeAdapter(RoomsResponse.class, new RoomsSerializer())
-                .registerTypeAdapter(CreatedRoomResponse.class, new CreatedRoomResponseSerializer())
+                .registerTypeAdapter(RoomIdResponse.class, new RoomIdResponseSerializer())
 
                 .registerTypeAdapter(UserProfile.class, new UserProfileSerializer())
                 .registerTypeAdapter(Player.class, new PlayerSerializer())

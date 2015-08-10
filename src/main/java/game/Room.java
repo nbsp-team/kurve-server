@@ -15,12 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * nickolay, 21.02.15.
  */
-public class Room {
+public class Room implements Comparable<Room> {
     public static final int ROUND_NUMBER = 6;
     private final long creationDate;
     private final boolean isPrivate;
     private final String id;
     private static List<String> playerColors;
+
+    @Override
+    public int compareTo(Room o) {
+        return o.getId().compareTo(o.getId());
+    }
 
     enum RoomState {
         WAITING,
