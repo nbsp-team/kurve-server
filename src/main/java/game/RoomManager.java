@@ -19,13 +19,13 @@ public class RoomManager {
     public static final int TRY_COUNT = 100;
 
     private final int MIN_PLAYER_IN_ROOM;
-    private final int MAX_PLAYER_IN_ROOM;
+    private final int DEFAULT_ROOM_CAPACITY;
 
     private Map<String, Room> rooms;
 
     public RoomManager() {
         MIN_PLAYER_IN_ROOM = Main.mechanicsConfig.getInt("minPlayerNumber");
-        MAX_PLAYER_IN_ROOM = Main.mechanicsConfig.getInt("maxPlayerNumber");
+        DEFAULT_ROOM_CAPACITY = Main.mechanicsConfig.getInt("maxPlayerNumber");
 
         rooms = new ConcurrentHashMap<>();
     }
@@ -46,7 +46,7 @@ public class RoomManager {
 
     public Room createRoom(GameService gameService, UserProfile user, boolean isPrivate) {
         String roomId = getUnusedRoomId();
-        Room newRoom = new Room(gameService, user, isPrivate, roomId);
+        Room newRoom = new Room(gameService, user, DEFAULT_ROOM_CAPACITY, isPrivate, roomId);
         rooms.put(roomId, newRoom);
         return newRoom;
     }
@@ -77,7 +77,7 @@ public class RoomManager {
                 return room;
             }
 
-            if (room.getPlayerCount() < MAX_PLAYER_IN_ROOM) {
+            if (room.getPlayerCount() < room.getCapacity()) {
                 acceptableRooms.add(room);
             }
         }
@@ -93,7 +93,7 @@ public class RoomManager {
     public void checkRoomReady(Room room) {
         int readyCount = room.getReadyPlayerCount();
 
-        if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= MAX_PLAYER_IN_ROOM
+        if (readyCount >= MIN_PLAYER_IN_ROOM && readyCount <= room.getCapacity()
                 && readyCount == room.getPlayerCount() && room.getRoomState() == Room.RoomState.WAITING) {
             room.startGame();
         }

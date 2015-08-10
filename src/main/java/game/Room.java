@@ -21,6 +21,7 @@ public class Room implements Comparable<Room> {
     private final boolean isPrivate;
     private final String id;
     private static List<String> playerColors;
+    private int capacity;
 
     @Override
     public int compareTo(Room o) {
@@ -41,10 +42,11 @@ public class Room implements Comparable<Room> {
 
     private int currentRound = 0;
 
-    public Room(GameService gameService, UserProfile owner, boolean isPrivate, String id) {
+    public Room(GameService gameService, UserProfile owner, int capcity, boolean isPrivate, String id) {
         this.players = new ConcurrentHashMap<>();
         this.creationDate = System.currentTimeMillis();
         this.gameService = gameService;
+        this.capacity = capcity;
         this.isPrivate = isPrivate;
         this.id = id;
         this.owner = owner;
@@ -291,5 +293,9 @@ public class Room implements Comparable<Room> {
 
     public UserProfile getOwner() {
         return owner;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 }
