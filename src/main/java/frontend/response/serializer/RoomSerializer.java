@@ -16,7 +16,7 @@ public class RoomSerializer implements JsonSerializer<Room> {
 
         jsonObject.addProperty("room_id", src.getId());
         jsonObject.addProperty("creation_date", src.getCreationDate());
-        jsonObject.addProperty("owner_user_id", src.getOwner().getId());
+        jsonObject.add("owner", context.serialize(src.getOwner()));
 
         JsonArray playersArray = new JsonArray();
         for (Player player : src.getPlayers()) {
