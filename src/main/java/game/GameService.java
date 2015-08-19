@@ -94,18 +94,12 @@ public class GameService implements GameWebSocketHandler.WebSocketMessageListene
     }
 
     @Override
-    public void onCreateRoom(GameWebSocketHandler handler, boolean isPrivate) {
-        Room newRoom = roomManager.createRoomWs(this, handler, isPrivate);
-        handler.sendMessage(new ConnectedToRoomMessage(newRoom.getId()));
-    }
-
-    @Override
     public void onConnectToRoom(GameWebSocketHandler handler, String roomId) {
         if (roomId == null || roomId.length() == 0) {
             // Connect to public room
             Room freeRoom = roomManager.findFreePublicRoom(handler.getUserProfile());
             if (freeRoom == null) {
-                freeRoom = roomManager.createRoomWs(this, handler, true);
+                return;
             }
 
             freeRoom.connect(handler);

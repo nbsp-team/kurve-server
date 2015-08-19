@@ -3,6 +3,7 @@ package frontend.servlet;
 import auth.SocialAccountService;
 import frontend.AbstractServlet;
 import frontend.annotation.AuthenticationRequired;
+import frontend.response.ErrorResponse;
 import frontend.response.RoomIdResponse;
 import frontend.response.Response;
 import game.GameService;
@@ -29,8 +30,13 @@ public class CreateRoomServlet extends AbstractServlet {
             isPrivate = true;
         }
 
+        String name = request.getParameter("name");
+        if (name == null) {
+            return new ErrorResponse(ErrorResponse.ErrorResponseCode.ERROR_INVALID_PARAMS, "Name param required");
+        }
+
         UserProfile user = getUser(request);
-        Room room = gameService.getRoomManager().createRoom(gameService, user, isPrivate);
+        Room room = gameService.getRoomManager().createRoom(gameService, user, isPrivate, name);
 
         return new RoomIdResponse(room.getId());
     }

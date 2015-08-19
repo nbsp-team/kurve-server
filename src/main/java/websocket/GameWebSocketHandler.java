@@ -132,10 +132,6 @@ public class GameWebSocketHandler extends WebSocketAdapter {
                 case CODE_RATING_UPDATE_RESPONSE:
                     break;
                 case CODE_CREATE_ROOM_REQUEST:
-                    messageListener.onCreateRoom(
-                            this,
-                            jresponse.get("private").getAsBoolean()
-                    );
                     break;
                 case CODE_CONNECT_TO_ROOM_REQUEST:
                     messageListener.onConnectToRoom(
@@ -206,8 +202,6 @@ public class GameWebSocketHandler extends WebSocketAdapter {
         void onUserReady(GameWebSocketHandler handler, boolean isReady);
 
         void onControl(GameWebSocketHandler handler, boolean isLeft, boolean isUp);
-
-        void onCreateRoom(GameWebSocketHandler handler, boolean isPrivate);
 
         void onConnectToRoom(GameWebSocketHandler handler, String room);
 

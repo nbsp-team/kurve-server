@@ -44,22 +44,10 @@ public class RoomManager {
         }
     }
 
-    public Room createRoom(GameService gameService, UserProfile user, boolean isPrivate) {
+    public Room createRoom(GameService gameService, UserProfile user, boolean isPrivate, String name) {
         String roomId = getUnusedRoomId();
-        Room newRoom = new Room(gameService, user, DEFAULT_ROOM_CAPACITY, isPrivate, roomId);
+        Room newRoom = new Room(gameService, user, DEFAULT_ROOM_CAPACITY, isPrivate, roomId, name);
         rooms.put(roomId, newRoom);
-        return newRoom;
-    }
-
-    public Room createRoomWs(GameService gameService, GameWebSocketHandler handler, boolean isPrivate) {
-        String playerColor = Room.getRandomColor();
-        Player newPlayer = new Player(playerColor, handler.getUserProfile());
-        newPlayer.addConnection(handler);
-
-        Room newRoom = createRoom(gameService, handler.getUserProfile(), isPrivate);
-        newRoom.addPlayer(newPlayer);
-        handler.setRoom(newRoom);
-
         return newRoom;
     }
 

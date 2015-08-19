@@ -22,6 +22,7 @@ public class Room implements Comparable<Room> {
     private final String id;
     private static List<String> playerColors;
     private int capacity;
+    private String name;
 
     @Override
     public int compareTo(Room o) {
@@ -42,7 +43,7 @@ public class Room implements Comparable<Room> {
 
     private int currentRound = 0;
 
-    public Room(GameService gameService, UserProfile owner, int capcity, boolean isPrivate, String id) {
+    public Room(GameService gameService, UserProfile owner, int capcity, boolean isPrivate, String id, String name) {
         this.players = new ConcurrentHashMap<>();
         this.creationDate = System.currentTimeMillis();
         this.gameService = gameService;
@@ -50,6 +51,7 @@ public class Room implements Comparable<Room> {
         this.isPrivate = isPrivate;
         this.id = id;
         this.owner = owner;
+        this.name = name;
         this.playerColors = Main.mechanicsConfig.getStringList("snake.colors");
     }
 
@@ -261,6 +263,11 @@ public class Room implements Comparable<Room> {
 
     public void sendPatchToUser(UserProfile user, List<Integer> lostIds) {
         getPlayerByUser(user).sendMessage(new SnakePatchMessage(gameField.getUpdatesManager().getListByIds(lostIds)));
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     public Collection<Player> getPlayers() {
